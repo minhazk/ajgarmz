@@ -14,7 +14,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     return (
         <html lang='en'>
             <body className={`${inter.className} flex min-h-screen flex-col`}>
-                <div className='container mx-auto flex-grow px-6'>
+                <div className='container mx-auto flex-grow px-5 sm:px-6 lg:px-12'>
                     <NavBar />
                     {children}
                 </div>

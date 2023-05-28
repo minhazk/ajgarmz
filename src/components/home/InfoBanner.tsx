@@ -25,9 +25,9 @@ const INFO = [
 
 export default function InfoBanner() {
     return (
-        <div className='mx-auto my-14 max-w-7xl'>
+        <div className='mx-auto my-12 max-w-7xl'>
             <h2 className='text-xl font-semibold text-primary'>We provide best customer experiences</h2>
-            <div className='mt-4 flex gap-8'>
+            <div className='mt-7 flex gap-8'>
                 {INFO.map(info => (
                     <InfoCard key={info.title} {...info} />
                 ))}

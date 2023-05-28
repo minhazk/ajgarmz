@@ -32,7 +32,7 @@ export default function Footer() {
                 </div>
             </div>
             <div className='relative py-5 text-center before:absolute before:left-1/2 before:top-0 before:h-px before:w-3/4 before:-translate-x-1/2 before:bg-gray-400'>
-                <p className='text-xs text-gray-200'>Copyright © 2022 AjGarmz. All rights reserved</p>
+                <p className='text-xs text-gray-200'>Copyright © {new Date().getFullYear()} AjGarmz. All rights reserved</p>
             </div>
         </footer>
     );
