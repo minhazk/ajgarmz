@@ -28,7 +28,7 @@ export default function CategorySelection() {
     return (
         <div className='mx-auto my-12 max-w-7xl'>
             <h2 className='text-xl font-semibold text-primary'>Features Categories</h2>
-            <div className='mt-7 flex gap-4'>
+            <div className='mt-7 grid grid-cols-2 gap-4 md:grid-cols-4'>
                 {CATEGORIES.map(category => (
                     <CategoryCard key={category.name} {...category} />
                 ))}
