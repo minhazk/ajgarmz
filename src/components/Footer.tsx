@@ -2,15 +2,15 @@ import Link from 'next/link';
 
 export default function Footer() {
     return (
-        <footer className='mt-12 bg-gray-800 text-white'>
-            <div className='container mx-auto flex items-center justify-between gap-3 py-8'>
+        <footer className='mt-12 bg-gray-800 px-4 text-white'>
+            <div className='container mx-auto flex flex-col items-center justify-between gap-7 py-8 text-center sm:flex-row sm:gap-3 sm:text-left'>
                 <div>
                     <h2 className='text-semibold'>AjGarmz</h2>
                     <p className='mt-2 text-xs text-gray-200'>
                         Specializes in providing high-quality, stylish <br></br> products for your wardrobe
                     </p>
                 </div>
-                <div className='flex gap-10 text-xs'>
+                <div className='flex flex-wrap justify-center gap-4 self-center text-xs sm:flex-nowrap sm:self-auto md:gap-10'>
                     <div className='flex flex-col gap-2'>
                         <h4 className='mb-1 font-semibold'>SHOP</h4>
                         <Link href='/'>All Collections</Link>

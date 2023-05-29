@@ -3,13 +3,14 @@ import { ChevronRight, X } from 'lucide-react';
 import FilterMenu from '@/components/shop/FilterMenu';
 import ItemCard from '@/components/shop/ItemCard';
 import dummy_tee from '../../assets/dummy_tee.jpg';
+import NavigationHistory from '@/components/NavigationHistory';
 
 export default function page() {
     const appliedFilters = ['Men', 'Tops'];
     const items = [
         {
             id: 1,
-            name: 'Christian Dior T-Shirt Dior T-Shirt Dior T-Shirt Dior T-Shirt',
+            name: 'Christian Dior T-Shirt',
             mainImage: dummy_tee,
             price: 85,
             oldPrice: 95,
@@ -67,13 +68,7 @@ export default function page() {
 
     return (
         <>
-            <div className='mb-4 mt-5 flex items-center gap-3 text-sm'>
-                <Link href='/' className='text-gray-500 opacity-70'>
-                    Home
-                </Link>
-                <ChevronRight className='text-gray-400 opacity-70' strokeWidth={2} size={18} />
-                <p className='font-semibold text-slate-500'>Browse products</p>
-            </div>
+            <NavigationHistory routes={['Browse Products']} />
 
             <div className='flex items-start gap-4'>
                 <FilterMenu />

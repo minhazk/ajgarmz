@@ -5,3 +5,15 @@
 body {
     background-color: rgba(253, 250, 243, 0.081);
 }
+
+::-webkit-scrollbar {
+    width: 3px;
+    height: 5px;
+}
+::-webkit-scrollbar-thumb {
+    @apply bg-slate-600;
+    border-radius: 50px;
+}
+::-webkit-scrollbar-track {
+    background-color: rgba(46, 47, 47, 0);
+}
