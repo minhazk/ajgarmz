@@ -8,11 +8,13 @@ export default function NavBar() {
                 <button className='md:hidden'>
                     <Menu size={20} />
                 </button>
-                <Link href='/' className='text-xl font-semibold'>
+                <Link href='/' className='text-xl font-semibold text-slate-700'>
                     AjGarmz
                 </Link>
-                <ul className='hidden items-center gap-2 text-xs font-semibold md:flex md:text-sm lg:gap-4'>
-                    <li>Shop</li>
+                <ul className='hidden items-center gap-2 text-xs font-semibold text-slate-500 md:flex md:text-sm lg:gap-4'>
+                    <li>
+                        <Link href='/shop'>Shop</Link>
+                    </li>
                     <li>New Arrival</li>
                     <li>Most Wanted</li>
                     <li>Brands</li>
@@ -22,7 +24,7 @@ export default function NavBar() {
                 <button className='sm:hidden'>
                     <Search size={19} />
                 </button>
-                <div className='hidden rounded border border-gray-300 bg-gray-100 sm:flex'>
+                <div className='hidden rounded border border-gray-200 bg-gray-50 sm:flex'>
                     <div className='flex items-center p-2 text-gray-500'>
                         <Search size={18} />
                     </div>

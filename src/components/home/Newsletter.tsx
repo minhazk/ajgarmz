@@ -2,7 +2,7 @@ import { Mail } from 'lucide-react';
 
 export default function Newsletter() {
     return (
-        <div className='my-12 flex flex-col items-center justify-center gap-3  py-3 text-center'>
+        <div className='mb-1 mt-12 flex flex-col items-center justify-center gap-3  py-3 text-center'>
             <h1 className='text-md font-bold sm:text-2xl'>
                 Subscribe to our newsletter to get updates <br></br> to our latests collections
             </h1>

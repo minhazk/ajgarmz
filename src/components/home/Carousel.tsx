@@ -1,6 +1,7 @@
 import Image from 'next/image';
 import carousel from '../../assets/carousel-1.jpg';
 import { ArrowRight } from 'lucide-react';
+import Link from 'next/link';
 
 export default function Carousel() {
     return (
@@ -9,12 +10,12 @@ export default function Carousel() {
                 <h3 className='mx-5 text-3xl font-semibold text-white'>
                     Level up your style with our<br></br>summer collections
                 </h3>
-                <button className='mt-4 flex items-center justify-center gap-2 rounded bg-white px-5 py-2 text-sm font-semibold'>
+                <Link href='/shop' className='mt-4 flex items-center justify-center gap-2 rounded bg-white px-5 py-2 text-sm font-semibold'>
                     Shop now
                     <ArrowRight size={17} />
-                </button>
+                </Link>
             </div>
-            <Image src={carousel} layout='fill' objectFit='cover' alt='model' className='absolute inset-0 -z-10' />
+            <Image src={carousel} fill alt='model' className='absolute inset-0 -z-10 object-cover' />
         </div>
     );
 }

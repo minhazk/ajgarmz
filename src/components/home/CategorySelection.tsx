@@ -27,7 +27,7 @@ const CATEGORIES = [
 export default function CategorySelection() {
     return (
         <div className='mx-auto my-12 max-w-7xl'>
-            <h2 className='text-xl font-semibold text-primary'>Features Categories</h2>
+            <h2 className='text-xl font-semibold text-primary'>Featured Categories</h2>
             <div className='mt-7 grid grid-cols-2 gap-4 md:grid-cols-4'>
                 {CATEGORIES.map(category => (
                     <CategoryCard key={category.name} {...category} />
@@ -47,9 +47,9 @@ function CategoryCard({ name, image }: CategoryCardProps) {
     return (
         <div className='relative aspect-square w-full overflow-hidden rounded-md border border-gray-400'>
             <div className='absolute inset-0 bg-[rgb(0,0,0,0.40)]'></div>
-            <Image src={image} alt={`Shop ${name}`} layout='fill' objectFit='cover' className='-z-10' />
+            <Image src={image} alt={`Shop ${name}`} fill className='-z-10 object-cover' />
             <button className='absolute bottom-5 left-1/2 flex w-[75%] -translate-x-1/2 items-center justify-between rounded border border-gray-400 bg-white px-4 py-3 text-xs font-semibold'>
-                Shop {name} <ArrowRight size={17} />
+                Shop {name} <ArrowRight size={17} className='hidden sm:block' />
             </button>
         </div>
     );
