@@ -1,4 +1,4 @@
-import { User2, ShoppingCart, Search, Menu } from 'lucide-react';
+import { User2, ShoppingCart, Search, Menu, PackagePlus } from 'lucide-react';
 import Link from 'next/link';
 
 export default function NavBar() {
@@ -30,6 +30,9 @@ export default function NavBar() {
                     </div>
                     <input type='text' placeholder='Search' className='bg-transparent text-sm outline-none md:w-36 lg:w-full' />
                 </div>
+                <Link href='/create'>
+                    <PackagePlus size={20} strokeWidth={2} />
+                </Link>
                 <div className='cursor-pointer'>
                     <ShoppingCart size={20} strokeWidth={2} />
                 </div>
