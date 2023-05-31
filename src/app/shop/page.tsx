@@ -9,7 +9,7 @@ export default function page() {
     const appliedFilters = ['Men', 'Tops'];
     const items = [
         {
-            id: 1,
+            id: 8561,
             name: 'Christian Dior T-Shirt',
             mainImage: dummy_tee,
             price: 85,
@@ -17,7 +17,7 @@ export default function page() {
             colours: ['Red', 'Black'],
         },
         {
-            id: 1,
+            id: 651,
             name: 'Christian Dior T-Shirt',
             mainImage: dummy_tee,
             price: 85,
@@ -25,7 +25,7 @@ export default function page() {
             colours: ['Red', 'Black'],
         },
         {
-            id: 1,
+            id: 5321,
             name: 'Christian Dior T-Shirt',
             mainImage: dummy_tee,
             price: 85,
@@ -33,7 +33,7 @@ export default function page() {
             colours: ['Red', 'Black'],
         },
         {
-            id: 1,
+            id: 2311,
             name: 'Christian Dior T-Shirt',
             mainImage: dummy_tee,
             price: 85,
@@ -41,7 +41,7 @@ export default function page() {
             colours: ['Red', 'Black'],
         },
         {
-            id: 1,
+            id: 1523,
             name: 'Christian Dior T-Shirt',
             mainImage: dummy_tee,
             price: 85,
@@ -49,7 +49,7 @@ export default function page() {
             colours: ['Red', 'Black'],
         },
         {
-            id: 1,
+            id: 142,
             name: 'Christian Dior T-Shirt',
             mainImage: dummy_tee,
             price: 85,
@@ -57,7 +57,7 @@ export default function page() {
             colours: ['Red', 'Black'],
         },
         {
-            id: 1,
+            id: 1321,
             name: 'Christian Dior T-Shirt',
             mainImage: dummy_tee,
             price: 85,

@@ -1,20 +1,73 @@
 'use client';
 
 import NavigationHistory from '@/components/NavigationHistory';
-import Creatable, { useCreatable } from 'react-select/creatable';
+import { MultiSelect, MultiSelectCreatable } from '@/components/create/SelectOptions';
+import { ChangeEvent, useState } from 'react';
+import { FileImage } from 'lucide-react';
+import ImageInput from '@/components/create/ImageInput';
+import ItemImage, { ImageFileProps } from '@/components/create/ItemImage';
+import { colours, genders, itemCategories, itemTypes, sizes } from '@/components/create/data';
 
 export default function Page() {
+    const [selectedSizes, setSelectedSizes] = useState<string[]>([]);
+    const [selectedColours, setSelectedColours] = useState<string[]>([]);
+    const [gender, setGender] = useState<string[]>([]);
+    const [category, setCategory] = useState<string[]>([]);
+    const [type, setType] = useState<string[]>([]);
+    const [images, setImages] = useState<{ mainImage: string; images: ImageFileProps[] }>({
+        mainImage: '',
+        images: [],
+    });
+
+    const onImageInput = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const images = Array.prototype.slice.call(e.target.files);
+        for (let image of images) {
+            image.objectURL = URL.createObjectURL(image);
+        }
+        setImages((prev: any) => ({ mainImage: prev.mainImage !== '' || prev.images.length !== 0 ? prev.mainImage : images[0].objectURL, images: [...prev.images, ...images] }));
+    };
+    console.log(images);
     return (
         <div>
             <NavigationHistory routes={['Create Listing']} />
 
-            <div>
-                <h1 className='text-2xl font-semibold text-slate-600'>Create Listing</h1>
+            <div className='flex flex-col gap-8 md:flex-row'>
+                <div className='md:w-1/2'>
+                    <h1 className='text-xl font-semibold text-slate-600'>Item Images</h1>
 
-                <InputGroup label='Item title' />
-                <InputGroup label='Item description' />
+                    <div className='mt-5'>
+                        <div className={`${images.mainImage !== '' ? 'mb-10' : 'mb-4'} mt-4 flex flex-wrap gap-2 md:gap-4`}>
+                            {images.images.length === 0
+                                ? Array.from({ length: 2 }).map((_, i) => (
+                                      <div key={i} className='flex aspect-square w-24 items-center justify-center overflow-hidden rounded-lg border border-gray-300 p-2 lg:w-32'>
+                                          <FileImage size={32} className='text-gray-300' />
+                                      </div>
+                                  ))
+                                : images.images.map(({ objectURL: image }) => <ItemImage key={image} image={image} setImages={setImages} images={images} />)}
+                        </div>
+                        <ImageInput onChange={onImageInput} />
+                    </div>
+                </div>
 
-                <Creatable />
+                <div className='md:w-1/2'>
+                    <h1 className='text-xl font-semibold text-slate-600'>Item Details</h1>
+
+                    <InputGroup label='Item title' />
+                    <InputGroup label='Item description' />
+                    <InputGroup label='Item price' type='number' />
+
+                    <MultiSelectCreatable setter={setSelectedSizes} options={sizes} label='Available Sizes' isMulti />
+
+                    <MultiSelectCreatable setter={setSelectedColours} options={colours} label='Available Colours' isMulti />
+
+                    <MultiSelect setter={setGender} options={genders} isMulti label='Assign Gender' />
+
+                    <MultiSelectCreatable setter={setCategory} options={itemCategories} label='Item Category' />
+
+                    <MultiSelect setter={setType} options={itemTypes} label='Item Type' />
+
+                    <button className='w-full rounded-md border border-slate-600 bg-slate-600 px-5 py-2 text-sm text-white transition-opacity hover:opacity-75'>Create Listing</button>
+                </div>
             </div>
         </div>
     );
@@ -22,15 +75,16 @@ export default function Page() {
 
 type InputGroupProps = {
     label: string;
+    type?: string;
 };
 
-function InputGroup({ label }: InputGroupProps) {
+function InputGroup({ label, ...inputProps }: InputGroupProps) {
     return (
         <div className='my-4 flex flex-col gap-2'>
             <label className='text-sm font-medium' htmlFor={label}>
                 {label}
             </label>
-            <input className='rounded-md border border-gray-200 p-2 text-sm outline-none' placeholder='Type here' id={label} />
+            <input {...inputProps} className='rounded-md border border-gray-300 p-2 text-sm outline-none' placeholder='Type here' id={label} />
         </div>
     );
 }

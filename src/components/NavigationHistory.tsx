@@ -12,12 +12,10 @@ export default function NavigationHistory({ routes }: NavigationHistoryProps) {
                 Home
             </Link>
             {routes.map((route, i) => (
-                <>
-                    <ChevronRight key={i} className='text-gray-400 opacity-70' strokeWidth={2} size={18} />
-                    <p key={i} className='whitespace-nowrap text-slate-500 last:font-semibold'>
-                        {route}
-                    </p>
-                </>
+                <div className='flex flex-wrap items-center gap-2 text-sm' key={i}>
+                    <ChevronRight className='text-gray-400 opacity-70' strokeWidth={2} size={18} />
+                    <p className='whitespace-nowrap text-slate-500 last:font-semibold'>{route}</p>
+                </div>
             ))}
         </div>
     );
