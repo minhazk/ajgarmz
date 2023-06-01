@@ -2,7 +2,7 @@
 
 import Image from 'next/image';
 import dummy_tee from '../../../assets/dummy_tee.jpg';
-import NavigationHistory from '@/components/NavigationHistory';
+import NavigationHistory from '@/components/ui/NavigationHistory';
 import currencyFormatter from '@/util/currencyFormat';
 import { useState } from 'react';
 

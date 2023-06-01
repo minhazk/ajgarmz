@@ -1,5 +1,5 @@
-import Footer from '@/components/Footer';
-import NavBar from '@/components/NavBar';
+import Footer from '@/components/ui/Footer';
+import NavBar from '@/components/ui/NavBar';
 import Carousel from '@/components/home/Carousel';
 import CategorySelection from '@/components/home/CategorySelection';
 import InfoBanner from '@/components/home/InfoBanner';

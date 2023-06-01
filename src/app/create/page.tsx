@@ -1,6 +1,6 @@
 'use client';
 
-import NavigationHistory from '@/components/NavigationHistory';
+import NavigationHistory from '@/components/ui/NavigationHistory';
 import { MultiSelect, MultiSelectCreatable } from '@/components/create/SelectOptions';
 import { ChangeEvent, useState } from 'react';
 import { FileImage } from 'lucide-react';

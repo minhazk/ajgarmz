@@ -3,7 +3,7 @@ import { ChevronRight, X } from 'lucide-react';
 import FilterMenu from '@/components/shop/FilterMenu';
 import ItemCard from '@/components/shop/ItemCard';
 import dummy_tee from '../../assets/dummy_tee.jpg';
-import NavigationHistory from '@/components/NavigationHistory';
+import NavigationHistory from '@/components/ui/NavigationHistory';
 
 export default function page() {
     const appliedFilters = ['Men', 'Tops'];
