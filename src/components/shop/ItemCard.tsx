@@ -21,9 +21,9 @@ export default function ItemCard({ id, mainImage, name, price, oldPrice, colours
                 <p className='overflow-hidden text-ellipsis text-xs font-semibold text-slate-500 sm:text-sm' style={{ display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical' }}>
                     {name}
                 </p>
-                <p className='sm:text-md text-sm font-bold text-slate-500'>{currencyFormatter(price)}</p>
+                <p className='sm:text-md text-end text-sm font-bold text-slate-500'>{currencyFormatter(price)}</p>
                 <p className='text-xs text-slate-400 sm:text-sm'>{colours.length} colours</p>
-                {oldPrice != null && <p className='text-xs text-gray-400 line-through'>{currencyFormatter(oldPrice)}</p>}
+                {oldPrice != null && <p className='text-end text-xs text-gray-400 line-through'>{currencyFormatter(oldPrice)}</p>}
             </div>
         </Link>
     );

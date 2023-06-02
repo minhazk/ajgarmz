@@ -28,8 +28,8 @@ export default function InfoBanner() {
         <div className='mx-auto my-12 max-w-7xl'>
             <h2 className='text-xl font-semibold text-primary'>We provide best customer experiences</h2>
             <div className='mt-7 grid grid-cols-2 gap-8 md:grid-cols-4'>
-                {INFO.map(info => (
-                    <InfoCard key={info.title} {...info} />
+                {INFO.map((info, i) => (
+                    <InfoCard key={i} {...info} />
                 ))}
             </div>
         </div>

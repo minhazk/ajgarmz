@@ -5,6 +5,7 @@ import dummy_tee from '../../../assets/dummy_tee.jpg';
 import NavigationHistory from '@/components/ui/NavigationHistory';
 import currencyFormatter from '@/util/currencyFormat';
 import { useState } from 'react';
+import CustomButton from '@/components/ui/CustomButton';
 
 type PageProps = {
     params: {
@@ -106,7 +107,7 @@ export default function Page({ params: { id } }: PageProps) {
                                 +
                             </button>
                         </div>
-                        <button className='rounded-md border border-slate-600 bg-slate-600 px-5 text-sm text-white transition-opacity hover:opacity-75'>Add to cart</button>
+                        <CustomButton>Add to cart</CustomButton>
                     </div>
                 </div>
             </div>
