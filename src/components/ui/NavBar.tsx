@@ -1,13 +1,15 @@
 'use client';
 
 import { User2, ShoppingCart, Search, Menu, PackagePlus, X } from 'lucide-react';
-import { signIn } from 'next-auth/react';
+import { signIn, signOut, useSession } from 'next-auth/react';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 
 export default function NavBar() {
     const [burgerOpen, setBurgerOpen] = useState<boolean>(false);
     const [userMenuOpen, setUserMenuOpen] = useState<boolean>(false);
+    const { data: session } = useSession();
+    console.log(session);
 
     useEffect(() => {
         const resize = () => {
@@ -54,7 +56,7 @@ export default function NavBar() {
                 </div>
             </div>
             <div className='ml-4 flex items-center'>
-                <button className='sm:hidden'>
+                <button className='rounded-full p-2 transition-colors hover:bg-gray-100 sm:hidden'>
                     <Search size={19} />
                 </button>
                 <div className='mr-2 hidden rounded border border-gray-200 bg-gray-50 sm:flex'>
@@ -75,10 +77,20 @@ export default function NavBar() {
                     </button>
                     {userMenuOpen && (
                         <div className='absolute right-0 top-full z-40 mt-2 overflow-hidden rounded-md border border-slate-300 bg-white text-sm font-medium shadow-sm'>
-                            <button onClick={() => signIn()} className='w-full px-6 py-2 text-slate-500 transition-colors hover:bg-gray-50'>
-                                Sign in
-                            </button>
-                            <button className='w-full px-6 py-2 text-slate-500 transition-colors hover:bg-gray-50'>Register</button>
+                            {session?.user ? (
+                                <button onClick={() => signOut()} className='w-full px-6 py-2 text-slate-500 transition-colors hover:bg-gray-50'>
+                                    Sign out
+                                </button>
+                            ) : (
+                                <>
+                                    <button onClick={() => signIn()} className='w-full px-6 py-2 text-slate-500 transition-colors hover:bg-gray-50'>
+                                        Sign in
+                                    </button>
+                                    <Link href='/register' className='block w-full px-6 py-2 text-slate-500 transition-colors hover:bg-gray-50'>
+                                        Register
+                                    </Link>
+                                </>
+                            )}
                         </div>
                     )}
                 </div>

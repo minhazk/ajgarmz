@@ -6,8 +6,8 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = env("mysql://4w0sjadztg78jc0ev9ta:pscale_pw_dLKUZiv7UxmNWIfiPv2qJep1HL9YrjT218ZbnJWWuwR@aws.connect.psdb.cloud/next-commerce?sslaccept=strict")
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
 }
 
 model Account {
@@ -38,8 +38,9 @@ model Session {
 
 model User {
     id            String    @id @default(cuid())
-    name          String?
-    email         String?   @unique
+    name          String
+    email         String   @unique
+    password      String
     emailVerified DateTime?
     image         String?
     accounts      Account[]
