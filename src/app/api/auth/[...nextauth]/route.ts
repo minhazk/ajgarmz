@@ -18,18 +18,20 @@ const handler = NextAuth({
                 const user = await prisma.user.findUnique({ where: { email } });
                 if (user == null) return null;
                 if (!(await bcrypt.compare(password, user.password))) return null;
-                return user;
+                const { id, name, email: e } = user;
+                return { id, name, email: e };
             },
         }),
     ],
     callbacks: {
-        session: ({ session, user }) => ({
-            ...session,
-            user: {
-                ...session.user,
-                id: user.id,
-            },
-        }),
+        async jwt({ token, user }) {
+            return { ...token, ...user };
+        },
+
+        async session({ session, token }) {
+            session.user = token as any;
+            return session;
+        },
     },
     session: {
         strategy: 'jwt',

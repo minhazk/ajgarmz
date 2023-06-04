@@ -7,8 +7,7 @@ import Newsletter from '@/components/home/Newsletter';
 import { useSession } from 'next-auth/react';
 
 export default function Home() {
-    const { data } = useSession();
-    console.log(data);
+    const { data: session } = useSession();
 
     return (
         <>

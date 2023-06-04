@@ -9,7 +9,6 @@ export default function NavBar() {
     const [burgerOpen, setBurgerOpen] = useState<boolean>(false);
     const [userMenuOpen, setUserMenuOpen] = useState<boolean>(false);
     const { data: session } = useSession();
-    console.log(session);
 
     useEffect(() => {
         const resize = () => {
@@ -78,15 +77,15 @@ export default function NavBar() {
                     {userMenuOpen && (
                         <div className='absolute right-0 top-full z-40 mt-2 overflow-hidden rounded-md border border-slate-300 bg-white text-sm font-medium shadow-sm'>
                             {session?.user ? (
-                                <button onClick={() => signOut()} className='w-full px-6 py-2 text-slate-500 transition-colors hover:bg-gray-50'>
+                                <button onClick={() => signOut()} className='w-full whitespace-nowrap px-6 py-2 text-slate-500 transition-colors hover:bg-gray-50'>
                                     Sign out
                                 </button>
                             ) : (
                                 <>
-                                    <button onClick={() => signIn()} className='w-full px-6 py-2 text-slate-500 transition-colors hover:bg-gray-50'>
+                                    <button onClick={() => signIn()} className='w-full whitespace-nowrap px-6 py-2 text-slate-500 transition-colors hover:bg-gray-50'>
                                         Sign in
                                     </button>
-                                    <Link href='/register' className='block w-full px-6 py-2 text-slate-500 transition-colors hover:bg-gray-50'>
+                                    <Link href='/register' className='block w-full whitespace-nowrap px-6 py-2 text-slate-500 transition-colors hover:bg-gray-50'>
                                         Register
                                     </Link>
                                 </>
