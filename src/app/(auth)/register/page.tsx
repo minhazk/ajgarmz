@@ -3,13 +3,10 @@
 import AuthForm from '@/components/ui/AuthForm';
 import CustomButton from '@/components/ui/CustomButton';
 import FormInput from '@/components/ui/FormInput';
-import { signIn, useSession } from 'next-auth/react';
+import { signIn } from 'next-auth/react';
 import { FormEvent } from 'react';
 
 export default function Page() {
-    const { data: session } = useSession();
-    console.log(1, session);
-
     const handleSubmit = async (e: FormEvent) => {
         e.preventDefault();
         const form = new FormData(e.target as HTMLFormElement);
