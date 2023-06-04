@@ -1,11 +1,16 @@
-import Link from 'next/link';
-import { ChevronRight, X } from 'lucide-react';
+'use client';
+
+import { X } from 'lucide-react';
 import FilterMenu from '@/components/shop/FilterMenu';
 import ItemCard from '@/components/shop/ItemCard';
 import dummy_tee from '../../assets/dummy_tee.jpg';
 import NavigationHistory from '@/components/ui/NavigationHistory';
+import { api } from '@/util/trpc';
 
 export default function page() {
+    const hello = api.example.hello.useQuery({ text: 'from tRPC' });
+    console.log(hello.data);
+
     const appliedFilters = ['Men', 'Tops'];
     const items = [
         {
