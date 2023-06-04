@@ -7,9 +7,10 @@ import dummy_tee from '../../assets/dummy_tee.jpg';
 import NavigationHistory from '@/components/ui/NavigationHistory';
 import { api } from '@/util/trpc';
 
-export default function page() {
+export default function Page() {
     const hello = api.example.hello.useQuery({ text: 'from tRPC' });
-    console.log(hello.data);
+    const { data } = api.items.getAll.useQuery();
+    console.log(data);
 
     const appliedFilters = ['Men', 'Tops'];
     const items = [

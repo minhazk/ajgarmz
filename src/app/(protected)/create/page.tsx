@@ -2,11 +2,12 @@
 
 import NavigationHistory from '@/components/ui/NavigationHistory';
 import { MultiSelect, MultiSelectCreatable } from '@/components/create/SelectOptions';
-import { useState } from 'react';
+import { FormEvent, useState } from 'react';
 import { FileImage } from 'lucide-react';
 import ImageInput from '@/components/create/ImageInput';
 import ItemImage, { ImagesStateProps } from '@/components/create/ItemImage';
 import { colours, genders, itemCategories, itemTypes, sizes } from '@/components/create/data';
+import { api } from '@/util/trpc';
 
 export default function Page() {
     const [selectedSizes, setSelectedSizes] = useState<string[]>([]);
@@ -18,6 +19,23 @@ export default function Page() {
         mainImage: null,
         images: [],
     });
+
+    const handleCreateItem = (e: FormEvent) => {
+        e.preventDefault();
+        const form = new FormData(e.target as HTMLFormElement);
+        const name = form.get('item title');
+        const description = form.get('item description');
+        const price = form.get('item price');
+        const item = { name, description, price, selectedSizes, selectedColours, gender, category: category[0], type: type[0] };
+        if (
+            Object.values(item).some(val => {
+                if (typeof val == 'string') return val == '';
+                return val?.length == 0;
+            })
+        )
+            return alert('Fill all inputs');
+        // api.items.createItem
+    };
 
     const onImageInput = (e: React.ChangeEvent<HTMLInputElement>) => {
         const images = Array.prototype.slice.call(e.target.files);
@@ -52,9 +70,11 @@ export default function Page() {
                 <div className='lg:w-1/2'>
                     <h1 className='text-xl font-semibold text-slate-600'>Item Details</h1>
 
-                    <InputGroup label='Item title' />
-                    <InputGroup label='Item description' />
-                    <InputGroup label='Item price' type='number' />
+                    <form onSubmit={handleCreateItem}>
+                        <InputGroup label='Item title' />
+                        <InputGroup label='Item description' />
+                        <InputGroup label='Item price' type='number' />
+                    </form>
 
                     <MultiSelectCreatable setter={setSelectedSizes} options={sizes} label='Available Sizes' isMulti />
 
@@ -81,10 +101,16 @@ type InputGroupProps = {
 function InputGroup({ label, ...inputProps }: InputGroupProps) {
     return (
         <div className='my-4 flex flex-col gap-2'>
-            <label className='text-sm font-medium' htmlFor={label}>
+            <label className='text-sm font-medium' htmlFor={label.toLowerCase()}>
                 {label}
             </label>
-            <input {...inputProps} className='rounded-md border border-gray-300 p-2 text-sm outline-none transition-colors focus-within:border-slate-400' placeholder='Type here' id={label} />
+            <input
+                id={label.toLowerCase()}
+                name={label.toLowerCase()}
+                {...inputProps}
+                className='rounded-md border border-gray-300 p-2 text-sm outline-none transition-colors focus-within:border-slate-400'
+                placeholder='Type here'
+            />
         </div>
     );
 }

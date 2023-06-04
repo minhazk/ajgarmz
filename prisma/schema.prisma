@@ -6,8 +6,8 @@ generator client {
 }
 
 datasource db {
-  provider = "mysql"
-  url      = env("DATABASE_URL")
+  provider     = "mysql"
+  url          = env("DATABASE_URL")
   relationMode = "prisma"
 }
 
@@ -63,18 +63,28 @@ model Item {
   price       Float
   category    String
   type        String
-  colors      Color[]  @relation("ItemColor")
+  colours     Colour[] @relation("ItemColour")
   sizes       Size[]   @relation("ItemSize")
+  images      Image[]  
 }
 
-model Color {
+model Image {
   id          Int      @id @default(autoincrement())
-  name        String   @unique
-  items       Item[]   @relation("ItemColor")
+  url         String
+  itemId      Int
+  item        Item     @relation(fields: [itemId], references: [id], onDelete: Cascade)
+
+  @@index([itemId])
+}
+
+model Colour {
+  id    Int    @id @default(autoincrement())
+  name  String @unique
+  items Item[] @relation("ItemColour")
 }
 
 model Size {
-  id          Int      @id @default(autoincrement())
-  name        String   @unique
-  Items       Item[]   @relation("ItemSize")
+  id    Int    @id @default(autoincrement())
+  name  String @unique
+  Items Item[] @relation("ItemSize")
 }

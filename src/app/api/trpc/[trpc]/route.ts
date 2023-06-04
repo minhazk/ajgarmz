@@ -1,4 +1,5 @@
 import { appRouter } from '@/server/api/root';
+import { prisma } from '@/server/prisma';
 import { FetchCreateContextFnOptions, fetchRequestHandler } from '@trpc/server/adapters/fetch';
 
 const handler = (request: Request) => {
@@ -7,8 +8,8 @@ const handler = (request: Request) => {
         endpoint: '/api/trpc',
         req: request,
         router: appRouter,
-        createContext: (opts: any): any => {
-            return {};
+        createContext: (opts: FetchCreateContextFnOptions): any => {
+            return { opts, prisma };
         },
     });
 };
