@@ -2,10 +2,10 @@
 
 import NavigationHistory from '@/components/ui/NavigationHistory';
 import { MultiSelect, MultiSelectCreatable } from '@/components/create/SelectOptions';
-import { ChangeEvent, useState } from 'react';
+import { useState } from 'react';
 import { FileImage } from 'lucide-react';
 import ImageInput from '@/components/create/ImageInput';
-import ItemImage, { ImageFileProps, ImagesStateProps } from '@/components/create/ItemImage';
+import ItemImage, { ImagesStateProps } from '@/components/create/ItemImage';
 import { colours, genders, itemCategories, itemTypes, sizes } from '@/components/create/data';
 
 export default function Page() {
