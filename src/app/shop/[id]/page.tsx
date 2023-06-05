@@ -21,6 +21,7 @@ export default function Page({ params: { id } }: PageProps) {
 
     if (isNaN(Number(id))) return <div>404</div>;
     const { data } = api.items.getItem.useQuery(Number(id));
+    if (!data) return <div>404</div>;
     const { name, description, mainImage, price, oldPrice, sizes, colours, images } = data;
 
     return (

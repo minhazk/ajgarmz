@@ -50,9 +50,14 @@ export const itemRouter = createTRPCRouter({
                 name,
                 description,
                 price,
-                category,
                 type,
                 gender,
+                category: {
+                    connectOrCreate: {
+                        where: { name: category },
+                        create: { name: category },
+                    },
+                },
                 images: {
                     createMany: { data: [{ url: 'https://source.unsplash.com/random/2' }] },
                 },

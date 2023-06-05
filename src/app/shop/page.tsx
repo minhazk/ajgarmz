@@ -8,6 +8,7 @@ import { api } from '@/util/trpc';
 
 export default function Page() {
     const { data: items } = api.items.getAll.useQuery();
+    console.log(items);
     const appliedFilters = ['Men', 'Tops'];
 
     return (

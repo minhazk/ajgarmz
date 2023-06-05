@@ -6,7 +6,7 @@ import dummy_tee from '../../assets/dummy_tee.jpg';
 export type ItemCardProps = {
     id: number;
     mainImage: {
-        url: string;
+        url: string | null;
     };
     name: string;
     price: number;
