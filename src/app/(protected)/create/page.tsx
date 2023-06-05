@@ -13,28 +13,39 @@ export default function Page() {
     const [selectedSizes, setSelectedSizes] = useState<string[]>([]);
     const [selectedColours, setSelectedColours] = useState<string[]>([]);
     const [gender, setGender] = useState<string[]>([]);
-    const [category, setCategory] = useState<string[]>([]);
-    const [type, setType] = useState<string[]>([]);
+    const [category, setCategory] = useState<string>('');
+    const [type, setType] = useState<string>('');
     const [images, setImages] = useState<ImagesStateProps>({
         mainImage: null,
         images: [],
     });
 
+    const createItem = api.items.createItem.useMutation({
+        onSuccess(data, variables, context) {
+            console.log('item created', data, variables, context);
+        },
+        onError(error) {
+            console.log('There was an error creating your item.');
+        },
+    });
+
     const handleCreateItem = (e: FormEvent) => {
         e.preventDefault();
         const form = new FormData(e.target as HTMLFormElement);
-        const name = form.get('item title');
-        const description = form.get('item description');
-        const price = form.get('item price');
-        const item = { name, description, price, selectedSizes, selectedColours, gender, category: category[0], type: type[0] };
+        const name = form.get('item title')!.toString();
+        const description = form.get('item description')!.toString();
+        const price = parseFloat(form.get('item price')!.toString());
+        const item = { name, description, price, sizes: selectedSizes, colours: selectedColours, gender: gender.length !== 1 ? 'unisex' : gender[0], category, type };
+        console.log(item);
         if (
             Object.values(item).some(val => {
                 if (typeof val == 'string') return val == '';
+                if (typeof val == 'number') return val < 0.01;
                 return val?.length == 0;
             })
         )
             return alert('Fill all inputs');
-        // api.items.createItem
+        void createItem.mutate(item);
     };
 
     const onImageInput = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -74,19 +85,21 @@ export default function Page() {
                         <InputGroup label='Item title' />
                         <InputGroup label='Item description' />
                         <InputGroup label='Item price' type='number' />
+
+                        <MultiSelectCreatable setter={setSelectedSizes} options={sizes} label='Available Sizes' isMulti />
+
+                        <MultiSelectCreatable setter={setSelectedColours} options={colours} label='Available Colours' isMulti />
+
+                        <MultiSelect setter={setGender} options={genders} isMulti label='Assign Gender' />
+
+                        <MultiSelectCreatable setter={setCategory} options={itemCategories} label='Item Category' />
+
+                        <MultiSelect setter={setType} options={itemTypes} label='Item Type' />
+
+                        <button type='submit' className='w-full rounded-md border border-slate-600 bg-slate-600 px-5 py-2 text-sm text-white transition-opacity hover:opacity-75'>
+                            Create Listing
+                        </button>
                     </form>
-
-                    <MultiSelectCreatable setter={setSelectedSizes} options={sizes} label='Available Sizes' isMulti />
-
-                    <MultiSelectCreatable setter={setSelectedColours} options={colours} label='Available Colours' isMulti />
-
-                    <MultiSelect setter={setGender} options={genders} isMulti label='Assign Gender' />
-
-                    <MultiSelectCreatable setter={setCategory} options={itemCategories} label='Item Category' />
-
-                    <MultiSelect setter={setType} options={itemTypes} label='Item Type' />
-
-                    <button className='w-full rounded-md border border-slate-600 bg-slate-600 px-5 py-2 text-sm text-white transition-opacity hover:opacity-75'>Create Listing</button>
                 </div>
             </div>
         </div>

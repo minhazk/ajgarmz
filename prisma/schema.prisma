@@ -61,18 +61,23 @@ model Item {
   name        String
   description String
   price       Float
+  oldPrice    Float?
   category    String
   type        String
-  colours     Colour[] @relation("ItemColour")
-  sizes       Size[]   @relation("ItemSize")
-  images      Image[]  
+  gender      String
+  colours     Colour[]
+  sizes       Size[]
+  mainImage   Image?   @relation("MainImage")
+  images      Image[]  @relation("Images")
 }
 
 model Image {
-  id          Int      @id @default(autoincrement())
-  url         String
-  itemId      Int
-  item        Item     @relation(fields: [itemId], references: [id], onDelete: Cascade)
+  id           Int    @id @default(autoincrement())
+  url          String
+  item         Item?  @relation(name: "Images", fields: [itemId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  itemId       Int?
+  itemAsMain   Item?  @relation(name: "MainImage", fields: [itemAsMainId], references: [id])
+  itemAsMainId Int?   @unique
 
   @@index([itemId])
 }
@@ -80,11 +85,11 @@ model Image {
 model Colour {
   id    Int    @id @default(autoincrement())
   name  String @unique
-  items Item[] @relation("ItemColour")
+  items Item[]
 }
 
 model Size {
   id    Int    @id @default(autoincrement())
   name  String @unique
-  Items Item[] @relation("ItemSize")
+  items Item[]
 }

@@ -6,6 +6,7 @@ import NavigationHistory from '@/components/ui/NavigationHistory';
 import currencyFormatter from '@/util/currencyFormat';
 import { useState } from 'react';
 import CustomButton from '@/components/ui/CustomButton';
+import { api } from '@/util/trpc';
 
 type PageProps = {
     params: {
@@ -14,21 +15,13 @@ type PageProps = {
 };
 
 export default function Page({ params: { id } }: PageProps) {
-    const dummyItem = {
-        name: 'Christian Dior T-Shirt',
-        description:
-            'Lorem ipsum dolor sit amet consectetur adipisicing elit. Vero, facilis dolores! Architecto incidunt inventore ipsam enim qui quia nostrum doloremque eligendi cum, corporis veniam ad consequatur, quisquam eius, commodi fugiat!',
-        mainImage: dummy_tee,
-        price: 85,
-        oldPrice: 95,
-        sizes: ['XL', 'L', 'M', 'S'],
-        colours: ['Red', 'Black'],
-        images: [dummy_tee, dummy_tee, dummy_tee, dummy_tee],
-    };
-    const { name, mainImage, price, oldPrice, sizes, colours, images, description } = dummyItem;
     const [selectedSize, setSelectedSize] = useState<string>('');
     const [selectedColour, setSelectedColour] = useState<string>('');
     const [quantity, setQuantity] = useState<number>(1);
+
+    if (isNaN(Number(id))) return <div>404</div>;
+    const { data } = api.items.getItem.useQuery(Number(id));
+    const { name, description, mainImage, price, oldPrice, sizes, colours, images } = data;
 
     return (
         <div>
@@ -37,15 +30,15 @@ export default function Page({ params: { id } }: PageProps) {
             <div className='flex flex-col gap-8 md:flex-row'>
                 <div className='flex w-full flex-col gap-4 md:w-1/2 md:max-w-xl'>
                     <div className='order-2 grid grid-flow-col justify-start gap-2 overflow-auto rounded-md pb-2'>
-                        {images.map((image, i) => (
-                            <div className='relative aspect-square w-28 cursor-pointer overflow-hidden rounded-md' key={i}>
-                                <Image src={image} fill className='asp object-cover' alt={name} />
+                        {images.map(({ id, url }: { id: number; url: string }) => (
+                            <div className='relative aspect-square w-28 cursor-pointer overflow-hidden rounded-md' key={id}>
+                                <Image src={dummy_tee} fill className='asp object-cover' alt={name} />
                             </div>
                         ))}
                     </div>
 
                     <div className='relative aspect-square w-full overflow-hidden rounded-md'>
-                        <Image src={mainImage} alt={name} fill className='cover' />
+                        <Image src={dummy_tee} alt={name} fill className='cover' />
                     </div>
                 </div>
 
@@ -54,7 +47,7 @@ export default function Page({ params: { id } }: PageProps) {
                         <h1 className='text-lg font-medium text-slate-500'>{name}</h1>
                         <div className='flex items-baseline gap-4'>
                             <p className='text-lg font-bold text-slate-500'>{currencyFormatter(price)}</p>
-                            <p className='text-md font-semibold text-slate-300 line-through'>{currencyFormatter(oldPrice)}</p>
+                            {oldPrice != null && <p className='text-md font-semibold text-slate-300 line-through'>{currencyFormatter(oldPrice)}</p>}
                         </div>
                     </div>
 
@@ -66,13 +59,13 @@ export default function Page({ params: { id } }: PageProps) {
                     <div className='py-4'>
                         <h3 className='text-md mb-3 font-medium text-slate-600'>Available sizes</h3>
                         <div className='flex flex-wrap items-center gap-1'>
-                            {sizes.map((size, i) => (
+                            {sizes.map(({ id, name: size }: { id: number; name: string }) => (
                                 <button
                                     onClick={() => setSelectedSize(size)}
                                     className={`flex w-10 items-center justify-center rounded-md border p-2 text-sm font-medium transition-colors ${
                                         selectedSize === size ? 'border-white bg-slate-600 text-white' : 'border-gray-300 bg-white text-slate-500 hover:bg-slate-50'
                                     }`}
-                                    key={i}
+                                    key={id}
                                 >
                                     {size}
                                 </button>
@@ -83,13 +76,13 @@ export default function Page({ params: { id } }: PageProps) {
                     <div className='py-4'>
                         <h3 className='text-md mb-3 font-medium text-slate-600'>Available colours</h3>
                         <div className='flex flex-wrap items-center gap-1'>
-                            {colours.map((colour, i) => (
+                            {colours.map(({ id, name: colour }: { id: number; name: string }) => (
                                 <button
                                     onClick={() => setSelectedColour(colour)}
                                     className={`flex items-center justify-center rounded-md border p-2 text-sm font-medium transition-colors ${
                                         selectedColour === colour ? 'border-white bg-slate-600 text-white' : 'border-gray-300 bg-white text-slate-500 hover:bg-slate-50'
                                     }`}
-                                    key={i}
+                                    key={id}
                                 >
                                     {colour}
                                 </button>

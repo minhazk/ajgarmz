@@ -4,7 +4,7 @@ import Creatable from 'react-select/creatable';
 type MultiSelectProps = {
     options: readonly ({ value: string; label: string } | GroupBase<{ value: string; label: string }>)[];
     label: string;
-    setter: (options: string[]) => void;
+    setter: (options: any) => void;
     isMulti?: boolean;
 };
 
