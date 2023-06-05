@@ -1,22 +1,27 @@
 'use client';
 
 import { X } from 'lucide-react';
-import FilterMenu from '@/components/shop/FilterMenu';
+import FilterMenu, { appliedFiltersProps } from '@/components/shop/FilterMenu';
 import ItemCard, { ItemCardProps } from '@/components/shop/ItemCard';
 import NavigationHistory from '@/components/ui/NavigationHistory';
 import { api } from '@/util/trpc';
+import { useState } from 'react';
 
 export default function Page() {
     const { data: items } = api.items.getAll.useQuery();
-    console.log(items);
-    const appliedFilters = ['Men', 'Tops'];
+    const { data: categories } = api.items.getCategories.useQuery();
+    const [appliedFilters, setAppliedFilters] = useState<appliedFiltersProps>({});
+
+    const handleRemoveFilter = (filter: string) => {
+        // setAppliedFilters(prev => )
+    };
 
     return (
         <>
             <NavigationHistory routes={['Browse Products']} />
 
             <div className='flex items-start gap-4'>
-                <FilterMenu />
+                <FilterMenu categories={categories} setAppliedFilters={setAppliedFilters} />
 
                 <div className='w-full'>
                     <div className='flex items-center justify-between gap-2 text-xs text-slate-600'>
@@ -35,12 +40,18 @@ export default function Page() {
 
                     <div className='mb-3 mt-1 flex flex-wrap items-center gap-3'>
                         <p className='text-sm font-semibold text-slate-600'>Applied Filters:</p>
-                        {appliedFilters.map((filter, i) => (
-                            <button key={i} className='flex items-center gap-1 rounded-lg border border-gray-200 bg-white px-3 py-1 text-sm transition-colors hover:bg-gray-50'>
-                                {filter}
-                                <X size={15} className='text-gray-500' />
-                            </button>
-                        ))}
+                        {Object.values(appliedFilters)
+                            .flat()
+                            .map((filter, i) => (
+                                <button
+                                    onClick={() => handleRemoveFilter(filter)}
+                                    key={i}
+                                    className='flex items-center gap-1 rounded-lg border border-gray-200 bg-white px-3 py-1 text-sm transition-colors hover:bg-gray-50'
+                                >
+                                    {filter}
+                                    <X size={15} className='text-gray-500' />
+                                </button>
+                            ))}
                     </div>
 
                     <div className='grid grid-cols-2 gap-2 sm:gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4'>

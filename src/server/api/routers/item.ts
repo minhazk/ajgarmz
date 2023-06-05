@@ -44,6 +44,9 @@ export const itemRouter = createTRPCRouter({
             },
         });
     }),
+    getCategories: publicProcedure.output(z.object({ id: z.number(), name: z.string() }).array()).query(({ ctx }) => {
+        return ctx.prisma.category.findMany();
+    }),
     createItem: publicProcedure.input(ItemCreateInput).mutation(({ ctx, input: { name, description, price, sizes, colours, gender, category, type } }) => {
         return ctx.prisma.item.create({
             data: {

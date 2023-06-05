@@ -35,8 +35,16 @@ export default function Page() {
         const name = form.get('item title')!.toString();
         const description = form.get('item description')!.toString();
         const price = parseFloat(form.get('item price')!.toString());
-        const item = { name, description, price, sizes: selectedSizes, colours: selectedColours, gender: gender.length !== 1 ? 'unisex' : gender[0], category, type };
-        console.log(item);
+        const item = {
+            name,
+            description,
+            price,
+            sizes: selectedSizes,
+            colours: selectedColours.map(colour => colour.toLowerCase()),
+            gender: gender.length !== 1 ? 'unisex' : gender[0].toLowerCase(),
+            category: category.toLowerCase(),
+            type: type.toLowerCase(),
+        };
         if (
             Object.values(item).some(val => {
                 if (typeof val == 'string') return val == '';

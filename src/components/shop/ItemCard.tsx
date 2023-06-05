@@ -6,15 +6,15 @@ import dummy_tee from '../../assets/dummy_tee.jpg';
 export type ItemCardProps = {
     id: number;
     mainImage: {
-        url: string | null;
-    };
+        url: string;
+    } | null;
     name: string;
     price: number;
-    oldPrice?: number;
-    colours: Array<string>;
+    oldPrice: number | null;
+    colours: { id: number; name: string }[];
 };
 
-export default function ItemCard({ id, mainImage: { url }, name, price, oldPrice, colours }: ItemCardProps) {
+export default function ItemCard({ id, mainImage, name, price, oldPrice, colours }: ItemCardProps) {
     return (
         <Link href={`/shop/${id}`} className='rounded-md border border-gray-100 p-3'>
             <div className='relative aspect-square overflow-hidden rounded-md'>
