@@ -128,13 +128,15 @@ export const itemRouter = createTRPCRouter({
             },
         });
     }),
-    getUserItems: publicProcedure.input(z.string()).query(({ ctx, input: id }) => {
+    getUserItems: publicProcedure.input(z.string().nullish()).query(({ ctx, input: id }) => {
+        if (id == null) return [];
         return ctx.prisma.basketItem.findMany({
             where: { userId: id },
             select: {
                 item: {
                     select: {
                         id: true,
+                        mainImage: true,
                         name: true,
                         price: true,
                         oldPrice: true,
