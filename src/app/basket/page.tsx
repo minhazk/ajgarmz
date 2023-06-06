@@ -12,7 +12,6 @@ export default function Page() {
     const { data: session } = useSession();
     const { data: items } = api.items.getUserItems.useQuery(session?.user?.id ?? null);
     if (session?.user?.id == null) return <div>not logged in</div>;
-    console.log(items);
 
     return (
         <>

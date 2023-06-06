@@ -1,6 +1,6 @@
 'use client';
 
-import { X } from 'lucide-react';
+import { SlidersHorizontal, X } from 'lucide-react';
 import FilterMenu, { appliedFiltersProps } from '@/components/shop/FilterMenu';
 import ItemCard from '@/components/shop/ItemCard';
 import NavigationHistory from '@/components/ui/NavigationHistory';
@@ -36,6 +36,8 @@ export default function Page() {
         });
     };
 
+    console.log(pages);
+
     return (
         <>
             <NavigationHistory routes={['Browse Products']} />
@@ -45,9 +47,20 @@ export default function Page() {
 
                 <div className='w-full'>
                     <div className='flex items-center justify-between gap-2 text-xs text-slate-600'>
-                        <p>
-                            Showing <span className='font-semibold'>{0}</span> results
-                        </p>
+                        <div className='relative flex items-center gap-3'>
+                            <input id='filter' type='checkbox' className='hidden text-slate-500' />
+                            <label htmlFor='filter'>
+                                <SlidersHorizontal size={20} />
+                            </label>
+                            <div className='absolute left-0 top-full z-40 my-4'>
+                                dasads
+                                <FilterMenu categories={categories} setAppliedFilters={setAppliedFilters} />
+                            </div>
+
+                            <p>
+                                Showing <span className='font-semibold'>{(pages?.pages[0].items.length ?? 1) * (pages?.pages.length ?? 1)}</span> results
+                            </p>
+                        </div>
                         <div className='flex items-center gap-2'>
                             <p>Sort by</p>
                             <select className='rounded-md border border-gray-200 p-2 outline-none'>

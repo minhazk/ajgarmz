@@ -32,22 +32,22 @@ export default function NavBar() {
                 <div className={`lg:block ${burgerOpen ? 'absolute left-0 top-full z-40 mt-2 block w-52 overflow-hidden rounded-lg border border-gray-300 bg-white py-4 lg:hidden' : 'hidden'}`}>
                     <ul className='flex flex-col text-sm font-semibold text-slate-500 lg:flex-row lg:items-center lg:gap-3'>
                         <li>
-                            <Link href='/shop' className='block w-full py-4 pl-8 pr-2 transition-colors lg:px-1 lg:py-2'>
+                            <Link onClick={() => setBurgerOpen(false)} href='/shop' className='block w-full py-4 pl-8 pr-2 transition-colors lg:px-1 lg:py-2'>
                                 Shop
                             </Link>
                         </li>
                         <li>
-                            <Link href='/' className='block w-full py-4 pl-8 pr-2 transition-colors lg:px-1 lg:py-2'>
+                            <Link onClick={() => setBurgerOpen(false)} href='/' className='block w-full py-4 pl-8 pr-2 transition-colors lg:px-1 lg:py-2'>
                                 New Arrival
                             </Link>
                         </li>
                         <li>
-                            <Link href='/' className='block w-full py-4 pl-8 pr-2 transition-colors lg:px-1 lg:py-2'>
+                            <Link onClick={() => setBurgerOpen(false)} href='/' className='block w-full py-4 pl-8 pr-2 transition-colors lg:px-1 lg:py-2'>
                                 Most Wanted
                             </Link>
                         </li>
                         <li>
-                            <Link href='/' className='block w-full py-4 pl-8 pr-2 transition-colors lg:px-1 lg:py-2'>
+                            <Link onClick={() => setBurgerOpen(false)} href='/' className='block w-full py-4 pl-8 pr-2 transition-colors lg:px-1 lg:py-2'>
                                 Brands
                             </Link>
                         </li>
