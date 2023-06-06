@@ -22,8 +22,6 @@ export default function Page() {
     );
     const { data: categories } = api.items.getCategories.useQuery();
 
-    console.log(pages?.pages);
-
     type T = keyof typeof appliedFilters;
 
     const handleRemoveFilter = (filter: string) => {

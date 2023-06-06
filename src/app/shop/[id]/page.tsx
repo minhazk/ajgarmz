@@ -7,6 +7,7 @@ import currencyFormatter from '@/util/currencyFormat';
 import { useState } from 'react';
 import CustomButton from '@/components/ui/CustomButton';
 import { api } from '@/util/trpc';
+import { useSession } from 'next-auth/react';
 
 type PageProps = {
     params: {
@@ -14,15 +15,43 @@ type PageProps = {
     };
 };
 
+type InputProps = {
+    id: number;
+    name: string;
+};
+
 export default function Page({ params: { id } }: PageProps) {
-    const [selectedSize, setSelectedSize] = useState<string>('');
-    const [selectedColour, setSelectedColour] = useState<string>('');
+    const { data: session } = useSession();
+    const [selectedSize, setSelectedSize] = useState<InputProps>();
+    const [selectedColour, setSelectedColour] = useState<InputProps>();
     const [quantity, setQuantity] = useState<number>(1);
+
+    const addToBasket = api.items.addToBasket.useMutation({
+        onSuccess(data, variables, context) {
+            console.log('item added', data, variables, context);
+        },
+        onError(error) {
+            console.log('There was an error adding your item.');
+        },
+    });
 
     if (isNaN(Number(id))) return <div>404</div>;
     const { data } = api.items.getItem.useQuery(Number(id));
     if (!data) return <div>404</div>;
     const { name, description, mainImage, price, oldPrice, sizes, colours, images } = data;
+
+    const handleAddToBasket = () => {
+        if (session?.user.id == null) return alert('Please login to add items');
+        if (selectedSize == null) return alert('Please choose a size');
+        if (selectedColour == null) return alert('Please choose a colour');
+        void addToBasket.mutate({
+            userId: session.user.id,
+            itemId: Number(id),
+            sizeId: selectedSize.id,
+            colourId: selectedColour.id,
+            quantity,
+        });
+    };
 
     return (
         <div>
@@ -60,15 +89,15 @@ export default function Page({ params: { id } }: PageProps) {
                     <div className='py-4'>
                         <h3 className='text-md mb-3 font-medium text-slate-600'>Available sizes</h3>
                         <div className='flex flex-wrap items-center gap-1'>
-                            {sizes.map(({ id, name: size }: { id: number; name: string }) => (
+                            {sizes.map((size: InputProps) => (
                                 <button
                                     onClick={() => setSelectedSize(size)}
                                     className={`flex w-10 items-center justify-center rounded-md border p-2 text-sm font-medium transition-colors ${
-                                        selectedSize === size ? 'border-white bg-slate-600 text-white' : 'border-gray-300 bg-white text-slate-500 hover:bg-slate-50'
+                                        selectedSize?.name === size.name ? 'border-white bg-slate-600 text-white' : 'border-gray-300 bg-white text-slate-500 hover:bg-slate-50'
                                     }`}
-                                    key={id}
+                                    key={size.id}
                                 >
-                                    {size}
+                                    {size.name}
                                 </button>
                             ))}
                         </div>
@@ -77,15 +106,15 @@ export default function Page({ params: { id } }: PageProps) {
                     <div className='py-4'>
                         <h3 className='text-md mb-3 font-medium text-slate-600'>Available colours</h3>
                         <div className='flex flex-wrap items-center gap-1'>
-                            {colours.map(({ id, name: colour }: { id: number; name: string }) => (
+                            {colours.map((colour: InputProps) => (
                                 <button
                                     onClick={() => setSelectedColour(colour)}
                                     className={`flex items-center justify-center rounded-md border p-2 text-sm font-medium transition-colors first-letter:uppercase ${
-                                        selectedColour === colour ? 'border-white bg-slate-600 text-white' : 'border-gray-300 bg-white text-slate-500 hover:bg-slate-50'
+                                        selectedColour?.name === colour.name ? 'border-white bg-slate-600 text-white' : 'border-gray-300 bg-white text-slate-500 hover:bg-slate-50'
                                     }`}
-                                    key={id}
+                                    key={colour.id}
                                 >
-                                    {colour}
+                                    {colour.name}
                                 </button>
                             ))}
                         </div>
@@ -101,7 +130,7 @@ export default function Page({ params: { id } }: PageProps) {
                                 +
                             </button>
                         </div>
-                        <CustomButton>Add to cart</CustomButton>
+                        <CustomButton onClick={handleAddToBasket}>Add to cart</CustomButton>
                     </div>
                 </div>
             </div>

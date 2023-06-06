@@ -67,9 +67,9 @@ export default function NavBar() {
                 <Link href='/create' className='rounded-full p-2 transition-colors hover:bg-gray-100'>
                     <PackagePlus size={20} strokeWidth={2} />
                 </Link>
-                <div className='cursor-pointer rounded-full p-2 transition-colors hover:bg-gray-100'>
+                <Link href='/basket' className='rounded-full p-2 transition-colors hover:bg-gray-100'>
                     <ShoppingCart size={20} strokeWidth={2} />
-                </div>
+                </Link>
                 <div className='relative'>
                     <button onClick={() => setUserMenuOpen(p => !p)} className='flex items-center rounded-full p-2 transition-colors hover:bg-gray-100'>
                         <User2 size={20} strokeWidth={2} />

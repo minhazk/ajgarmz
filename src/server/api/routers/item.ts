@@ -1,7 +1,7 @@
 import { createTRPCRouter, protectedProcedure, publicProcedure } from '@/server/api/trpc';
 import { z } from 'zod';
 
-const ItemCreateInput = z.object({
+const itemCreateInput = z.object({
     name: z.string(),
     description: z.string(),
     price: z.number(),
@@ -10,6 +10,14 @@ const ItemCreateInput = z.object({
     colours: z.string().array(),
     category: z.string(),
     type: z.string(),
+});
+
+const basketItemInput = z.object({
+    userId: z.string(),
+    itemId: z.number(),
+    sizeId: z.number(),
+    colourId: z.number(),
+    quantity: z.number(),
 });
 
 export const itemRouter = createTRPCRouter({
@@ -81,7 +89,7 @@ export const itemRouter = createTRPCRouter({
     getCategories: publicProcedure.output(z.object({ id: z.number(), name: z.string() }).array()).query(({ ctx }) => {
         return ctx.prisma.category.findMany();
     }),
-    createItem: publicProcedure.input(ItemCreateInput).mutation(({ ctx, input: { name, description, price, sizes, colours, gender, category, type } }) => {
+    createItem: publicProcedure.input(itemCreateInput).mutation(({ ctx, input: { name, description, price, sizes, colours, gender, category, type } }) => {
         return ctx.prisma.item.create({
             data: {
                 name,
@@ -117,6 +125,37 @@ export const itemRouter = createTRPCRouter({
                         };
                     }),
                 },
+            },
+        });
+    }),
+    getUserItems: publicProcedure.input(z.string()).query(({ ctx, input: id }) => {
+        return ctx.prisma.basketItem.findMany({
+            where: { userId: id },
+            select: {
+                item: {
+                    select: {
+                        id: true,
+                        name: true,
+                        price: true,
+                        oldPrice: true,
+                    },
+                },
+                size: { select: { name: true } },
+                colour: { select: { name: true } },
+                quantity: true,
+            },
+        });
+    }),
+    addToBasket: publicProcedure.input(basketItemInput).mutation(({ ctx, input: { userId, itemId, sizeId, colourId, quantity } }) => {
+        return ctx.prisma.basketItem.upsert({
+            where: { itemId_userId_colourId_sizeId: { itemId, userId, colourId, sizeId } },
+            update: { quantity: { increment: quantity } },
+            create: {
+                user: { connect: { id: userId } },
+                item: { connect: { id: itemId } },
+                colour: { connect: { id: colourId } },
+                size: { connect: { id: sizeId } },
+                quantity,
             },
         });
     }),

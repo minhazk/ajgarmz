@@ -38,12 +38,13 @@ model Session {
 }
 
 model User {
-  id            String    @id @default(cuid())
+  id            String       @id @default(cuid())
   name          String
-  email         String    @unique
+  email         String       @unique
   password      String
   emailVerified DateTime?
   image         String?
+  basket        BasketItem[] @relation("BasketUser")
   // accounts      Account[]
   // sessions      Session[]
 }
@@ -57,19 +58,20 @@ model VerificationToken {
 }
 
 model Item {
-  id          Int      @id @default(autoincrement())
+  id          Int          @id @default(autoincrement())
   name        String
   description String
   price       Float
   oldPrice    Float?
-  category    Category @relation(fields: [categoryId], references: [id])
+  category    Category     @relation(fields: [categoryId], references: [id])
   categoryId  Int
   type        String
   gender      String
   colours     Colour[]
   sizes       Size[]
-  mainImage   Image?   @relation("MainImage")
-  images      Image[]  @relation("Images")
+  mainImage   Image?       @relation("MainImage")
+  images      Image[]      @relation("Images")
+  basket      BasketItem[] @relation("BasketItem")
 
   @@index([categoryId])
 }
@@ -86,19 +88,38 @@ model Image {
 }
 
 model Colour {
-  id    Int    @id @default(autoincrement())
-  name  String @unique
-  items Item[]
+  id     Int          @id @default(autoincrement())
+  name   String       @unique
+  items  Item[]
+  basket BasketItem[] @relation("itemColour")
 }
 
 model Size {
-  id    Int    @id @default(autoincrement())
-  name  String @unique
-  items Item[]
+  id     Int          @id @default(autoincrement())
+  name   String       @unique
+  items  Item[]
+  basket BasketItem[] @relation("itemSize")
 }
 
 model Category {
   id    Int    @id @default(autoincrement())
   name  String @unique
   items Item[]
+}
+
+model BasketItem {
+  item     Item   @relation("BasketItem", fields: [itemId], references: [id])
+  itemId   Int
+  user     User   @relation("BasketUser", fields: [userId], references: [id])
+  userId   String
+  colour   Colour @relation("itemColour", fields: [colourId], references: [id])
+  colourId Int
+  size     Size   @relation("itemSize", fields: [sizeId], references: [id])
+  sizeId   Int
+  quantity Int
+
+  @@unique([itemId, userId, colourId, sizeId])
+  @@index([userId])
+  @@index([colourId])
+  @@index([sizeId])
 }
