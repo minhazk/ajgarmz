@@ -20,15 +20,17 @@ export type appliedFiltersProps = {
 };
 
 type FilterProps = {
-    label: string;
+    label: FilterLabels;
     options: string[] | FilterProps;
 }[];
+
+export type FilterLabels = 'Category' | 'Department' | 'Gender';
 
 export default function FilterMenu({ categories, setAppliedFilters }: FilterMenuProps) {
     const [filters, setFilters] = useState<FilterProps>([
         {
             label: 'Gender',
-            options: ['Men', 'Women', 'Unisex'],
+            options: ['Men', 'Women'],
         },
         {
             label: 'Department',
@@ -60,7 +62,7 @@ export default function FilterMenu({ categories, setAppliedFilters }: FilterMenu
 
 type FilterButtonProps = {
     key: number;
-    label: string;
+    label: FilterLabels;
     options: string[] | FilterProps;
     setAppliedFilters: Dispatch<SetStateAction<appliedFiltersProps>>;
 };
@@ -71,11 +73,17 @@ function FilterButton({ label, options, setAppliedFilters }: FilterButtonProps) 
     const handleOnInput = (e: ChangeEvent) => {
         const input = e.target as HTMLInputElement;
         const isChecked = input.checked;
-        console.log(e.target as HTMLInputElement);
-        setAppliedFilters((prev: appliedFiltersProps) => {
-            const arr = (prev[label] ||= []);
-            arr.push(input.id);
-            return { ...prev };
+        const filter = input.id.toLowerCase();
+        setAppliedFilters((filters: appliedFiltersProps) => {
+            for (const [key, value] of Object.entries(filters)) {
+                if (value.includes(filter)) {
+                    filters[key as keyof typeof filters] = filters[key as keyof typeof filters]?.filter(items => items !== filter);
+                    return { ...filters };
+                }
+            }
+            const arr = (filters[label] ||= []);
+            arr.push(filter);
+            return { ...filters };
         });
     };
 

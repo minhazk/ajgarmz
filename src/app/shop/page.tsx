@@ -2,18 +2,40 @@
 
 import { X } from 'lucide-react';
 import FilterMenu, { appliedFiltersProps } from '@/components/shop/FilterMenu';
-import ItemCard, { ItemCardProps } from '@/components/shop/ItemCard';
+import ItemCard from '@/components/shop/ItemCard';
 import NavigationHistory from '@/components/ui/NavigationHistory';
 import { api } from '@/util/trpc';
 import { useState } from 'react';
 
 export default function Page() {
-    const { data: items } = api.items.getAll.useQuery();
-    const { data: categories } = api.items.getCategories.useQuery();
     const [appliedFilters, setAppliedFilters] = useState<appliedFiltersProps>({});
+    const {
+        data: pages,
+        hasNextPage,
+        fetchNextPage,
+        isLoading,
+    } = api.items.getAll.useInfiniteQuery(
+        { filters: appliedFilters, limit: 3 },
+        {
+            getNextPageParam: lastPage => lastPage.nextCursor,
+        }
+    );
+    const { data: categories } = api.items.getCategories.useQuery();
+
+    console.log(pages?.pages);
+
+    type T = keyof typeof appliedFilters;
 
     const handleRemoveFilter = (filter: string) => {
-        // setAppliedFilters(prev => )
+        setAppliedFilters((filters: appliedFiltersProps) => {
+            for (const [key, value] of Object.entries(filters)) {
+                if (value.includes(filter)) {
+                    filters[key as T] = filters[key as T]?.filter(items => items !== filter);
+                    break;
+                }
+            }
+            return { ...filters };
+        });
     };
 
     return (
@@ -55,10 +77,20 @@ export default function Page() {
                     </div>
 
                     <div className='grid grid-cols-2 gap-2 sm:gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4'>
-                        {items?.map((item: ItemCardProps) => (
-                            <ItemCard key={item.id} {...item} />
-                        ))}
+                        {pages?.pages.map(page => page.items.map(item => <ItemCard key={item.id} {...item} />))}
                     </div>
+
+                    {hasNextPage && (
+                        <div className='my-5 flex justify-center'>
+                            <button
+                                onClick={() => fetchNextPage()}
+                                disabled={isLoading}
+                                className='rounded-md border border-gray-200 px-4 py-2 text-sm text-slate-400 transition-colors hover:bg-gray-50'
+                            >
+                                Load More
+                            </button>
+                        </div>
+                    )}
                 </div>
             </div>
         </>

@@ -80,7 +80,7 @@ export default function Page({ params: { id } }: PageProps) {
                             {colours.map(({ id, name: colour }: { id: number; name: string }) => (
                                 <button
                                     onClick={() => setSelectedColour(colour)}
-                                    className={`flex items-center justify-center rounded-md border p-2 text-sm font-medium transition-colors ${
+                                    className={`flex items-center justify-center rounded-md border p-2 text-sm font-medium transition-colors first-letter:uppercase ${
                                         selectedColour === colour ? 'border-white bg-slate-600 text-white' : 'border-gray-300 bg-white text-slate-500 hover:bg-slate-50'
                                     }`}
                                     key={id}

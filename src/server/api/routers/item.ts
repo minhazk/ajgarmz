@@ -13,22 +13,56 @@ const ItemCreateInput = z.object({
 });
 
 export const itemRouter = createTRPCRouter({
-    getAll: publicProcedure.query(({ ctx }) => {
-        return ctx.prisma.item.findMany({
-            select: {
-                id: true,
-                name: true,
-                price: true,
-                oldPrice: true,
-                mainImage: {
-                    select: {
-                        url: true,
+    getAll: publicProcedure
+        .input(
+            z.object({
+                limit: z.number().min(1).max(100).nullish(),
+                cursor: z.number().nullish(),
+                filters: z.object({
+                    Gender: z.string().array().optional(),
+                    Category: z.string().array().optional(),
+                    Department: z.string().array().optional(),
+                }),
+            })
+        )
+        .query(async ({ ctx, input }) => {
+            const limit = input.limit ?? 50;
+            const {
+                cursor,
+                filters: { Gender, Category, Department },
+            } = input;
+            const items = await ctx.prisma.item.findMany({
+                take: limit + 1,
+                select: {
+                    id: true,
+                    name: true,
+                    price: true,
+                    oldPrice: true,
+                    mainImage: {
+                        select: {
+                            url: true,
+                        },
                     },
+                    colours: true,
                 },
-                colours: true,
-            },
-        });
-    }),
+                // where: {
+                //     gender: { in: Gender ?? [] }
+                // },
+                cursor: cursor ? { id: cursor } : undefined,
+                orderBy: {
+                    id: 'desc',
+                },
+            });
+            let nextCursor: typeof cursor | undefined = undefined;
+            if (items.length > limit) {
+                const nextItem = items.pop();
+                nextCursor = nextItem!.id;
+            }
+            return {
+                items,
+                nextCursor,
+            };
+        }),
     getItem: publicProcedure.input(z.number()).query(({ ctx, input: id }) => {
         return ctx.prisma.item.findUnique({
             where: { id },
