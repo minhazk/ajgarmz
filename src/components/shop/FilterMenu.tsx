@@ -52,7 +52,7 @@ export default function FilterMenu({ categories, setAppliedFilters }: FilterMenu
     }, [categories]);
 
     return (
-        <div className='hidden w-64 divide-y-2 divide-gray-50 rounded-md border border-gray-200 p-3 sm:block'>
+        <div className='divide-y-2 divide-gray-50 rounded-md border border-gray-200 p-3'>
             {filters.map((filter, i) => (
                 <FilterButton key={i} {...filter} setAppliedFilters={setAppliedFilters} />
             ))}

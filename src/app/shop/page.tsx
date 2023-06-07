@@ -43,17 +43,18 @@ export default function Page() {
             <NavigationHistory routes={['Browse Products']} />
 
             <div className='flex items-start gap-4'>
-                <FilterMenu categories={categories} setAppliedFilters={setAppliedFilters} />
+                <div className='hidden w-64 sm:block'>
+                    <FilterMenu categories={categories} setAppliedFilters={setAppliedFilters} />
+                </div>
 
                 <div className='w-full'>
                     <div className='flex items-center justify-between gap-2 text-xs text-slate-600'>
                         <div className='relative flex items-center gap-3'>
-                            <input id='filter' type='checkbox' className='hidden text-slate-500' />
-                            <label htmlFor='filter'>
-                                <SlidersHorizontal size={20} />
+                            <label htmlFor='filter' className='cursor-pointer sm:hidden'>
+                                <SlidersHorizontal size={17} />
                             </label>
-                            <div className='absolute left-0 top-full z-40 my-4'>
-                                dasads
+                            <input id='filter' type='checkbox' className='peer hidden text-slate-500' />
+                            <div className='absolute left-0 top-full z-40 my-3 hidden w-52 bg-white peer-checked:block'>
                                 <FilterMenu categories={categories} setAppliedFilters={setAppliedFilters} />
                             </div>
 
@@ -96,7 +97,7 @@ export default function Page() {
                             <button
                                 onClick={() => fetchNextPage()}
                                 disabled={isLoading}
-                                className='rounded-md border border-gray-200 px-4 py-2 text-sm text-slate-400 transition-colors hover:bg-gray-50'
+                                className='rounded-md border border-gray-200 px-4 py-2 text-xs text-slate-400 transition-colors hover:bg-gray-50 sm:text-sm'
                             >
                                 Load More
                             </button>
