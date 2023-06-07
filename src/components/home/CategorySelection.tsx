@@ -5,7 +5,7 @@ import clothing from '../../assets/clothing.jpg';
 import casual from '../../assets/casual.jpg';
 import { ArrowRight } from 'lucide-react';
 
-const CATEGORIES = [
+const categories = [
     {
         name: 'Clothing',
         image: clothing,
@@ -26,10 +26,10 @@ const CATEGORIES = [
 
 export default function CategorySelection() {
     return (
-        <div className='mx-auto my-12 w-full max-w-7xl'>
+        <div className='mx-auto my-2 w-full max-w-7xl md:my-7'>
             <h2 className='text-xl font-semibold text-primary'>Featured Categories</h2>
             <div className='mt-7 grid grid-cols-2 gap-4 md:grid-cols-4'>
-                {CATEGORIES.map(category => (
+                {categories.map(category => (
                     <CategoryCard key={category.name} {...category} />
                 ))}
             </div>

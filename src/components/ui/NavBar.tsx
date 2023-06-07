@@ -64,9 +64,11 @@ export default function NavBar() {
                     </div>
                     <input type='text' placeholder='Search' className='bg-transparent text-sm outline-none md:w-36 lg:w-full' />
                 </div>
-                <Link href='/create' className='rounded-full p-2 transition-colors hover:bg-gray-100'>
-                    <PackagePlus size={20} strokeWidth={2} />
-                </Link>
+                {session?.user.type === 'admin' && (
+                    <Link href='/create' className='rounded-full p-2 transition-colors hover:bg-gray-100'>
+                        <PackagePlus size={20} strokeWidth={2} />
+                    </Link>
+                )}
                 <Link href='/basket' className='rounded-full p-2 transition-colors hover:bg-gray-100'>
                     <ShoppingCart size={20} strokeWidth={2} />
                 </Link>

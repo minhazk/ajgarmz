@@ -1,6 +1,8 @@
 import { appRouter } from '@/server/api/root';
 import { prisma } from '@/server/prisma';
-import { FetchCreateContextFnOptions, fetchRequestHandler } from '@trpc/server/adapters/fetch';
+import { fetchRequestHandler } from '@trpc/server/adapters/fetch';
+import { CreateNextContextOptions } from '@trpc/server/adapters/next';
+import { getToken } from 'next-auth/jwt';
 
 const handler = (request: Request) => {
     console.log(`incoming request ${request.url}`);
@@ -8,8 +10,9 @@ const handler = (request: Request) => {
         endpoint: '/api/trpc',
         req: request,
         router: appRouter,
-        createContext: (opts: FetchCreateContextFnOptions): any => {
-            return { opts, prisma };
+        createContext: async (opts: CreateNextContextOptions) => {
+            const session = await getToken({ req: opts.req });
+            return { opts, session, prisma };
         },
     });
 };

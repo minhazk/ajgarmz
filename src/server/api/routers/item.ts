@@ -1,4 +1,4 @@
-import { createTRPCRouter, protectedProcedure, publicProcedure } from '@/server/api/trpc';
+import { adminProcedure, createTRPCRouter, publicProcedure } from '@/server/api/trpc';
 import { z } from 'zod';
 
 const itemCreateInput = z.object({

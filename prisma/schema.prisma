@@ -44,6 +44,7 @@ model User {
   password      String
   emailVerified DateTime?
   image         String?
+  type          String       @default("user")
   basket        BasketItem[] @relation("BasketUser")
   // accounts      Account[]
   // sessions      Session[]
