@@ -107,15 +107,10 @@ export const publicProcedure = t.procedure;
 
 /** Reusable middleware that enforces users are logged in before running the procedure. */
 const enforceUserIsAuthed = t.middleware(({ ctx, next }) => {
-    if (!ctx.session) {
+    if (!ctx.session || !ctx.session.user) {
         throw new TRPCError({ code: 'UNAUTHORIZED' });
     }
-    return next({
-        ctx: {
-            ...ctx,
-            session: { user: ctx.session },
-        },
-    });
+    return next();
 });
 
 /**
@@ -129,18 +124,13 @@ const enforceUserIsAuthed = t.middleware(({ ctx, next }) => {
 export const authedProcedure = t.procedure.use(enforceUserIsAuthed);
 
 const enforceUserIsAdmin = t.middleware(({ ctx, next }) => {
-    if (!ctx.session) {
+    if (!ctx.session || !ctx.session.user) {
         throw new TRPCError({ code: 'UNAUTHORIZED' });
     }
-    if (ctx.session?.type !== 'admin') {
+    if (ctx.session.user.type !== 'admin') {
         throw new TRPCError({ code: 'UNAUTHORIZED' });
     }
-    return next({
-        ctx: {
-            ...ctx,
-            session: { user: ctx.session },
-        },
-    });
+    return next();
 });
 
 export const adminProcedure = t.procedure.use(enforceUserIsAdmin);
