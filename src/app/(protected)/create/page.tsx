@@ -61,13 +61,11 @@ export default function Page() {
         void createItem.mutate(item);
     };
 
-    const onImageInput = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const images = Array.prototype.slice.call(e.target.files);
-        for (let image of images) {
-            image.objectURL = URL.createObjectURL(image);
-        }
+    const onImageInput = (images: any[]) => {
         setImages((prev: ImagesStateProps) => ({ mainImage: prev.mainImage != null || prev.images.length !== 0 ? prev.mainImage : images[0] ?? null, images: [...prev.images, ...images] }));
     };
+
+    console.log(images);
 
     return (
         <div>

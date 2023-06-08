@@ -26,6 +26,7 @@
         "next-auth": "^4.22.1",
         "react": "18.2.0",
         "react-dom": "18.2.0",
+        "react-google-drive-picker": "^1.2.2",
         "react-query": "^3.39.3",
         "react-select": "^5.7.3",
         "superjson": "^1.12.3",
