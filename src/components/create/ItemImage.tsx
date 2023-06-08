@@ -3,12 +3,8 @@ import Image from 'next/image';
 import { useState } from 'react';
 
 export type ImageFileProps = {
-    lastModified: number;
     name: string;
-    size: number;
-    type: string;
-    objectURL: string;
-    lastModifiedDate: Date;
+    url: string;
 };
 
 type ItemImageProps = {
@@ -50,7 +46,7 @@ export default function ItemImage({ image, setImages, images }: ItemImageProps) 
                 </button>
             )}
             <div className='relative aspect-square w-24 overflow-hidden rounded-md lg:w-32'>
-                <Image src={image.objectURL} fill className='object-cover' alt={image.name} />
+                <Image src={image.url} fill className='object-cover' alt={image.name} />
             </div>
             {images.mainImage?.name === image.name && (
                 <div className='absolute bottom-0 left-1/2 z-10 -translate-x-1/2 translate-y-1/2 rounded-md border-2 border-white bg-slate-800 px-5 py-1 text-xs font-semibold text-white'>MAIN</div>

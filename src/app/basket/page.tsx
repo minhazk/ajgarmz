@@ -21,7 +21,7 @@ export default function Page() {
                     {items?.map(({ item, colour, size, quantity }, i) => (
                         <div key={i} className='flex items-center gap-2 sm:gap-5'>
                             <div className='relative aspect-square min-w-[92px] overflow-hidden rounded-md sm:min-w-[96px]'>
-                                <Image src={dummy_tee} fill className='object-cover' alt={item.name} />
+                                <Image src={item.mainImage!.url} fill className='object-cover' alt={item.name} />
                             </div>
                             <div className='flex flex-grow flex-col gap-1'>
                                 <p

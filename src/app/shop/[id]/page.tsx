@@ -4,7 +4,7 @@ import Image from 'next/image';
 import dummy_tee from '../../../assets/dummy_tee.jpg';
 import NavigationHistory from '@/components/ui/NavigationHistory';
 import currencyFormatter from '@/util/currencyFormat';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import CustomButton from '@/components/ui/CustomButton';
 import { api } from '@/util/trpc';
 import { useSession } from 'next-auth/react';
@@ -25,6 +25,7 @@ export default function Page({ params: { id } }: PageProps) {
     const [selectedSize, setSelectedSize] = useState<InputProps>();
     const [selectedColour, setSelectedColour] = useState<InputProps>();
     const [quantity, setQuantity] = useState<number>(1);
+    const [selectedImage, setSelectedImage] = useState<string>();
 
     const addToBasket = api.items.addToBasket.useMutation({
         onSuccess(data, variables, context) {
@@ -35,7 +36,7 @@ export default function Page({ params: { id } }: PageProps) {
         },
     });
 
-    if (isNaN(Number(id))) return <div>404</div>;
+    if (isNaN(Number(id)) || id == null) return <div>404</div>;
     const { data } = api.items.getItem.useQuery(Number(id));
     if (!data) return <div>404</div>;
     const { name, description, mainImage, price, oldPrice, sizes, colours, images } = data;
@@ -60,15 +61,19 @@ export default function Page({ params: { id } }: PageProps) {
             <div className='flex flex-col gap-8 md:flex-row'>
                 <div className='flex w-full flex-col gap-4 md:w-1/2 md:max-w-xl'>
                     <div className='order-2 grid grid-flow-col justify-start gap-2 overflow-auto rounded-md pb-2'>
-                        {images.map(({ id, url }: { id: number; url: string }) => (
-                            <div className='relative aspect-square w-28 cursor-pointer overflow-hidden rounded-md' key={id}>
-                                <Image src={dummy_tee} fill className='asp object-cover' alt={name} />
+                        {[mainImage as { id: number; url: string }, ...images].map(({ id, url }: { id: number; url: string }) => (
+                            <div
+                                onClick={() => setSelectedImage(url)}
+                                className='relative aspect-square w-28 cursor-pointer overflow-hidden rounded-md border-2 border-transparent hover:border-slate-300'
+                                key={id}
+                            >
+                                <Image src={url} fill className='object-cover' alt={name} />
                             </div>
                         ))}
                     </div>
 
                     <div className='relative aspect-square w-full overflow-hidden rounded-md'>
-                        <Image src={dummy_tee} alt={name} fill className='cover' />
+                        <Image src={selectedImage ?? mainImage!.url} alt={name} fill className='object-cover' />
                     </div>
                 </div>
 

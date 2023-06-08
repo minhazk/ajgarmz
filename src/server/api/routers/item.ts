@@ -10,6 +10,12 @@ const itemCreateInput = z.object({
     colours: z.string().array(),
     category: z.string(),
     type: z.string(),
+    images: z
+        .object({
+            url: z.string(),
+        })
+        .array(),
+    mainImage: z.string(),
 });
 
 const basketItemInput = z.object({
@@ -79,15 +85,25 @@ export const itemRouter = createTRPCRouter({
                 oldPrice: true,
                 sizes: true,
                 colours: true,
-                images: true,
-                mainImage: true,
+                images: {
+                    select: {
+                        id: true,
+                        url: true,
+                    },
+                },
+                mainImage: {
+                    select: {
+                        id: true,
+                        url: true,
+                    },
+                },
             },
         });
     }),
     getCategories: publicProcedure.output(z.object({ id: z.number(), name: z.string() }).array()).query(({ ctx }) => {
         return ctx.prisma.category.findMany();
     }),
-    createItem: adminProcedure.input(itemCreateInput).mutation(({ ctx, input: { name, description, price, sizes, colours, gender, category, type } }) => {
+    createItem: adminProcedure.input(itemCreateInput).mutation(({ ctx, input: { name, description, price, sizes, colours, gender, category, type, images, mainImage } }) => {
         return ctx.prisma.item.create({
             data: {
                 name,
@@ -102,10 +118,10 @@ export const itemRouter = createTRPCRouter({
                     },
                 },
                 images: {
-                    createMany: { data: [{ url: 'https://source.unsplash.com/random/2' }] },
+                    createMany: { data: images },
                 },
                 mainImage: {
-                    create: { url: 'https://source.unsplash.com/random/2' },
+                    create: { url: mainImage },
                 },
                 colours: {
                     connectOrCreate: colours.map(colour => {
@@ -134,7 +150,11 @@ export const itemRouter = createTRPCRouter({
                 item: {
                     select: {
                         id: true,
-                        mainImage: true,
+                        mainImage: {
+                            select: {
+                                url: true,
+                            },
+                        },
                         name: true,
                         price: true,
                         oldPrice: true,

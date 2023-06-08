@@ -40,6 +40,7 @@ export default function Page() {
         const name = form.get('item title')!.toString();
         const description = form.get('item description')!.toString();
         const price = parseFloat(form.get('item price')!.toString());
+        if (images.mainImage == null) return alert('Item requires a main image');
         const item = {
             name,
             description,
@@ -49,12 +50,19 @@ export default function Page() {
             gender: gender.length !== 1 ? 'unisex' : gender[0].toLowerCase(),
             category: category.toLowerCase(),
             type: type.toLowerCase(),
+            images: images.images
+                .filter(img => img.url !== images.mainImage!.url)
+                .map(img => {
+                    return { url: img.url };
+                }),
+            mainImage: images.mainImage.url,
         };
         if (
             Object.values(item).some(val => {
                 if (typeof val == 'string') return val == '';
                 if (typeof val == 'number') return val < 0.01;
-                return val?.length == 0;
+                if (Array.isArray(val)) return val.length == 0;
+                return !val;
             })
         )
             return alert('Fill all inputs');
@@ -64,8 +72,6 @@ export default function Page() {
     const onImageInput = (images: any[]) => {
         setImages((prev: ImagesStateProps) => ({ mainImage: prev.mainImage != null || prev.images.length !== 0 ? prev.mainImage : images[0] ?? null, images: [...prev.images, ...images] }));
     };
-
-    console.log(images);
 
     return (
         <div>

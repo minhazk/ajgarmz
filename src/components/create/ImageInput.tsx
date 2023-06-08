@@ -4,6 +4,11 @@ type ImageInputProps = {
     onChange: (images: any) => void;
 };
 
+export type DriveImageProps = {
+    name: string;
+    id: string;
+};
+
 export default function ImageInput({ onChange }: ImageInputProps) {
     const [openPicker] = useDrivePicker();
 
@@ -16,7 +21,7 @@ export default function ImageInput({ onChange }: ImageInputProps) {
         openPicker({
             clientId,
             developerKey,
-            token: process.env.NEXT_PUBLIC_GOOGLE_ACCESS_TOKEN,
+            // token: process.env.NEXT_PUBLIC_GOOGLE_ACCESS_TOKEN,
             viewId: 'DOCS_IMAGES',
             showUploadView: true,
             showUploadFolders: true,
@@ -27,8 +32,8 @@ export default function ImageInput({ onChange }: ImageInputProps) {
                 if (data.action === 'cancel' || !data) return;
                 if (data.docs == null || data.docs.length === 0) return;
                 onChange([
-                    ...data.docs.map(img => {
-                        return { ...img, objectURL: `https://drive.google.com/uc?export=view&id=${img.id}` };
+                    ...data.docs.map(({ name, id }: DriveImageProps) => {
+                        return { name, url: `https://drive.google.com/uc?export=view&id=${id}` };
                     }),
                 ]);
             },
