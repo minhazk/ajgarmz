@@ -1,13 +1,13 @@
 'use client';
 
 import Image from 'next/image';
-import dummy_tee from '../../../assets/dummy_tee.jpg';
 import NavigationHistory from '@/components/ui/NavigationHistory';
 import currencyFormatter from '@/util/currencyFormat';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import CustomButton from '@/components/ui/CustomButton';
 import { api } from '@/util/trpc';
 import { useSession } from 'next-auth/react';
+import { showToast } from '@/util/toastNotification';
 
 type PageProps = {
     params: {
@@ -28,11 +28,11 @@ export default function Page({ params: { id } }: PageProps) {
     const [selectedImage, setSelectedImage] = useState<string>();
 
     const addToBasket = api.items.addToBasket.useMutation({
-        onSuccess(data, variables, context) {
-            console.log('item added', data, variables, context);
+        onSuccess() {
+            showToast('Item added to basket');
         },
-        onError(error) {
-            console.log('There was an error adding your item.');
+        onError() {
+            showToast('There was an error adding your item.');
         },
     });
 
@@ -42,9 +42,9 @@ export default function Page({ params: { id } }: PageProps) {
     const { name, description, mainImage, price, oldPrice, sizes, colours, images } = data;
 
     const handleAddToBasket = () => {
-        if (session?.user.id == null) return alert('Please login to add items');
-        if (selectedSize == null) return alert('Please choose a size');
-        if (selectedColour == null) return alert('Please choose a colour');
+        if (session?.user.id == null) return showToast('Please login to add items');
+        if (selectedSize == null) return showToast('Please choose a size');
+        if (selectedColour == null) return showToast('Please choose a colour');
         void addToBasket.mutate({
             userId: session.user.id,
             itemId: Number(id),
@@ -64,7 +64,9 @@ export default function Page({ params: { id } }: PageProps) {
                         {[mainImage as { id: number; url: string }, ...images].map(({ id, url }: { id: number; url: string }) => (
                             <div
                                 onClick={() => setSelectedImage(url)}
-                                className='relative aspect-square w-28 cursor-pointer overflow-hidden rounded-md border-2 border-transparent hover:border-slate-300'
+                                className={`${
+                                    (selectedImage ?? mainImage!.url) === url ? 'border-slate-600' : 'border-transparent hover:border-slate-300'
+                                } relative aspect-square w-28 cursor-pointer overflow-hidden rounded-md border-2`}
                                 key={id}
                             >
                                 <Image src={url} fill className='object-cover' alt={name} />

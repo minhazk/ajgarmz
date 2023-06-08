@@ -6,7 +6,6 @@ import { Inter } from 'next/font/google';
 import NavBar from '@/components/ui/NavBar';
 import { SessionProvider } from 'next-auth/react';
 import { TrpcProvider } from '@/util/trpc-provider';
-import { ToastProvider } from '@/context/ToastContext';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -19,16 +18,14 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     return (
         <html lang='en'>
             <body className={`${inter.className} flex min-h-screen flex-col`}>
-                <ToastProvider>
-                    <SessionProvider>
-                        <TrpcProvider>
-                            <div className='container mx-auto flex flex-grow flex-col px-5 sm:px-6 lg:px-12'>
-                                <NavBar />
-                                <div className='flex flex-grow flex-col'>{children}</div>
-                            </div>
-                        </TrpcProvider>
-                    </SessionProvider>
-                </ToastProvider>
+                <SessionProvider>
+                    <TrpcProvider>
+                        <div className='container mx-auto flex flex-grow flex-col px-5 sm:px-6 lg:px-12'>
+                            <NavBar />
+                            <div className='flex flex-grow flex-col'>{children}</div>
+                        </div>
+                    </TrpcProvider>
+                </SessionProvider>
                 <Footer />
             </body>
         </html>

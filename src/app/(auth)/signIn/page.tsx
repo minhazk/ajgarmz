@@ -6,6 +6,7 @@ import FormInput from '@/components/ui/FormInput';
 import AuthForm from '@/components/ui/AuthForm';
 import { FormEvent } from 'react';
 import { signIn } from 'next-auth/react';
+import { showToast } from '@/util/toastNotification';
 
 export default function Page() {
     const handleSubmit = async (e: FormEvent) => {
@@ -13,7 +14,7 @@ export default function Page() {
         const form = new FormData(e.target as HTMLFormElement);
         const email = form.get('email');
         const password = form.get('password');
-        if (email === '' || password === '') return alert('Please fill in all the fields');
+        if (email === '' || password === '') return showToast('Please fill in all the fields');
         signIn('credentials', {
             email,
             password,

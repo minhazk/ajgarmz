@@ -3,6 +3,7 @@
 import AuthForm from '@/components/ui/AuthForm';
 import CustomButton from '@/components/ui/CustomButton';
 import FormInput from '@/components/ui/FormInput';
+import { showToast } from '@/util/toastNotification';
 import { signIn } from 'next-auth/react';
 import { FormEvent } from 'react';
 
@@ -14,7 +15,7 @@ export default function Page() {
         const email = form.get('email');
         const password = form.get('password');
         const rePassword = form.get('confirm password');
-        if (name === '' || email === '' || password === '' || rePassword === '') return alert('Please fill in all fields');
+        if (name === '' || email === '' || password === '' || rePassword === '') return showToast('Please fill in all fields');
         const res = await fetch('/api/register', {
             method: 'POST',
             headers: {

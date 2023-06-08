@@ -10,7 +10,7 @@ import { colours, genders, itemCategories, itemTypes, sizes } from '@/components
 import { api } from '@/util/trpc';
 import { useSession } from 'next-auth/react';
 import NotAuthorised from '@/components/ui/NotAuthorised';
-import { useToast } from '@/context/ToastContext';
+import { showToast } from '@/util/toastNotification';
 
 export default function Page() {
     const { data: session } = useSession();
@@ -23,7 +23,6 @@ export default function Page() {
         mainImage: null,
         images: [],
     });
-    const { showToast } = useToast();
 
     const createItem = api.items.createItem.useMutation({
         onSuccess() {
@@ -44,7 +43,7 @@ export default function Page() {
         const name = formData.get('item title')!.toString();
         const description = formData.get('item description')!.toString();
         const price = parseFloat(formData.get('item price')!.toString());
-        if (images.mainImage == null) return alert('Item requires a main image');
+        if (images.mainImage == null) return showToast('Item requires a main image');
         const item = {
             name,
             description,
@@ -69,7 +68,7 @@ export default function Page() {
                 return !val;
             })
         )
-            return alert('Fill all inputs');
+            return showToast('Fill all inputs');
         void createItem.mutate(item);
         form.reset();
     };

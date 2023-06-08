@@ -1,3 +1,4 @@
+import { showToast } from '@/util/toastNotification';
 import useDrivePicker from 'react-google-drive-picker';
 
 type ImageInputProps = {
@@ -16,7 +17,7 @@ export default function ImageInput({ onChange }: ImageInputProps) {
         const clientId = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID;
         const developerKey = process.env.NEXT_PUBLIC_GOOGLE_API_KEY;
         const token = process.env.NEXT_PUBLIC_GOOGLE_ACCESS_TOKEN;
-        if (!clientId || !developerKey || !token) return alert('Missing API keys');
+        if (!clientId || !developerKey || !token) return showToast('Missing API keys');
         openPicker({
             clientId,
             developerKey,
