@@ -29,13 +29,16 @@
         "react-google-drive-picker": "^1.2.2",
         "react-query": "^3.39.3",
         "react-select": "^5.7.3",
+        "react-simple-toasts": "^4.0.1",
         "superjson": "^1.12.3",
         "typescript": "5.0.4",
+        "uuid": "^9.0.0",
         "zod": "^3.21.4"
     },
     "devDependencies": {
         "@types/bcryptjs": "^2.4.2",
         "@types/node-fetch": "^2.6.4",
+        "@types/uuid": "^9.0.1",
         "autoprefixer": "^10.4.14",
         "postcss": "^8.4.24",
         "prettier-plugin-tailwindcss": "^0.3.0",

@@ -3,7 +3,6 @@
 import { api } from '@/util/trpc';
 import { useSession } from 'next-auth/react';
 import Image from 'next/image';
-import dummy_tee from '../../assets/dummy_tee.jpg';
 import NavigationHistory from '@/components/ui/NavigationHistory';
 import currencyFormatter from '@/util/currencyFormat';
 import CustomButton from '@/components/ui/CustomButton';

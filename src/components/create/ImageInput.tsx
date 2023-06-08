@@ -12,16 +12,15 @@ export type DriveImageProps = {
 export default function ImageInput({ onChange }: ImageInputProps) {
     const [openPicker] = useDrivePicker();
 
-    console.log(process.env.NEXT_PUBLIC_GOOGLE_CLOUD_CLIENT_SECRET);
-
     const handleUploadImages = () => {
         const clientId = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID;
         const developerKey = process.env.NEXT_PUBLIC_GOOGLE_API_KEY;
-        if (!clientId || !developerKey) return alert('Missing API keys');
+        const token = process.env.NEXT_PUBLIC_GOOGLE_ACCESS_TOKEN;
+        if (!clientId || !developerKey || !token) return alert('Missing API keys');
         openPicker({
             clientId,
             developerKey,
-            // token: process.env.NEXT_PUBLIC_GOOGLE_ACCESS_TOKEN,
+            // token,
             viewId: 'DOCS_IMAGES',
             showUploadView: true,
             showUploadFolders: true,

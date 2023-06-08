@@ -10,6 +10,7 @@ import { colours, genders, itemCategories, itemTypes, sizes } from '@/components
 import { api } from '@/util/trpc';
 import { useSession } from 'next-auth/react';
 import NotAuthorised from '@/components/ui/NotAuthorised';
+import { useToast } from '@/context/ToastContext';
 
 export default function Page() {
     const { data: session } = useSession();
@@ -22,13 +23,15 @@ export default function Page() {
         mainImage: null,
         images: [],
     });
+    const { showToast } = useToast();
 
     const createItem = api.items.createItem.useMutation({
-        onSuccess(data, variables, context) {
-            console.log('item created', data, variables, context);
+        onSuccess() {
+            showToast('Item successfully created');
+            setImages({ mainImage: null, images: [] });
         },
-        onError(error) {
-            console.log('There was an error creating your item.');
+        onError() {
+            showToast('There was an error creating your item.');
         },
     });
 
@@ -36,10 +39,11 @@ export default function Page() {
 
     const handleCreateItem = (e: FormEvent) => {
         e.preventDefault();
-        const form = new FormData(e.target as HTMLFormElement);
-        const name = form.get('item title')!.toString();
-        const description = form.get('item description')!.toString();
-        const price = parseFloat(form.get('item price')!.toString());
+        const form = e.target as HTMLFormElement;
+        const formData = new FormData(form);
+        const name = formData.get('item title')!.toString();
+        const description = formData.get('item description')!.toString();
+        const price = parseFloat(formData.get('item price')!.toString());
         if (images.mainImage == null) return alert('Item requires a main image');
         const item = {
             name,
@@ -67,6 +71,7 @@ export default function Page() {
         )
             return alert('Fill all inputs');
         void createItem.mutate(item);
+        form.reset();
     };
 
     const onImageInput = (images: any[]) => {
