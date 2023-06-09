@@ -1,4 +1,4 @@
-import { adminProcedure, createTRPCRouter, publicProcedure } from '@/server/api/trpc';
+import { adminProcedure, authedProcedure, createTRPCRouter, publicProcedure } from '@/server/api/trpc';
 import { z } from 'zod';
 
 const itemCreateInput = z.object({
@@ -142,7 +142,7 @@ export const itemRouter = createTRPCRouter({
             },
         });
     }),
-    getUserItems: publicProcedure.input(z.string().nullish()).query(({ ctx, input: id }) => {
+    getUserItems: authedProcedure.input(z.string().nullish()).query(({ ctx, input: id }) => {
         if (id == null) return [];
         return ctx.prisma.basketItem.findMany({
             where: { userId: id },
@@ -160,13 +160,13 @@ export const itemRouter = createTRPCRouter({
                         oldPrice: true,
                     },
                 },
-                size: { select: { name: true } },
-                colour: { select: { name: true } },
+                size: { select: { id: true, name: true } },
+                colour: { select: { id: true, name: true } },
                 quantity: true,
             },
         });
     }),
-    addToBasket: publicProcedure.input(basketItemInput).mutation(({ ctx, input: { userId, itemId, sizeId, colourId, quantity } }) => {
+    addToBasket: authedProcedure.input(basketItemInput).mutation(({ ctx, input: { userId, itemId, sizeId, colourId, quantity } }) => {
         return ctx.prisma.basketItem.upsert({
             where: { itemId_userId_colourId_sizeId: { itemId, userId, colourId, sizeId } },
             update: { quantity: { increment: quantity } },
@@ -179,4 +179,23 @@ export const itemRouter = createTRPCRouter({
             },
         });
     }),
+    removeItemFromBasket: authedProcedure
+        .input(z.object({ userId: z.string(), itemId: z.number(), sizeId: z.number(), colourId: z.number(), quantity: z.number() }))
+        .mutation(({ ctx, input: { userId, itemId, sizeId, colourId, quantity } }) => {
+            if (quantity === 1) {
+                return ctx.prisma.basketItem.delete({
+                    where: {
+                        itemId_userId_colourId_sizeId: { itemId, userId, colourId, sizeId },
+                    },
+                });
+            }
+            return ctx.prisma.basketItem.update({
+                where: {
+                    itemId_userId_colourId_sizeId: { itemId, userId, colourId, sizeId },
+                },
+                data: {
+                    quantity: quantity - 1,
+                },
+            });
+        }),
 });

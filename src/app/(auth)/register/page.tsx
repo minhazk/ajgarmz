@@ -10,11 +10,12 @@ import { FormEvent } from 'react';
 export default function Page() {
     const handleSubmit = async (e: FormEvent) => {
         e.preventDefault();
-        const form = new FormData(e.target as HTMLFormElement);
-        const name = form.get('full name');
-        const email = form.get('email');
-        const password = form.get('password');
-        const rePassword = form.get('confirm password');
+        const form = e.target as HTMLFormElement;
+        const formData = new FormData(form);
+        const name = formData.get('full name');
+        const email = formData.get('email');
+        const password = formData.get('password');
+        const rePassword = formData.get('confirm password');
         if (name === '' || email === '' || password === '' || rePassword === '') return showToast('Please fill in all fields');
         const res = await fetch('/api/register', {
             method: 'POST',
@@ -33,6 +34,11 @@ export default function Page() {
                 email,
                 password,
                 callbackUrl: '/',
+            }).then(res => {
+                if (res?.ok) {
+                    showToast('Account created');
+                    form.reset();
+                }
             });
         }
     };

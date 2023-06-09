@@ -11,14 +11,20 @@ import { showToast } from '@/util/toastNotification';
 export default function Page() {
     const handleSubmit = async (e: FormEvent) => {
         e.preventDefault();
-        const form = new FormData(e.target as HTMLFormElement);
-        const email = form.get('email');
-        const password = form.get('password');
+        const form = e.target as HTMLFormElement;
+        const formData = new FormData(form);
+        const email = formData.get('email');
+        const password = formData.get('password');
         if (email === '' || password === '') return showToast('Please fill in all the fields');
         signIn('credentials', {
             email,
             password,
             callbackUrl: '/',
+        }).then(res => {
+            if (res?.ok) {
+                showToast(`Signed in as ${email}`);
+                form.reset();
+            }
         });
     };
 
