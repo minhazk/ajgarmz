@@ -11,7 +11,6 @@ const handler = (request: Request) => {
         router: appRouter,
         createContext: async (opts: FetchCreateContextFnOptions): Promise<any> => {
             const session = await getToken({ req: opts.req } as any);
-            console.log(session);
             return { opts, session: { user: session }, prisma };
         },
     });

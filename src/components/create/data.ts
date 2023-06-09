@@ -21,8 +21,8 @@ export const colours: OptionProps = [
 ];
 
 export const genders: OptionProps = [
-    { value: 'male', label: 'Male' },
-    { value: 'female', label: 'Female' },
+    { value: 'men', label: 'Men' },
+    { value: 'women', label: 'Women' },
 ];
 
 export const itemCategories: OptionProps = [

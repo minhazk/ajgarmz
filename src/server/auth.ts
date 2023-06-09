@@ -33,7 +33,6 @@ export const authOptions: NextAuthOptions = {
             async authorize(credentials, _req) {
                 const { email, password } = credentials as { email: string; password: string };
                 const user = await prisma.user.findUnique({ where: { email } });
-                console.log(user);
                 if (user == null) return null;
                 if (!(await bcrypt.compare(password, user.password))) return null;
                 const { id, name, email: e, type } = user;

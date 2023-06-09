@@ -14,9 +14,9 @@ type FilterMenuProps = {
 };
 
 export type appliedFiltersProps = {
-    Category?: string[];
-    Department?: string[];
-    Gender?: string[];
+    Category?: string[] | undefined;
+    Department?: string[] | undefined;
+    Gender?: string[] | undefined;
 };
 
 type FilterProps = {

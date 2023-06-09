@@ -45,7 +45,7 @@ export default function BasketItem({ item, colour, size, quantity, removeItem, l
                 </div>
                 <div className='flex flex-grow flex-col gap-1'>
                     <Link
-                        href={`/shop/${item.id}`}
+                        href={`/item/${item.id}`}
                         className='overflow-hidden text-ellipsis text-sm font-semibold text-slate-600 first-letter:uppercase sm:text-base'
                         style={{ display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical' }}
                     >

@@ -34,6 +34,7 @@ const getItemsInput = z.object({
         Category: z.string().array().optional(),
         Department: z.string().array().optional(),
     }),
+    searchParam: z.string().optional(),
 });
 
 export const itemRouter = createTRPCRouter({
@@ -42,7 +43,19 @@ export const itemRouter = createTRPCRouter({
         const {
             cursor,
             filters: { Gender, Category, Department },
+            searchParam,
         } = input;
+        console.log(Gender, Category, Department);
+        const filters: {
+            gender?: { in: string[] };
+            category?: { is: { name: { in: string[] } } };
+            type?: { in: string[] };
+        } = {};
+        const dep: string[] = searchParam ? (Department?.includes(searchParam) ? Department : Department?.filter(type => type !== searchParam) ?? [searchParam]) : Department ?? [];
+        if (Gender != undefined && Gender.length !== 0) filters.gender = { in: Gender };
+        if (Category != undefined && Category.length !== 0) filters.category = { is: { name: { in: Category } } };
+        if (dep != undefined && dep.length !== 0) filters.type = { in: dep };
+        console.log(filters);
         const items = await ctx.prisma.item.findMany({
             take: limit + 1,
             select: {
@@ -57,9 +70,7 @@ export const itemRouter = createTRPCRouter({
                 },
                 colours: true,
             },
-            // where: {
-            //     gender: { in: Gender ?? [] }
-            // },
+            where: filters,
             cursor: cursor ? { id: cursor } : undefined,
             orderBy: {
                 id: 'desc',

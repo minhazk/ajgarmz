@@ -4,44 +4,52 @@ import { SlidersHorizontal, X } from 'lucide-react';
 import FilterMenu, { appliedFiltersProps } from '@/components/shop/FilterMenu';
 import ItemCard from '@/components/shop/ItemCard';
 import NavigationHistory from '@/components/ui/NavigationHistory';
+import { useEffect, useState } from 'react';
 import { api } from '@/util/trpc';
-import { useState } from 'react';
 
-export default function Page() {
+type PageProps = {
+    searchParams: {
+        category?: string;
+    };
+};
+
+export default function Page({ searchParams: { category } }: PageProps) {
     const [appliedFilters, setAppliedFilters] = useState<appliedFiltersProps>({});
+    const { data: categories } = api.items.getCategories.useQuery();
     const {
         data: pages,
         hasNextPage,
         fetchNextPage,
         isLoading,
+        refetch,
     } = api.items.getAll.useInfiniteQuery(
-        { filters: appliedFilters, limit: 3 },
+        { filters: appliedFilters, searchParam: category?.toLowerCase(), limit: 10 },
         {
             getNextPageParam: lastPage => lastPage.nextCursor,
         }
     );
-    const { data: categories } = api.items.getCategories.useQuery();
+
+    useEffect(() => {
+        refetch();
+    }, [appliedFilters, refetch]);
+
+    console.log(appliedFilters, (pages?.pages[0].items.length ?? 0) + (pages?.pages[0].nextCursor ?? 0));
 
     type T = keyof typeof appliedFilters;
 
     const handleRemoveFilter = (filter: string) => {
         setAppliedFilters((filters: appliedFiltersProps) => {
+            const updatedFilters: appliedFiltersProps = {};
             for (const [key, value] of Object.entries(filters)) {
-                if (value.includes(filter)) {
-                    filters[key as T] = filters[key as T]?.filter(items => items !== filter);
-                    break;
-                }
+                updatedFilters[key as T] = value?.filter(item => item !== filter) || [];
             }
-            return { ...filters };
+            return updatedFilters;
         });
     };
 
-    console.log(pages);
-
     return (
         <>
-            <NavigationHistory routes={['Browse Products']} />
-
+            <NavigationHistory routes={['Browse Products', category ?? null]} />
             <div className='flex items-start gap-4'>
                 <div className='hidden w-64 sm:block'>
                     <FilterMenu categories={categories} setAppliedFilters={setAppliedFilters} />
@@ -59,7 +67,7 @@ export default function Page() {
                             </div>
 
                             <p>
-                                Showing <span className='font-semibold'>{(pages?.pages[0].items.length ?? 1) * (pages?.pages.length ?? 1)}</span> results
+                                Showing <span className='font-semibold'>{(pages?.pages[0].items.length ?? 0) + (pages?.pages[0].nextCursor ?? 0)}</span> results
                             </p>
                         </div>
                         <div className='flex items-center gap-2'>
@@ -73,23 +81,24 @@ export default function Page() {
                     </div>
 
                     <div className='mb-3 mt-1 flex flex-wrap items-center gap-3'>
-                        <p className='text-sm font-semibold text-slate-600'>Applied Filters:</p>
-                        {Object.values(appliedFilters)
-                            .flat()
-                            .map((filter, i) => (
-                                <button
-                                    onClick={() => handleRemoveFilter(filter)}
-                                    key={i}
-                                    className='flex items-center gap-1 rounded-lg border border-gray-200 bg-white px-3 py-1 text-sm transition-colors hover:bg-gray-50'
-                                >
-                                    {filter}
-                                    <X size={15} className='text-gray-500' />
-                                </button>
-                            ))}
+                        {appliedFilters && Object.values(appliedFilters).length != 0 && <p className='text-sm font-semibold text-slate-600'>Applied Filters:</p>}
+                        {appliedFilters &&
+                            Object.values(appliedFilters)
+                                .flat()
+                                .map((filter: any, i) => (
+                                    <button
+                                        onClick={() => handleRemoveFilter(filter)}
+                                        key={i}
+                                        className='flex items-center gap-1 rounded-lg border border-gray-200 bg-white px-3 py-1 text-sm transition-colors hover:bg-gray-50'
+                                    >
+                                        {filter}
+                                        <X size={15} className='text-gray-500' />
+                                    </button>
+                                ))}
                     </div>
 
                     <div className='grid grid-cols-2 gap-2 sm:gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4'>
-                        {pages?.pages.map(page => page.items.map(item => <ItemCard key={item.id} {...item} />))}
+                        {pages?.pages.map((page: any) => page.items.map((item: any) => <ItemCard key={item.id} {...item} />))}
                     </div>
 
                     {hasNextPage && (

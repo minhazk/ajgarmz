@@ -1,5 +1,6 @@
 'use client';
 
+import { showToast } from '@/util/toastNotification';
 import { User2, ShoppingCart, Search, Menu, PackagePlus, X } from 'lucide-react';
 import { signIn, signOut, useSession } from 'next-auth/react';
 import Link from 'next/link';
@@ -95,7 +96,10 @@ export default function NavBar() {
                     {userMenuOpen && (
                         <div className='absolute right-0 top-full z-40 mt-2 overflow-hidden rounded-md border border-slate-300 bg-white text-sm font-medium shadow-sm'>
                             {session?.user ? (
-                                <button onClick={() => signOut()} className='w-full whitespace-nowrap px-6 py-2 text-slate-500 transition-colors hover:bg-gray-50'>
+                                <button
+                                    onClick={() => signOut().then(() => showToast('Account signed out'))}
+                                    className='w-full whitespace-nowrap px-6 py-2 text-slate-500 transition-colors hover:bg-gray-50'
+                                >
                                     Sign out
                                 </button>
                             ) : (

@@ -15,7 +15,7 @@ export type ItemCardProps = {
 
 export default function ItemCard({ id, mainImage, name, price, oldPrice, colours }: ItemCardProps) {
     return (
-        <Link href={`/shop/${id}`} className='rounded-md border border-gray-100 p-3'>
+        <Link href={`/item/${id}`} className='rounded-md border border-gray-100 p-3'>
             <div className='relative aspect-square overflow-hidden rounded-md'>
                 <Image src={mainImage!.url} fill className='object-cover' alt={name} />
             </div>
