@@ -29,8 +29,9 @@ export default function Page() {
             showToast('Item successfully created');
             setImages({ mainImage: null, images: [] });
         },
-        onError() {
+        onError(err) {
             showToast('There was an error creating your item.');
+            console.log(err);
         },
     });
 
@@ -69,8 +70,8 @@ export default function Page() {
             })
         )
             return showToast('Fill all inputs');
-        void createItem.mutate(item);
-        form.reset();
+        createItem.mutate(item);
+        if (createItem.isSuccess) form.reset();
     };
 
     const onImageInput = (images: any[]) => {
