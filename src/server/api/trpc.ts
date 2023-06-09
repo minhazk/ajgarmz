@@ -40,6 +40,7 @@ type CreateContextOptions = {
 const createInnerTRPCContext = (opts: CreateContextOptions) => {
     return {
         session: opts.session,
+        user: opts.session?.user,
         prisma,
     };
 };
