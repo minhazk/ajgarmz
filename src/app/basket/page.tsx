@@ -7,7 +7,6 @@ import currencyFormatter from '@/util/currencyFormat';
 import CustomButton from '@/components/ui/CustomButton';
 import BasketItem, { removeItemProps } from '@/components/basket/BasketItem';
 import { showToast } from '@/util/toastNotification';
-import { useEffect, useState } from 'react';
 import { Loader2 } from 'lucide-react';
 
 export default function Page() {
