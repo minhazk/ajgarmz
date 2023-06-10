@@ -8,10 +8,12 @@ import CustomButton from '@/components/ui/CustomButton';
 import BasketItem, { removeItemProps } from '@/components/basket/BasketItem';
 import { showToast } from '@/util/toastNotification';
 import { Loader2 } from 'lucide-react';
+import { useRouter } from 'next/navigation';
 
 export default function Page() {
     const { data: session } = useSession();
     const { data: items, refetch } = api.items.getUserItems.useQuery(session?.user?.id ?? null);
+    const { push } = useRouter();
 
     const removeItem = api.items.removeItemFromBasket.useMutation({
         onSuccess() {
@@ -19,6 +21,15 @@ export default function Page() {
         },
         onError() {
             showToast('There was an error removing your item.');
+        },
+    });
+
+    const makePayment = api.payment.makePayment.useMutation({
+        onSuccess() {
+            showToast('Your order has been placed');
+        },
+        onError() {
+            showToast('There was an error placing your order');
         },
     });
 
@@ -32,6 +43,10 @@ export default function Page() {
             quantity,
         });
         refetch();
+    };
+
+    const handlePayment = () => {
+        makePayment.mutateAsync(items).then(data => push(data as string));
     };
 
     return (
@@ -64,7 +79,7 @@ export default function Page() {
                         </p>
                         <div className='col-span-2 my-3 h-px bg-gray-200'></div>
                         <div className='col-span-2'>
-                            <CustomButton>Stripe</CustomButton>
+                            <CustomButton onClick={handlePayment}>Stripe</CustomButton>
                         </div>
                     </div>
                 </div>

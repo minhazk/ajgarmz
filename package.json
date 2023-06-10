@@ -30,6 +30,8 @@
         "react-query": "^3.39.3",
         "react-select": "^5.7.3",
         "react-simple-toasts": "^4.0.1",
+        "react-stripe-checkout": "^2.6.3",
+        "stripe": "^12.9.0",
         "superjson": "^1.12.3",
         "typescript": "5.0.4",
         "uuid": "^9.0.0",
