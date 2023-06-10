@@ -8,8 +8,7 @@ const stripe = new Stripe(apiKey, {
     apiVersion: '2022-11-15',
 });
 
-// const endpointSecret = process.env.STRIPE_WEBHOOK_SECRET_KEY as string
-const endpointSecret = 'whsec_2a5839f5c037c46cd03a3f792d32a8d3753669fe0dfefc296e6dfb691a47a397';
+const endpointSecret = process.env.STRIPE_WEBHOOK_SECRET_KEY as string;
 
 export async function POST(req: NextRequest) {
     const buf = await req.text();
@@ -19,7 +18,6 @@ export async function POST(req: NextRequest) {
 
     try {
         event = stripe.webhooks.constructEvent(buf, sig, endpointSecret);
-        // event = stripe.webhooks.constructEvent(Buffer.from(arrayBuffer), sig, process.env.STRIPE_WEBHOOK_SECRET!);
     } catch (err) {
         return NextResponse.json({ received: false, message: `Webhook Error: ${err}` });
     }
