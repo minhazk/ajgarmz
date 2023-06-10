@@ -30,6 +30,10 @@ AuthForm.FormContent = function FormContent({ children }: FormContentProps) {
     return <div className='my-4 flex flex-col gap-4'>{children}</div>;
 };
 
-AuthForm.FormFooter = function FormContent({ children }: FormContentProps) {
+AuthForm.FormFooter = function FormFooter({ children }: FormContentProps) {
     return <p className='mt-4 text-center text-xs text-slate-500'>{children}</p>;
+};
+
+AuthForm.Error = function FormError({ children }: FormContentProps) {
+    return <p className='mt-4 text-center text-xs text-red-500'>{children}</p>;
 };

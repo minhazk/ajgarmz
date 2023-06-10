@@ -17,6 +17,7 @@ export default function Page() {
         const password = formData.get('password');
         const rePassword = formData.get('confirm password');
         if (name === '' || email === '' || password === '' || rePassword === '') return showToast('Please fill in all fields');
+        if (password !== rePassword) return showToast('Passwords do not match');
         const res = await fetch('/api/register', {
             method: 'POST',
             headers: {
@@ -28,8 +29,12 @@ export default function Page() {
                 password,
             }),
         });
-        if (res.ok) {
-            (e.target as HTMLFormElement).reset();
+        if (res.status === 403) {
+            showToast('There is already an existing an account with that email address');
+        } else if (res.status === 500) {
+            showToast('There was an error creating your account');
+        } else if (res.ok) {
+            form.reset();
             signIn('credentials', {
                 email,
                 password,

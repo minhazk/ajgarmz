@@ -8,7 +8,7 @@ import { FormEvent } from 'react';
 import { signIn } from 'next-auth/react';
 import { showToast } from '@/util/toastNotification';
 
-export default function Page() {
+export default function Page({ searchParams: { error } }: any) {
     const handleSubmit = async (e: FormEvent) => {
         e.preventDefault();
         const form = e.target as HTMLFormElement;
@@ -20,11 +20,6 @@ export default function Page() {
             email,
             password,
             callbackUrl: '/',
-        }).then(res => {
-            if (res?.ok) {
-                showToast(`Signed in as ${email}`);
-                form.reset();
-            }
         });
     };
 
@@ -45,6 +40,7 @@ export default function Page() {
                     Sign up
                 </Link>
             </AuthForm.FormFooter>
+            {error && <AuthForm.Error>There was an error signing in your account</AuthForm.Error>}
         </AuthForm>
     );
 }
