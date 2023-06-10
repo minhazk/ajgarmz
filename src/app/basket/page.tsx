@@ -24,14 +24,7 @@ export default function Page() {
         },
     });
 
-    const makePayment = api.payment.makePayment.useMutation({
-        onSuccess() {
-            showToast('Your order has been placed');
-        },
-        onError() {
-            showToast('There was an error placing your order');
-        },
-    });
+    const makePayment = api.payment.makePayment.useMutation();
 
     const handleRemoveItem = async ({ colourId, sizeId, itemId, quantity }: removeItemProps) => {
         if (session?.user?.id == null) return;
