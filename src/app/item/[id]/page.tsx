@@ -8,6 +8,7 @@ import CustomButton from '@/components/ui/CustomButton';
 import { api } from '@/util/trpc';
 import { useSession } from 'next-auth/react';
 import { showToast } from '@/util/toastNotification';
+import useLocalStorage from '@/hooks/useLocalStorage';
 
 type PageProps = {
     params: {
@@ -26,6 +27,7 @@ export default function Page({ params: { id } }: PageProps) {
     const [selectedColour, setSelectedColour] = useState<InputProps>();
     const [quantity, setQuantity] = useState<number>(1);
     const [selectedImage, setSelectedImage] = useState<string>();
+    const { addItem } = useLocalStorage();
 
     const addToBasket = api.items.addToBasket.useMutation({
         onSuccess() {
@@ -37,21 +39,39 @@ export default function Page({ params: { id } }: PageProps) {
     });
 
     if (isNaN(Number(id)) || id == null) return <div>404</div>;
+
     const { data } = api.items.getItem.useQuery(Number(id));
+
     if (!data) return <div>404</div>;
+
     const { name, description, mainImage, price, oldPrice, sizes, colours, images } = data;
 
     const handleAddToBasket = () => {
-        if (session?.user.id == null) return showToast('Please login to add items');
         if (selectedSize == null) return showToast('Please choose a size');
         if (selectedColour == null) return showToast('Please choose a colour');
-        void addToBasket.mutate({
-            userId: session.user.id,
-            itemId: Number(id),
-            sizeId: selectedSize.id,
-            colourId: selectedColour.id,
-            quantity,
-        });
+        if (session?.user.id == null) {
+            addItem({
+                item: {
+                    mainImage: mainImage?.url != null ? { url: mainImage.url } : null,
+                    name,
+                    price,
+                    oldPrice,
+                    id: Number(id),
+                },
+                colour: { name: selectedColour.name },
+                size: { name: selectedSize.name },
+                quantity,
+            });
+            return showToast('Item added to basket');
+        } else {
+            void addToBasket.mutate({
+                userId: session.user.id,
+                itemId: Number(id),
+                sizeId: selectedSize.id,
+                colourId: selectedColour.id,
+                quantity,
+            });
+        }
     };
 
     return (

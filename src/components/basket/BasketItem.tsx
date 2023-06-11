@@ -12,16 +12,16 @@ export type BasketItemProps = {
         price: number;
         id: number;
     };
-    colour: { id: number; name: string };
-    size: { id: number; name: string };
+    colour: { id?: number; name: string };
+    size: { id?: number; name: string };
     quantity: number;
     removeItem: (data: removeItemProps) => void;
     loading: boolean;
 };
 
 export type removeItemProps = {
-    colourId: number;
-    sizeId: number;
+    colour: { id?: number; name: string };
+    size: { id?: number; name: string };
     itemId: number;
     quantity: number;
 };
@@ -29,12 +29,7 @@ export type removeItemProps = {
 export default function BasketItem({ item, colour, size, quantity, removeItem, loading }: BasketItemProps) {
     const handleRemoveItem = (e: React.MouseEvent<HTMLElement>) => {
         e.stopPropagation();
-        void removeItem({
-            colourId: colour.id,
-            sizeId: size.id,
-            itemId: item.id,
-            quantity,
-        });
+        removeItem({ itemId: item.id, colour, size, quantity });
     };
 
     return (

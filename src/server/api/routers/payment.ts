@@ -17,8 +17,8 @@ const paymentInput = z
             id: z.number(),
             mainImage: z.object({ url: z.string() }).nullable(),
         }),
-        size: z.object({ name: z.string(), id: z.number() }),
-        colour: z.object({ name: z.string(), id: z.number() }),
+        size: z.object({ name: z.string(), id: z.number().optional() }),
+        colour: z.object({ name: z.string(), id: z.number().optional() }),
         quantity: z.number(),
     })
     .array()
