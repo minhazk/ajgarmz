@@ -29,6 +29,8 @@ export default function Page() {
         }
     }, [status, items, localStorageItems, localStorage]);
 
+    console.log(localStorageItems[0]?.quantity);
+
     const removeItem = api.items.removeItemFromBasket.useMutation({
         onSuccess() {
             showToast('Item removed from basket');
@@ -85,11 +87,11 @@ export default function Page() {
                     <div className='grid grid-cols-2 gap-3 text-slate-700'>
                         <p className='text-sm font-medium sm:text-base'>Subtotal</p>
                         <p className='justify-self-end text-sm sm:text-base'>
-                            {currencyFormatter((items ?? localStorageItems)?.reduce((prev: any, curr: any) => prev + curr.item.price * curr.quantity, 0) ?? 0)}
+                            {currencyFormatter(localStorageItems?.reduce((prev: any, curr: any) => prev + curr.item.price * curr.quantity, 0) ?? 0)}
                         </p>
                         <p className='text-sm font-medium sm:text-base'>Total</p>
                         <p className='justify-self-end text-sm font-semibold sm:text-base'>
-                            {currencyFormatter((items ?? localStorageItems)?.reduce((prev: any, curr: any) => prev + curr.item.price * curr.quantity, 0) ?? 0)}
+                            {currencyFormatter(localStorageItems?.reduce((prev: any, curr: any) => prev + curr.item.price * curr.quantity, 0) ?? 0)}
                         </p>
                         <div className='col-span-2 my-3 h-px bg-gray-200'></div>
                         <div className='col-span-2'>
