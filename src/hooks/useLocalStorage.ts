@@ -47,7 +47,7 @@ const useLocalStorage = () => {
                         item.quantity -= 1;
                         return item;
                     })
-                    .filter(item => item.quantity !== 0),
+                    .filter(item => item.quantity < 1),
             ];
         });
     };

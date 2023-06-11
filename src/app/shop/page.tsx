@@ -33,8 +33,6 @@ export default function Page({ searchParams: { category } }: PageProps) {
         refetch();
     }, [appliedFilters, refetch]);
 
-    console.log(appliedFilters, (pages?.pages[0].items.length ?? 0) + (pages?.pages[0].nextCursor ?? 0));
-
     type T = keyof typeof appliedFilters;
 
     const handleRemoveFilter = (filter: string) => {

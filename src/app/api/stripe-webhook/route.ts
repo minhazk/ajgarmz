@@ -22,8 +22,6 @@ export async function POST(req: NextRequest) {
         return NextResponse.json({ received: false, message: `Webhook Error: ${err}` });
     }
 
-    console.log(event.type);
-
     switch (event.type) {
         case 'payment_intent.succeeded':
             const paymentIntentSucceeded = event.data.object as {

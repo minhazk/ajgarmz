@@ -8,12 +8,10 @@ import ImageInput from '@/components/create/ImageInput';
 import ItemImage, { ImagesStateProps } from '@/components/create/ItemImage';
 import { colours, genders, itemCategories, itemTypes, sizes } from '@/components/create/data';
 import { api } from '@/util/trpc';
-import { useSession } from 'next-auth/react';
 import NotAuthorised from '@/components/ui/NotAuthorised';
 import { showToast } from '@/util/toastNotification';
 
 export default function Page() {
-    const { data: session } = useSession();
     const [selectedSizes, setSelectedSizes] = useState<string[]>([]);
     const [selectedColours, setSelectedColours] = useState<string[]>([]);
     const [gender, setGender] = useState<string[]>([]);
@@ -34,8 +32,6 @@ export default function Page() {
             console.log(err);
         },
     });
-
-    if (session?.user.type !== 'admin') return <NotAuthorised />;
 
     const handleCreateItem = (e: FormEvent) => {
         e.preventDefault();

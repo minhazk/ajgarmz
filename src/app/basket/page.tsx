@@ -29,8 +29,6 @@ export default function Page() {
         }
     }, [status, items, localStorageItems, localStorage]);
 
-    console.log(localStorageItems[0]?.quantity);
-
     const removeItem = api.items.removeItemFromBasket.useMutation({
         onSuccess() {
             showToast('Item removed from basket');
@@ -39,8 +37,6 @@ export default function Page() {
             showToast('There was an error removing your item.');
         },
     });
-
-    console.log(localStorageItems, items);
 
     const makePayment = api.payment.makePayment.useMutation();
 
