@@ -6,6 +6,7 @@ import { Calendar, CalendarDays } from 'lucide-react';
 import { useEffect, useState } from 'react';
 
 export default function Page() {
+    const { data: stats } = api.admin.getOrderStats.useQuery();
     const { data: ordersPages, hasNextPage, fetchNextPage, isLoading } = api.admin.getOrders.useInfiniteQuery({});
     const [groupedOrders, setGroupedOrders] = useState([]);
 
@@ -20,20 +21,18 @@ export default function Page() {
         setGroupedOrders(Object.values(grouped));
     }, [ordersPages]);
 
-    console.log(groupedOrders);
-
     return (
         <div>
             <div className='grid grid-cols-2 gap-4'>
                 <div className='flex w-full flex-col items-center justify-center gap-3 rounded-md border border-gray-300 bg-gray-200 p-2 py-4 text-slate-500'>
                     <Calendar size={30} />
-                    <p className='text-lg font-semibold md:text-3xl'>12</p>
+                    <p className='text-lg font-semibold md:text-3xl'>{stats?.week ?? 0}</p>
                     <p className='text-sm'>This week</p>
                 </div>
 
                 <div className='flex w-full flex-col items-center justify-center gap-3 rounded-md border border-gray-300 bg-gray-200 p-2 py-4 text-slate-500'>
                     <CalendarDays size={30} />
-                    <p className='text-lg font-semibold md:text-3xl'>12</p>
+                    <p className='text-lg font-semibold md:text-3xl'>{stats?.all ?? 0}</p>
                     <p className='text-sm'>All time</p>
                 </div>
             </div>

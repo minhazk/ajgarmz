@@ -74,4 +74,15 @@ export const adminRouter = createTRPCRouter({
             nextCursor,
         };
     }),
+    getOrderStats: adminProcedure.query(async ({ ctx }) => {
+        const orders = await ctx.prisma.orderItem.findMany({
+            select: { createdAt: true },
+        });
+        const oneWeekAgo = new Date();
+        oneWeekAgo.setDate(oneWeekAgo.getDate() - 7);
+
+        const oneWeekCount = orders.filter(order => order.createdAt > oneWeekAgo).length;
+
+        return { week: oneWeekCount, all: orders.length };
+    }),
 });
