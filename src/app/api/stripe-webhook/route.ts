@@ -43,10 +43,8 @@ export async function POST(req: NextRequest) {
             const recipientName = paymentIntentSucceeded.shipping.name;
             const shippingCost = items.reduce((prev: any, curr: any) => prev + curr.price * curr.quantity, 0) !== amountPaid ? 10 : 0;
             const orderId = paymentIntentSucceeded.id;
-            console.log(address);
             const addressFormat = Object.fromEntries(Object.entries(address).filter(([_, v]) => v != null)) as any;
-            console.log(addressFormat, recipientName);
-            const aaa = await prisma.address.create({
+            await prisma.address.create({
                 data: {
                     ...addressFormat,
                     recipientName,
@@ -67,7 +65,6 @@ export async function POST(req: NextRequest) {
                     },
                 },
             });
-            console.log(aaa);
             break;
         default:
             console.log(`Unhandled event type ${event.type}`);

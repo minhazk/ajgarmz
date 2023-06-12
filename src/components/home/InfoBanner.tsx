@@ -25,7 +25,7 @@ const INFO = [
 
 export default function InfoBanner() {
     return (
-        <div className='mx-auto my-12 max-w-7xl'>
+        <div className='mx-auto my-10 max-w-7xl sm:my-12'>
             <h2 className='text-xl font-semibold text-primary'>We provide best customer experiences</h2>
             <div className='mt-7 grid grid-cols-2 gap-8 md:grid-cols-4'>
                 {INFO.map((info, i) => (

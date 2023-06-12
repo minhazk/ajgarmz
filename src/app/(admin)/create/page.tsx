@@ -8,8 +8,8 @@ import ImageInput from '@/components/create/ImageInput';
 import ItemImage, { ImagesStateProps } from '@/components/create/ItemImage';
 import { colours, genders, itemCategories, itemTypes, sizes } from '@/components/create/data';
 import { api } from '@/util/trpc';
-import NotAuthorised from '@/components/ui/NotAuthorised';
 import { showToast } from '@/util/toastNotification';
+import CustomButton from '@/components/ui/CustomButton';
 
 export default function Page() {
     const [selectedSizes, setSelectedSizes] = useState<string[]>([]);
@@ -114,9 +114,9 @@ export default function Page() {
 
                         <MultiSelect setter={setType} options={itemTypes} label='Item Type' />
 
-                        <button type='submit' className='w-full rounded-md border border-slate-600 bg-slate-600 px-5 py-2 text-sm text-white transition-opacity hover:opacity-75'>
+                        <CustomButton disabled={createItem.isLoading} type='submit'>
                             Create Listing
-                        </button>
+                        </CustomButton>
                     </form>
                 </div>
             </div>

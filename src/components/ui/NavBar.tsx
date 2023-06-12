@@ -30,7 +30,7 @@ export default function NavBar() {
                 <Link href='/' className='text-xl font-semibold text-slate-600'>
                     AjGarmz
                 </Link>
-                <div className={`lg:block ${burgerOpen ? 'absolute left-0 top-full z-40 mt-2 block w-52 overflow-hidden rounded-lg border border-gray-300 bg-white pb-5 lg:hidden' : 'hidden'}`}>
+                <div className={`lg:block ${burgerOpen ? 'absolute left-0 top-full z-40 mt-2 block w-52 overflow-hidden rounded-lg border border-gray-300 bg-white lg:hidden' : 'hidden'}`}>
                     <ul className='flex flex-col text-sm font-semibold text-slate-500 lg:flex-row lg:items-center lg:gap-3'>
                         <li>
                             <Link
@@ -44,7 +44,7 @@ export default function NavBar() {
                         <li>
                             <Link
                                 onClick={() => setBurgerOpen(false)}
-                                href='/'
+                                href='/shop'
                                 className='before-0 relative block w-full py-4 pl-8 pr-2 transition-colors before:absolute before:bottom-1 before:left-1/2 before:h-px before:w-0 before:-translate-x-1/2 before:bg-slate-600 before:transition-all md:hover:before:w-full lg:px-1 lg:py-2'
                             >
                                 New Arrival
@@ -53,19 +53,10 @@ export default function NavBar() {
                         <li>
                             <Link
                                 onClick={() => setBurgerOpen(false)}
-                                href='/'
+                                href='/shop'
                                 className='before-0 relative block w-full py-4 pl-8 pr-2 transition-colors before:absolute before:bottom-1 before:left-1/2 before:h-px before:w-0 before:-translate-x-1/2 before:bg-slate-600 before:transition-all md:hover:before:w-full lg:px-1 lg:py-2'
                             >
                                 Most Wanted
-                            </Link>
-                        </li>
-                        <li>
-                            <Link
-                                onClick={() => setBurgerOpen(false)}
-                                href='/'
-                                className='before-0 relative block w-full py-4 pl-8 pr-2 transition-colors before:absolute before:bottom-1 before:left-1/2 before:h-px before:w-0 before:-translate-x-1/2 before:bg-slate-600 before:transition-all md:hover:before:w-full lg:px-1 lg:py-2'
-                            >
-                                Brands
                             </Link>
                         </li>
                     </ul>

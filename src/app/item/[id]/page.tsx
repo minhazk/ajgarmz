@@ -157,7 +157,9 @@ export default function Page({ params: { id } }: PageProps) {
                                 +
                             </button>
                         </div>
-                        <CustomButton onClick={handleAddToBasket}>Add to cart</CustomButton>
+                        <CustomButton onClick={handleAddToBasket} disabled={addToBasket.isLoading}>
+                            Add to cart
+                        </CustomButton>
                     </div>
                 </div>
             </div>

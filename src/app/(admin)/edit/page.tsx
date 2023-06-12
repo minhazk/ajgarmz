@@ -101,7 +101,11 @@ export default function Page() {
                                     className='w-fit rounded-md border border-slate-200 p-1 text-xs outline-none transition-colors focus-within:border-slate-300 sm:text-sm'
                                     defaultValue={currencyFormat(item?.oldPrice ?? 0)}
                                 />
-                                <button type='submit' className='rounded-full bg-transparent p-1 text-xs text-slate-600 transition-colors hover:bg-slate-500 hover:text-white'>
+                                <button
+                                    disabled={updateItem.isLoading}
+                                    type='submit'
+                                    className='rounded-full bg-transparent p-1 text-xs text-slate-600 transition-colors hover:bg-slate-500 hover:text-white'
+                                >
                                     <Check size={18} />
                                 </button>
                             </form>

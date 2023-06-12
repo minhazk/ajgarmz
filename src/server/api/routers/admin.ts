@@ -1,15 +1,15 @@
-import { createTRPCRouter, publicProcedure } from '@/server/api/trpc';
+import { adminProcedure, createTRPCRouter } from '@/server/api/trpc';
 import { z } from 'zod';
 
 export const adminRouter = createTRPCRouter({
-    searchItems: publicProcedure.input(z.string()).query(({ ctx, input: searchInput }) => {
+    searchItems: adminProcedure.input(z.string()).query(({ ctx, input: searchInput }) => {
         console.log(2, searchInput);
         return ctx.prisma.$queryRaw`
             SELECT * FROM Item
             WHERE name LIKE ${`%${searchInput}%`}
         `;
     }),
-    updateItem: publicProcedure
+    updateItem: adminProcedure
         .input(
             z.object({
                 id: z.number(),

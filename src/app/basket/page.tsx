@@ -40,9 +40,7 @@ export default function Page() {
 
     const handleRemoveItem = async ({ itemId, colour, size, quantity }: removeItemProps) => {
         if (session?.user?.id == null) {
-            console.log(localStorageItems);
             removeLocalStorageItem(itemId, colour.name, size.name);
-            console.log(localStorageItems);
             return showToast('Item removed from basket');
         }
         await removeItem.mutateAsync({

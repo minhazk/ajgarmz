@@ -108,6 +108,8 @@ export const publicProcedure = t.procedure;
 
 /** Reusable middleware that enforces users are logged in before running the procedure. */
 const enforceUserIsAuthed = t.middleware(({ ctx, next }) => {
+    // auth check commented out because it is not working in production - waiting for fix
+
     // if (!ctx.session || !ctx.session.user) {
     //     throw new TRPCError({ code: 'UNAUTHORIZED' });
     // }
@@ -125,6 +127,8 @@ const enforceUserIsAuthed = t.middleware(({ ctx, next }) => {
 export const authedProcedure = t.procedure.use(enforceUserIsAuthed);
 
 const enforceUserIsAdmin = t.middleware(({ ctx, next }) => {
+    // admin check commented out because it is not working in production - waiting for fix
+
     // if (!ctx.session || !ctx.session.user) {
     //     throw new TRPCError({ code: 'UNAUTHORIZED' });
     // }
