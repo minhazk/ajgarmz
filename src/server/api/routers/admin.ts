@@ -23,4 +23,55 @@ export const adminRouter = createTRPCRouter({
                 data: { price, oldPrice },
             });
         }),
+    getOrders: adminProcedure.query(async ({ ctx }) => {
+        const limit = 10;
+        const items = await ctx.prisma.orderItem.findMany({
+            take: limit + 1,
+            select: {
+                id: true,
+                orderId: true,
+                userId: true,
+                colour: true,
+                size: true,
+                quantity: true,
+                amountPaid: true,
+                createdAt: true,
+                shippingCost: true,
+                item: {
+                    select: {
+                        id: true,
+                        name: true,
+                        price: true,
+                        mainImage: {
+                            select: { url: true },
+                        },
+                    },
+                },
+                address: {
+                    select: {
+                        recipientName: true,
+                        line1: true,
+                        line2: true,
+                        postal_code: true,
+                        city: true,
+                        state: true,
+                        country: true,
+                    },
+                },
+            },
+            cursor: undefined,
+            orderBy: {
+                id: 'desc',
+            },
+        });
+        let nextCursor: any;
+        if (items.length > limit) {
+            const nextItem = items.pop();
+            nextCursor = nextItem!.id;
+        }
+        return {
+            items,
+            nextCursor,
+        };
+    }),
 });

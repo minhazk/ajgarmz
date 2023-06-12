@@ -30,7 +30,7 @@ export default function Page({ searchParams: { error } }: any) {
                     <FormInput label='Email' type='email' />
                     <FormInput label='Password' type='password' />
                     <div className='mt-5'>
-                        <CustomButton>Sign in</CustomButton>
+                        <CustomButton type='submit'>Sign in</CustomButton>
                     </div>
                 </AuthForm.FormContent>
             </form>

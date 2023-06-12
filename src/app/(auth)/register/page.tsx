@@ -57,7 +57,7 @@ export default function Page() {
                     <FormInput label='Password' type='password' />
                     <FormInput label='Confirm Password' type='password' />
                     <div className='mt-5'>
-                        <CustomButton>Create Account</CustomButton>
+                        <CustomButton type='submit'>Create Account</CustomButton>
                     </div>
                 </AuthForm.FormContent>
             </form>
