@@ -45,17 +45,28 @@ export const itemRouter = createTRPCRouter({
             filters: { Gender, Category, Department },
             searchParam,
         } = input;
-        console.log(Gender, Category, Department);
+
         const filters: {
             gender?: { in: string[] };
             category?: { is: { name: { in: string[] } } };
             type?: { in: string[] };
+            oldPrice?: { not: null };
         } = {};
-        const dep: string[] = searchParam ? (Department?.includes(searchParam) ? Department : Department?.filter(type => type !== searchParam) ?? [searchParam]) : Department ?? [];
+
+        const isSale = searchParam === 'sale';
+
+        let dep: string[] = [];
+        if (searchParam && !isSale) {
+            dep = Department?.includes(searchParam) ? Department : Department?.filter(type => type !== searchParam) ?? [searchParam];
+        } else {
+            dep = Department ?? [];
+        }
+
         if (Gender != undefined && Gender.length !== 0) filters.gender = { in: Gender };
         if (Category != undefined && Category.length !== 0) filters.category = { is: { name: { in: Category } } };
         if (dep != undefined && dep.length !== 0) filters.type = { in: dep };
-        console.log(filters);
+        if (isSale) filters.oldPrice = { not: null };
+
         const items = await ctx.prisma.item.findMany({
             take: limit + 1,
             select: {

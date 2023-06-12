@@ -9,6 +9,8 @@ import { api } from '@/util/trpc';
 import { useSession } from 'next-auth/react';
 import { showToast } from '@/util/toastNotification';
 import useLocalStorage from '@/hooks/useLocalStorage';
+import { notFound } from 'next/navigation';
+import Loading from '@/components/Item/Loading';
 
 type PageProps = {
     params: {
@@ -38,11 +40,11 @@ export default function Page({ params: { id } }: PageProps) {
         },
     });
 
-    if (isNaN(Number(id)) || id == null) return <div>404</div>;
+    if (isNaN(Number(id)) || id == null) return notFound();
 
     const { data } = api.items.getItem.useQuery(Number(id));
 
-    if (!data) return <div>404</div>;
+    if (!data) return <Loading />;
 
     const { name, description, mainImage, price, oldPrice, sizes, colours, images } = data;
 
