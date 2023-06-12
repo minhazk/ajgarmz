@@ -39,7 +39,7 @@ export const paymentRouter = createTRPCRouter({
                 };
             }),
             mode: 'payment',
-            success_url: `${process.env.NEXT_PUBLIC_DOMAIN_URL}/basket`,
+            success_url: `${process.env.NEXT_PUBLIC_DOMAIN_URL}/basket?order=success`,
             cancel_url: `${process.env.NEXT_PUBLIC_DOMAIN_URL}/basket`,
             payment_intent_data: {
                 metadata: {

@@ -12,11 +12,20 @@ import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import useLocalStorage from '@/hooks/useLocalStorage';
 
-export default function Page() {
+type PageProps = {
+    searchParams: {
+        order: string;
+    };
+};
+
+export default function Page({ searchParams: { order } }: PageProps) {
     const { data: session, status } = useSession();
-    const { data: items, refetch } = api.items.getUserItems.useQuery(session?.user?.id ?? null);
+    const { data: items, refetch } = api.items.getUserItems.useQuery(session?.user?.id ?? null, {
+        refetchOnMount: true,
+    });
+    const clearBasket = api.items.clearUserBasket.useMutation();
     const { push } = useRouter();
-    const { items: localStorageItems, removeItem: removeLocalStorageItem } = useLocalStorage();
+    const { items: localStorageItems, removeItem: removeLocalStorageItem, clearItems } = useLocalStorage();
     const [basketItems, setBasketItems] = useState<any>([]);
 
     useEffect(() => {
@@ -26,6 +35,23 @@ export default function Page() {
             setBasketItems(items);
         }
     }, [status, items, basketItems, localStorageItems]);
+
+    useEffect(() => {
+        (async () => {
+            if (order == null) return;
+            if (status === 'loading') return;
+            if (order == 'success') {
+                showToast('Your order has been placed. Your items will be dispatched as soon as possible');
+                if (status === 'unauthenticated') {
+                    clearItems();
+                } else {
+                    await clearBasket.mutateAsync(session!.user.id);
+                    refetch();
+                }
+                push('/basket');
+            }
+        })();
+    }, [order, status, refetch]);
 
     const removeItem = api.items.removeItemFromBasket.useMutation({
         onSuccess() {

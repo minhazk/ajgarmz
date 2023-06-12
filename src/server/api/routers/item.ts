@@ -220,4 +220,9 @@ export const itemRouter = createTRPCRouter({
                 },
             });
         }),
+    clearUserBasket: authedProcedure.input(z.string()).mutation(({ ctx, input: userId }) => {
+        return ctx.prisma.basketItem.deleteMany({
+            where: { userId },
+        });
+    }),
 });

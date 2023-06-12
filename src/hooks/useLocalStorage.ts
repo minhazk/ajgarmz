@@ -56,7 +56,11 @@ const useLocalStorage = () => {
         return value.find(item => item.item.id === itemId && item.colour.name === colour && item.size.name === size);
     };
 
-    return { items: value, addItem, removeItem, retrieveItem };
+    const clearItems = () => {
+        setValue([]);
+    };
+
+    return { items: value, addItem, removeItem, retrieveItem, clearItems };
 };
 
 export default useLocalStorage;
