@@ -9,25 +9,23 @@ import BasketItem, { removeItemProps } from '@/components/basket/BasketItem';
 import { showToast } from '@/util/toastNotification';
 import { Loader2 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import useLocalStorage from '@/hooks/useLocalStorage';
 
 export default function Page() {
     const { data: session, status } = useSession();
     const { data: items, refetch } = api.items.getUserItems.useQuery(session?.user?.id ?? null);
     const { push } = useRouter();
-    const { items: localStorage, removeItem: removeLocalStorageItem } = useLocalStorage();
-    const [localStorageItems, setLocalStorageItems] = useState<any>([]);
-    const itemsRef = useRef<any>(items);
+    const { items: localStorageItems, removeItem: removeLocalStorageItem } = useLocalStorage();
+    const [basketItems, setBasketItems] = useState<any>([]);
 
     useEffect(() => {
         if (status === 'unauthenticated') {
-            setLocalStorageItems(localStorage);
+            setBasketItems(localStorageItems);
+        } else if (status === 'authenticated') {
+            setBasketItems(items);
         }
-        if (status === 'authenticated') {
-            setLocalStorageItems(items);
-        }
-    }, [status, items, localStorageItems, localStorage]);
+    }, [status, items, basketItems, localStorageItems]);
 
     const removeItem = api.items.removeItemFromBasket.useMutation({
         onSuccess() {
@@ -40,9 +38,11 @@ export default function Page() {
 
     const makePayment = api.payment.makePayment.useMutation();
 
-    const handleRemoveItem = async ({ colour, size, itemId, quantity }: removeItemProps) => {
+    const handleRemoveItem = async ({ itemId, colour, size, quantity }: removeItemProps) => {
         if (session?.user?.id == null) {
+            console.log(localStorageItems);
             removeLocalStorageItem(itemId, colour.name, size.name);
+            console.log(localStorageItems);
             return showToast('Item removed from basket');
         }
         await removeItem.mutateAsync({
@@ -56,7 +56,7 @@ export default function Page() {
     };
 
     const handlePayment = () => {
-        makePayment.mutateAsync(itemsRef.current).then(data => push(data as string));
+        makePayment.mutateAsync(basketItems).then(data => push(data as string));
     };
 
     return (
@@ -71,10 +71,10 @@ export default function Page() {
                         </div>
                     )}
                     <h1 className='mb-3 text-xl font-semibold text-slate-600'>Your items</h1>
-                    {(!items || items.length === 0) && (!localStorageItems || localStorageItems.length === 0) ? (
+                    {(!items || items.length === 0) && (!basketItems || basketItems.length === 0) ? (
                         <p className='py-8 text-center text-sm text-slate-400'>There are no items in your basket</p>
                     ) : (
-                        localStorageItems?.map((basketItem: any, i: any) => <BasketItem {...basketItem} removeItem={handleRemoveItem} key={i} loading={removeItem.isLoading} />)
+                        basketItems?.map((basketItem: any, i: any) => <BasketItem {...basketItem} removeItem={handleRemoveItem} key={i} loading={removeItem.isLoading} />)
                     )}
                 </div>
 
@@ -82,17 +82,15 @@ export default function Page() {
                     <h1 className='mb-4 text-xl font-semibold text-slate-600'>Summary</h1>
                     <div className='grid grid-cols-2 gap-3 text-slate-700'>
                         <p className='text-sm font-medium sm:text-base'>Subtotal</p>
-                        <p className='justify-self-end text-sm sm:text-base'>
-                            {currencyFormatter(localStorageItems?.reduce((prev: any, curr: any) => prev + curr.item.price * curr.quantity, 0) ?? 0)}
-                        </p>
+                        <p className='justify-self-end text-sm sm:text-base'>{currencyFormatter(basketItems?.reduce((prev: any, curr: any) => prev + curr.item.price * curr.quantity, 0) ?? 0)}</p>
                         <p className='text-sm font-medium sm:text-base'>Total</p>
                         <p className='justify-self-end text-sm font-semibold sm:text-base'>
-                            {currencyFormatter(localStorageItems?.reduce((prev: any, curr: any) => prev + curr.item.price * curr.quantity, 0) ?? 0)}
+                            {currencyFormatter(basketItems?.reduce((prev: any, curr: any) => prev + curr.item.price * curr.quantity, 0) ?? 0)}
                         </p>
                         <div className='col-span-2 my-3 h-px bg-gray-200'></div>
                         <div className='col-span-2'>
                             <CustomButton onClick={handlePayment} disabled={makePayment.isLoading}>
-                                Stripe
+                                Continue with payment
                             </CustomButton>
                         </div>
                     </div>

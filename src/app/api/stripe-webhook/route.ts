@@ -1,14 +1,6 @@
+import { endpointSecret, stripe } from '@/lib/Stripe';
 import { prisma } from '@/server/prisma';
 import { NextRequest, NextResponse } from 'next/server';
-import Stripe from 'stripe';
-
-const apiKey = process.env.STRIPE_SECRET_KEY as string;
-
-const stripe = new Stripe(apiKey, {
-    apiVersion: '2022-11-15',
-});
-
-const endpointSecret = process.env.STRIPE_WEBHOOK_SECRET_KEY as string;
 
 export async function POST(req: NextRequest) {
     const buf = await req.text();
@@ -27,7 +19,7 @@ export async function POST(req: NextRequest) {
             const paymentIntentSucceeded = event.data.object as {
                 id: string;
                 receipt_email: string;
-                amount: number;
+                amount_received: number;
                 charges: {
                     data: any;
                 };
@@ -42,10 +34,40 @@ export async function POST(req: NextRequest) {
                         postal_code: string;
                         state: string;
                     };
+                    name: string;
                 };
             };
-            console.log(paymentIntentSucceeded);
-            // await prisma.orderItem.createMany();
+            const amountPaid = paymentIntentSucceeded.amount_received / 100;
+            const items = JSON.parse(paymentIntentSucceeded.metadata.items);
+            const address = paymentIntentSucceeded.shipping.address;
+            const recipientName = paymentIntentSucceeded.shipping.name;
+            const shippingCost = items.reduce((prev: any, curr: any) => prev + curr.price * curr.quantity, 0) !== amountPaid ? 10 : 0;
+            const orderId = paymentIntentSucceeded.id;
+            console.log(address);
+            const addressFormat = Object.fromEntries(Object.entries(address).filter(([_, v]) => v != null)) as any;
+            console.log(addressFormat, recipientName);
+            const aaa = await prisma.address.create({
+                data: {
+                    ...addressFormat,
+                    recipientName,
+                    orderItems: {
+                        createMany: {
+                            data: items.map((item: any) => {
+                                return {
+                                    orderId,
+                                    itemId: item.itemId,
+                                    colour: item.colour,
+                                    size: item.size,
+                                    quantity: item.quantity,
+                                    amountPaid,
+                                    shippingCost,
+                                };
+                            }),
+                        },
+                    },
+                },
+            });
+            console.log(aaa);
             break;
         default:
             console.log(`Unhandled event type ${event.type}`);

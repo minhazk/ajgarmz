@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 
-const LOCAL_STORAGE_ITEMS_KEY = 'AJGARMZ_guest_basket';
+export const LOCAL_STORAGE_ITEMS_KEY = 'AJGARMZ_guest_basket';
 
 type LocalStorageItem = {
     item: { id: number; mainImage: { url: string } | null; name: string; price: number; oldPrice: number | null };
@@ -47,7 +47,7 @@ const useLocalStorage = () => {
                         item.quantity -= 1;
                         return item;
                     })
-                    .filter(item => item.quantity < 1),
+                    .filter(item => item.quantity > 0),
             ];
         });
     };
