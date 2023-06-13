@@ -1,3 +1,4 @@
+import currencyFormatter from '@/util/currencyFormat';
 import { formatDate } from '@/util/dateTimeFormatter';
 import Image from 'next/image';
 import { ReactNode, useState } from 'react';
@@ -12,14 +13,10 @@ export type OrderItemProps = {
     amountPaid: number;
     createdAt: Date;
     shippingCost: number;
-    item: {
-        id: number;
-        name: string;
-        price: number;
-        mainImage: {
-            url: string;
-        };
-    };
+    itemId: number;
+    itemName: string;
+    itemPrice: number;
+    imageUrl: string;
     address: {
         city: string;
         country: string;
@@ -71,17 +68,15 @@ export default function OrderGroup({ orderItems }: { orderItems: OrderItemProps[
     );
 }
 
-function OrderItem({ colour, size, quantity, item }: OrderItemProps) {
-    const { id: itemId, name: itemName, price, mainImage } = item;
-
+function OrderItem({ colour, size, quantity, itemPrice, itemName, imageUrl, itemId }: OrderItemProps) {
     return (
         <div className='grid grid-cols-4 items-center justify-items-center gap-3 rounded-lg border border-gray-300 px-3 py-2 md:grid-cols-[auto_auto_repeat(5,1fr)]'>
             <ItemData label='ID' value={itemId} />
             <div className='relative mx-4 aspect-square w-16 overflow-hidden rounded-md'>
-                <Image src={mainImage.url} alt={itemName} className='w-full object-cover' fill />
+                <Image src={imageUrl} alt={itemName} className='w-full object-cover' fill />
             </div>
             <ItemData label='Name' value={itemName} />
-            <ItemData label='Price' value={price} />
+            <ItemData label='Price' value={currencyFormatter(itemPrice)} />
             <ItemData label='Colour' value={colour} />
             <ItemData label='Size' value={size} />
             <ItemData label='Quantity' value={quantity} />

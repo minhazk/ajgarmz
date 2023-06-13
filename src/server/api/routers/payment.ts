@@ -45,7 +45,15 @@ export const paymentRouter = createTRPCRouter({
                 metadata: {
                     items: JSON.stringify(
                         items.map(item => {
-                            return { itemId: item.item.id, price: item.item.price, size: item.size.name, colour: item.colour.name, quantity: item.quantity };
+                            return {
+                                id: item.item.id,
+                                name: item.item.name,
+                                price: item.item.price,
+                                imageUrl: item.item.mainImage!.url,
+                                size: item.size.name,
+                                colour: item.colour.name,
+                                quantity: item.quantity,
+                            };
                         })
                     ),
                 },

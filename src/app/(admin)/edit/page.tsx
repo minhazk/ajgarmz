@@ -3,7 +3,7 @@
 import currencyFormat from '@/util/currencyFormat';
 import { showToast } from '@/util/toastNotification';
 import { api } from '@/util/trpc';
-import { Check, Search } from 'lucide-react';
+import { Check, Search, X } from 'lucide-react';
 import { FormEvent, useEffect, useState } from 'react';
 
 type searchItem =
@@ -30,6 +30,15 @@ export default function Page() {
         },
         onError() {
             showToast('There was an error updating your item');
+        },
+    });
+
+    const deleteItem = api.admin.deleteItem.useMutation({
+        onSuccess() {
+            showToast('Item removed');
+        },
+        onError() {
+            showToast('There was an error removing this item');
         },
     });
 
@@ -62,6 +71,11 @@ export default function Page() {
         refetch();
     };
 
+    const handleDeleteItem = async (id: number) => {
+        await deleteItem.mutateAsync(id);
+        refetch();
+    };
+
     return (
         <div>
             <form onSubmit={handleSearch} className='mr-2 flex rounded border border-gray-200 bg-gray-50'>
@@ -74,8 +88,8 @@ export default function Page() {
             <div className='my-5 flex flex-col gap-3'>
                 {items != undefined && items.length !== 0 ? (
                     <>
-                        <div className='grid grid-cols-[1fr_1fr_1fr_1fr_auto] gap-4 px-5 py-2 text-slate-600'>
-                            <p className='text-xs font-semibold sm:text-sm'>ID</p>
+                        <div className='grid grid-cols-[auto_1fr_1fr_1fr_auto] items-center gap-4 px-5 py-2 text-slate-600'>
+                            <p className='min-w-[50px] text-xs font-semibold sm:text-sm'>ID</p>
                             <p className='text-xs font-semibold sm:text-sm'>Item Name</p>
                             <p className='text-xs font-semibold sm:text-sm'>Price</p>
                             <p className='text-xs font-semibold sm:text-sm'>Old Price</p>
@@ -86,10 +100,10 @@ export default function Page() {
                         {items.map(item => (
                             <form
                                 onSubmit={e => handleUpdateItem(e, item.id)}
-                                className='grid grid-cols-[1fr_1fr_1fr_1fr_auto] items-center gap-4 rounded-md border border-gray-200 px-5 py-5 text-slate-600'
+                                className='grid grid-cols-[auto_1fr_1fr_1fr_auto] items-center gap-4 rounded-md border border-gray-200 px-5 py-5 text-slate-600'
                                 key={item.id}
                             >
-                                <p className='text-xs font-semibold sm:text-sm'>{item.id}</p>
+                                <p className='min-w-[50px] text-xs font-semibold sm:text-sm'>{item.id}</p>
                                 <p className='text-xs font-semibold sm:text-sm'>{item.name}</p>
                                 <input
                                     name='price'
@@ -101,13 +115,22 @@ export default function Page() {
                                     className='w-full rounded-md border border-slate-200 p-1 text-xs outline-none transition-colors focus-within:border-slate-300 sm:text-sm'
                                     defaultValue={currencyFormat(item?.oldPrice ?? 0)}
                                 />
-                                <button
-                                    disabled={updateItem.isLoading}
-                                    type='submit'
-                                    className='rounded-full bg-transparent p-1 text-xs text-slate-600 transition-colors hover:bg-slate-500 hover:text-white'
-                                >
-                                    <Check size={18} />
-                                </button>
+                                <div className='flex items-center justify-center gap-2'>
+                                    <button
+                                        type='button'
+                                        onClick={() => handleDeleteItem(item.id)}
+                                        className='rounded-full bg-transparent p-1 text-xs text-slate-600 transition-colors hover:bg-red-500 hover:text-white'
+                                    >
+                                        <X size={18} />
+                                    </button>
+                                    <button
+                                        disabled={updateItem.isLoading}
+                                        type='submit'
+                                        className='rounded-full bg-transparent p-1 text-xs text-slate-600 transition-colors hover:bg-slate-500 hover:text-white'
+                                    >
+                                        <Check size={18} />
+                                    </button>
+                                </div>
                             </form>
                         ))}
                     </>

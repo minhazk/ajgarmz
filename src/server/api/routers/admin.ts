@@ -37,16 +37,10 @@ export const adminRouter = createTRPCRouter({
                 amountPaid: true,
                 createdAt: true,
                 shippingCost: true,
-                item: {
-                    select: {
-                        id: true,
-                        name: true,
-                        price: true,
-                        mainImage: {
-                            select: { url: true },
-                        },
-                    },
-                },
+                itemId: true,
+                itemName: true,
+                itemPrice: true,
+                imageUrl: true,
                 address: {
                     select: {
                         recipientName: true,
@@ -84,5 +78,10 @@ export const adminRouter = createTRPCRouter({
         const oneWeekCount = orders.filter(order => order.createdAt > oneWeekAgo).length;
 
         return { week: oneWeekCount, all: orders.length };
+    }),
+    deleteItem: adminProcedure.input(z.number()).mutation(({ ctx, input: id }) => {
+        return ctx.prisma.item.delete({
+            where: { id },
+        });
     }),
 });

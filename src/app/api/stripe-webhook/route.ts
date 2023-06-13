@@ -53,7 +53,10 @@ export async function POST(req: NextRequest) {
                             data: items.map((item: any) => {
                                 return {
                                     orderId,
-                                    itemId: item.itemId,
+                                    itemId: item.id,
+                                    itemName: item.name,
+                                    itemPrice: item.price,
+                                    imageUrl: item.imageUrl,
                                     colour: item.colour,
                                     size: item.size,
                                     quantity: item.quantity,
