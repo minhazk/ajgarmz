@@ -1,6 +1,7 @@
 'use client';
 
 import OrderItem, { OrderItemProps } from '@/components/orders/OrderGroup';
+import NavigationHistory from '@/components/ui/NavigationHistory';
 import { api } from '@/util/trpc';
 import { Calendar, CalendarDays } from 'lucide-react';
 import { useEffect, useState } from 'react';
@@ -23,6 +24,8 @@ export default function Page() {
 
     return (
         <div>
+            <NavigationHistory routes={['admin', 'orders']} />
+
             <div className='grid grid-cols-2 gap-4'>
                 <div className='flex w-full flex-col items-center justify-center gap-3 rounded-md border border-gray-300 bg-gray-200 p-2 py-4 text-slate-500'>
                     <Calendar size={30} />

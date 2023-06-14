@@ -3,7 +3,6 @@ import { z } from 'zod';
 
 export const adminRouter = createTRPCRouter({
     searchItems: adminProcedure.input(z.string()).query(({ ctx, input: searchInput }) => {
-        console.log(2, searchInput);
         return ctx.prisma.$queryRaw`
             SELECT * FROM Item
             WHERE name LIKE ${`%${searchInput}%`}

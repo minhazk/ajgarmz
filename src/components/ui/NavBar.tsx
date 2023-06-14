@@ -5,6 +5,7 @@ import { User2, ShoppingCart, Search, Menu, PackagePlus, X } from 'lucide-react'
 import { signIn, signOut, useSession } from 'next-auth/react';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
+import SearchForm from './SearchForm';
 
 export default function NavBar() {
     const [burgerOpen, setBurgerOpen] = useState<boolean>(false);
@@ -63,15 +64,7 @@ export default function NavBar() {
                 </div>
             </div>
             <div className='ml-4 flex items-center'>
-                <button className='rounded-full p-2 transition-colors hover:bg-gray-100 sm:hidden'>
-                    <Search size={19} />
-                </button>
-                <div className='mr-2 hidden rounded border border-gray-200 bg-gray-50 sm:flex'>
-                    <div className='flex items-center p-2 text-gray-500'>
-                        <Search size={18} />
-                    </div>
-                    <input type='text' placeholder='Search' className='bg-transparent text-sm outline-none md:w-36 lg:w-full' />
-                </div>
+                <SearchForm />
                 {session?.user.type === 'admin' && (
                     <Link href='/admin' className='rounded-full p-2 transition-colors hover:bg-gray-100'>
                         <PackagePlus size={20} strokeWidth={2} />

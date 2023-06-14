@@ -1,5 +1,6 @@
 'use client';
 
+import NavigationHistory from '@/components/ui/NavigationHistory';
 import currencyFormat from '@/util/currencyFormat';
 import { showToast } from '@/util/toastNotification';
 import { api } from '@/util/trpc';
@@ -78,6 +79,9 @@ export default function Page() {
 
     return (
         <div>
+            <NavigationHistory routes={['admin', 'edit']} />
+
+            <h1 className='mb-4 mt-2 text-lg font-medium text-slate-600'>Search items to edit</h1>
             <form onSubmit={handleSearch} className='mr-2 flex rounded border border-gray-200 bg-gray-50'>
                 <button type='submit' className='flex items-center p-2 text-gray-500'>
                     <Search size={18} />

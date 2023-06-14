@@ -76,7 +76,7 @@ export default function Page() {
 
     return (
         <div>
-            <NavigationHistory routes={['Create Listing']} />
+            <NavigationHistory routes={['admin', 'create listing']} />
 
             <div className='flex flex-col gap-8 lg:flex-row'>
                 <div className='lg:w-1/2'>

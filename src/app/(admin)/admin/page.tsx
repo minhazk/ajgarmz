@@ -1,4 +1,4 @@
-import { AlignHorizontalJustifyEndIcon, BarChart2, Edit3, PackagePlus, Truck } from 'lucide-react';
+import { Edit3, PackagePlus, Truck } from 'lucide-react';
 import Link from 'next/link';
 
 export default function Page() {
