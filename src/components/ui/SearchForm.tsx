@@ -5,6 +5,10 @@ import { api } from '@/util/trpc';
 import Link from 'next/link';
 import currencyFormat from '@/util/currencyFormat';
 
+type SearchFormProps = {
+    closeMenus: () => void;
+};
+
 type SearchDataProps = {
     data:
         | {
@@ -18,7 +22,7 @@ type SearchDataProps = {
     isLoading: boolean;
 };
 
-export default function SearchForm() {
+export default function SearchForm({ closeMenus }: SearchFormProps) {
     const [open, setOpen] = useState(false);
     const [input, setInput] = useState<string | null>(null);
     const {
@@ -52,8 +56,6 @@ export default function SearchForm() {
         debounceFn();
     };
 
-    console.log(items);
-
     return (
         <>
             <button className='rounded-full p-2 transition-colors hover:bg-gray-100 sm:hidden' onClick={() => setOpen(open => !open)}>
@@ -71,8 +73,9 @@ export default function SearchForm() {
                         {items.map(item => (
                             <Link
                                 href={`item/${item.id}`}
-                                className='hover:bg-gray-10 flex cursor-pointer items-center gap-3 px-3 py-3'
+                                className='flex cursor-pointer items-center gap-3 px-3 py-3 hover:bg-gray-100/80'
                                 onClick={() => {
+                                    closeMenus();
                                     setInput(null);
                                     setOpen(false);
                                 }}
@@ -89,7 +92,7 @@ export default function SearchForm() {
                         ))}
                     </div>
                 )}
-                {isLoading && (
+                {input !== null && isLoading && (
                     <div className='absolute top-full z-50 my-3 flex w-full flex-col overflow-hidden rounded-md border bg-white text-sm text-gray-400'>
                         <p className='flex items-center justify-center gap-3 px-3 py-3 font-light'>
                             <Loader2 className='animate-spin' size={16} strokeWidth={1} />

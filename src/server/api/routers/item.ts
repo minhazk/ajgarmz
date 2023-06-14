@@ -227,7 +227,6 @@ export const itemRouter = createTRPCRouter({
     }),
     searchItems: publicProcedure.input(z.string().nullable()).query(({ ctx, input: searchInput }) => {
         if (searchInput == '') return null;
-        console.log(searchInput == null);
         return ctx.prisma.$queryRaw`
             SELECT id, name, price, oldPrice FROM Item
             WHERE name LIKE ${`%${searchInput}%`}
