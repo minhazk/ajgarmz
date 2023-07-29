@@ -49,7 +49,7 @@ export default function OrderGroup({ orderItems }: { orderItems: OrderItemProps[
                     <div className='grid w-full grid-cols-2 items-center justify-items-center gap-2 md:grid-cols-4 md:gap-4'>
                         <ItemData label='Created at' value={formatDate(orderItems[0].createdAt)} />
                         <ItemData label='No. of Items' value={orderItems.length} />
-                        <ItemData label='Order charge' value={orderItems.reduce((prev, curr) => prev + curr.amountPaid, 0)} />
+                        <ItemData label='Order charge' value={currencyFormatter(orderItems.reduce((prev, curr) => prev + curr.amountPaid, 0))} />
                         <ItemData label='Shipping' value={orderItems[0].shippingCost === 0 ? 'Standard' : 'Next Day'} />
                     </div>
                 </div>

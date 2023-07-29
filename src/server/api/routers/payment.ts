@@ -19,8 +19,14 @@ const paymentInput = z
     .optional();
 
 export const paymentRouter = createTRPCRouter({
-    makePayment: publicProcedure.input(paymentInput).mutation(async ({ ctx, input: items }) => {
+    makePayment: publicProcedure.input(paymentInput).mutation(async ({ input: items }) => {
         if (items == null || items.length === 0) return null;
+        const metadata: Record<string, string> = {};
+
+        for (const { item, size, colour, quantity } of items) {
+            metadata[`${item.id}${size.name}${colour.name}`] = JSON.stringify([item.id, item.name, item.mainImage?.url, item.price, size.name, colour.name, quantity]);
+        }
+
         const session = await stripe.checkout.sessions.create({
             line_items: items?.map(({ item, size, colour, quantity }) => {
                 return {
@@ -42,21 +48,7 @@ export const paymentRouter = createTRPCRouter({
             success_url: `${process.env.NEXT_PUBLIC_DOMAIN_URL}/basket?order=success`,
             cancel_url: `${process.env.NEXT_PUBLIC_DOMAIN_URL}/basket`,
             payment_intent_data: {
-                metadata: {
-                    items: JSON.stringify(
-                        items.map(item => {
-                            return {
-                                id: item.item.id,
-                                name: item.item.name,
-                                price: item.item.price,
-                                imageUrl: item.item.mainImage!.url,
-                                size: item.size.name,
-                                colour: item.colour.name,
-                                quantity: item.quantity,
-                            };
-                        })
-                    ),
-                },
+                metadata,
             },
             shipping_address_collection: {
                 allowed_countries: [

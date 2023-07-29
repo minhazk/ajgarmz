@@ -80,6 +80,7 @@ export default function Page({ searchParams: { order } }: PageProps) {
     };
 
     const handlePayment = () => {
+        if (basketItems.length === 0) return showToast('Basket is empty!');
         makePayment.mutateAsync(basketItems).then(data => push(data as string));
     };
 

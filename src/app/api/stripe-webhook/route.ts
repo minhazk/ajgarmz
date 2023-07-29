@@ -36,12 +36,15 @@ export async function POST(req: NextRequest) {
                     };
                     name: string;
                 };
+                shipping_cost: number | null;
             };
+
             const amountPaid = paymentIntentSucceeded.amount_received / 100;
-            const items = JSON.parse(paymentIntentSucceeded.metadata.items);
+            const items = Object.values(paymentIntentSucceeded.metadata).map((val: any) => JSON.parse(val));
             const address = paymentIntentSucceeded.shipping.address;
             const recipientName = paymentIntentSucceeded.shipping.name;
-            const shippingCost = items.reduce((prev: any, curr: any) => prev + curr.price * curr.quantity, 0) !== amountPaid ? 10 : 0;
+            const shippingCost = items.reduce((prev: any, curr: any) => prev + curr[3] * curr[6], 0) !== amountPaid ? 10 : 0;
+            console.log(shippingCost, amountPaid);
             const orderId = paymentIntentSucceeded.id;
             const addressFormat = Object.fromEntries(Object.entries(address).filter(([_, v]) => v != null)) as any;
             await prisma.address.create({
@@ -50,16 +53,16 @@ export async function POST(req: NextRequest) {
                     recipientName,
                     orderItems: {
                         createMany: {
-                            data: items.map((item: any) => {
+                            data: items.map(([id, name, imageUrl, price, size, colour, quantity]: any) => {
                                 return {
                                     orderId,
-                                    itemId: item.id,
-                                    itemName: item.name,
-                                    itemPrice: item.price,
-                                    imageUrl: item.imageUrl,
-                                    colour: item.colour,
-                                    size: item.size,
-                                    quantity: item.quantity,
+                                    itemId: id,
+                                    itemName: name,
+                                    itemPrice: price,
+                                    imageUrl,
+                                    colour,
+                                    size,
+                                    quantity,
                                     amountPaid,
                                     shippingCost,
                                 };
