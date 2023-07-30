@@ -1,4 +1,7 @@
+'use client';
+
 import { showToast } from '@/util/toastNotification';
+import { useEffect, useRef, useState } from 'react';
 import useDrivePicker from 'react-google-drive-picker';
 
 type ImageInputProps = {
@@ -12,16 +15,47 @@ export type DriveImageProps = {
 
 export default function ImageInput({ onChange }: ImageInputProps) {
     const [openPicker] = useDrivePicker();
+    const accessTokenRef = useRef<string | null>(null);
+    const expiryRef = useRef<number | null>(null);
 
-    const handleUploadImages = () => {
+    const getNewAccessToken = async (clientId: string, refreshToken: string) => {
+        const clientSecret = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_SECRET;
+
+        const url = 'https://oauth2.googleapis.com/token';
+        const params = new URLSearchParams();
+        params.append('client_id', clientId);
+        params.append('client_secret', clientSecret!);
+        params.append('refresh_token', refreshToken);
+        params.append('grant_type', 'refresh_token');
+
+        const response = await fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            body: params,
+        });
+
+        const { access_token, expires_in } = await response.json();
+        const expiryTime = Date.now() + expires_in * 1000;
+        accessTokenRef.current = access_token;
+        expiryRef.current = expiryTime;
+    };
+
+    const handleUploadImages = async () => {
         const clientId = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID;
         const developerKey = process.env.NEXT_PUBLIC_GOOGLE_API_KEY;
-        const token = process.env.NEXT_PUBLIC_GOOGLE_ACCESS_TOKEN;
-        if (!clientId || !developerKey || !token) return showToast('Missing API keys');
+        const refreshToken = process.env.NEXT_PUBLIC_GOOGLE_REFRESH_TOKEN;
+        if (!clientId || !developerKey || !refreshToken) return showToast('Missing authorization keys');
+
+        if (!accessTokenRef.current || !expiryRef.current || Date.now() >= expiryRef.current) {
+            await getNewAccessToken(clientId, refreshToken);
+        }
+
         openPicker({
             clientId,
             developerKey,
-            // token,
+            token: accessTokenRef.current!,
             viewId: 'DOCS_IMAGES',
             showUploadView: true,
             showUploadFolders: true,
