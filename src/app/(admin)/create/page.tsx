@@ -61,7 +61,6 @@ export default function Page() {
             Object.values(item).some(val => {
                 if (typeof val == 'string') return val == '';
                 if (typeof val == 'number') return val < 0.01;
-                if (Array.isArray(val)) return val.length == 0;
                 return !val;
             })
         )

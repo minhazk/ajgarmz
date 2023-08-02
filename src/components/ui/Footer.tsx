@@ -14,12 +14,12 @@ export default function Footer() {
                     <div className='flex flex-col gap-2'>
                         <h4 className='mb-1 font-semibold'>SHOP</h4>
                         <Link href='/shop'>All Collections</Link>
-                        <Link href='/shop?category=sale'>Sale</Link>
+                        <Link href='/shop?category=sale'>Sale Items</Link>
                     </div>
                     <div className='flex flex-col gap-2'>
                         <h4 className='mb-1 font-semibold'>SUPPORT</h4>
-                        <a href='tel:+44 7185291273'>+44 7185291273</a>
-                        <a href='mailto:customer_service@gmail.com'>customer_service@gmail.com</a>
+                        <a href='tel:+44 7443886436'>+44 7443886436</a>
+                        <a href='mailto:ajgarmz.customerservice@gmail.com'>ajgarmz.customerservice@gmail.com</a>
                     </div>
                 </div>
             </div>
