@@ -34,7 +34,7 @@ export function MultiSelect({ options, setter, label, isMulti, insertAll }: Mult
                 isMulti={isMulti}
                 closeMenuOnSelect={!isMulti}
                 onChange={(selected: any) => (isMulti ? setSelectedOptions(selected) : setSelectedOptions(selected.value))}
-                value={Array.isArray(selectedOptions) ? selectedOptions : selectedOptions?.value}
+                value={!selectedOptions ? undefined : Array.isArray(selectedOptions) ? selectedOptions : selectedOptions?.value}
             />
         </div>
     );
@@ -62,7 +62,7 @@ export function MultiSelectCreatable({ options, setter, label, isMulti, insertAl
                 options={options}
                 closeMenuOnSelect={!isMulti}
                 onChange={(selected: any) => (isMulti ? setSelectedOptions(selected) : setSelectedOptions(selected.value))}
-                value={Array.isArray(selectedOptions) ? selectedOptions : selectedOptions?.value}
+                value={!selectedOptions ? undefined : Array.isArray(selectedOptions) ? selectedOptions : selectedOptions?.value}
             />
         </div>
     );
