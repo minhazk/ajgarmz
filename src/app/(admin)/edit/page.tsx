@@ -67,7 +67,6 @@ export default function Page() {
         if (priceFormat == null) return showToast('Item must have a price');
         if (oldPriceFormat == null || oldPriceFormat === 0) oldPriceFormat = null;
         if (isNaN(priceFormat) || (oldPriceFormat != null && isNaN(oldPriceFormat))) return showToast('Incorrectly formatted input. Valid input example: £1.00 or 1.00 or 1');
-        console.log(priceFormat, oldPriceFormat);
         await updateItem.mutateAsync({ id: itemId, price: priceFormat, oldPrice: oldPriceFormat });
         refetch();
     };

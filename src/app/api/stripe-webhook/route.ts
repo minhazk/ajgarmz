@@ -44,7 +44,6 @@ export async function POST(req: NextRequest) {
             const address = paymentIntentSucceeded.shipping.address;
             const recipientName = paymentIntentSucceeded.shipping.name;
             const shippingCost = items.reduce((prev: any, curr: any) => prev + curr[3] * curr[6], 0) !== amountPaid ? 10 : 0;
-            console.log(shippingCost, amountPaid);
             const orderId = paymentIntentSucceeded.id;
             const addressFormat = Object.fromEntries(Object.entries(address).filter(([_, v]) => v != null)) as any;
             await prisma.address.create({

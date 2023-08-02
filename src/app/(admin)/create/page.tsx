@@ -22,6 +22,8 @@ export default function Page() {
         images: [],
     });
 
+    console.log(images);
+
     const createItem = api.items.createItem.useMutation({
         onSuccess() {
             showToast('Item successfully created');
@@ -32,8 +34,6 @@ export default function Page() {
             console.log(err);
         },
     });
-
-    console.log(sizes);
 
     const handleCreateItem = (e: FormEvent) => {
         e.preventDefault();
@@ -107,9 +107,9 @@ export default function Page() {
 
                         <MultiSelectCreatable setter={setSelectedSizes} options={sizes} label='Available Sizes' isMulti insertAll />
 
-                        <MultiSelectCreatable setter={setSelectedColours} options={colours} label='Available Colours' isMulti />
+                        <MultiSelectCreatable setter={setSelectedColours} options={colours} label='Available Colours' isMulti insertAll />
 
-                        <MultiSelect setter={setGender} options={genders} isMulti label='Assign Gender' />
+                        <MultiSelect setter={setGender} options={genders} isMulti label='Assign Gender' insertAll />
 
                         <MultiSelectCreatable setter={setCategory} options={itemCategories} label='Item Category' />
 

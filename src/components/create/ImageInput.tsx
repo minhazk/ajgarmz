@@ -1,7 +1,7 @@
 'use client';
 
 import { showToast } from '@/util/toastNotification';
-import { useEffect, useRef, useState } from 'react';
+import { useRef } from 'react';
 import useDrivePicker from 'react-google-drive-picker';
 
 type ImageInputProps = {
@@ -65,6 +65,7 @@ export default function ImageInput({ onChange }: ImageInputProps) {
             callbackFunction: data => {
                 if (data.action === 'cancel' || !data) return;
                 if (data.docs == null || data.docs.length === 0) return;
+                console.log(data);
                 onChange([
                     ...data.docs.map(({ name, id }: DriveImageProps) => {
                         return { name, url: `https://drive.google.com/uc?export=view&id=${id}` };
