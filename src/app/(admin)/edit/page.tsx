@@ -62,8 +62,8 @@ export default function Page() {
         const formData = new FormData(form);
         const price = formData.get('price')!.toString();
         const oldPrice = formData.get('old-price')!.toString();
-        const priceFormat = Number(price.replace('£', ''));
-        let oldPriceFormat = Number(oldPrice.replace('£', '')) as number | null;
+        const priceFormat = Number(price.replace(/(£|,)/g, ''));
+        let oldPriceFormat = Number(oldPrice.replace(/(£|,)/g, '')) as number | null;
         if (priceFormat == null) return showToast('Item must have a price');
         if (oldPriceFormat == null || oldPriceFormat === 0) oldPriceFormat = null;
         if (isNaN(priceFormat) || (oldPriceFormat != null && isNaN(oldPriceFormat))) return showToast('Incorrectly formatted input. Valid input example: £1.00 or 1.00 or 1');
@@ -95,7 +95,7 @@ export default function Page() {
                         <div className='grid grid-cols-[auto_1fr_1fr_1fr_auto] items-center gap-4 px-5 py-2 text-slate-600'>
                             <p className='min-w-[50px] text-xs font-semibold sm:text-sm'>ID</p>
                             <p className='text-xs font-semibold sm:text-sm'>Item Name</p>
-                            <p className='text-xs font-semibold sm:text-sm'>Price</p>
+                            <p className='text-xs font-semibold sm:text-sm'>Sale Price</p>
                             <p className='text-xs font-semibold sm:text-sm'>Old Price</p>
                             <button className='bg-transparent p-1 text-xs text-transparent'>
                                 <Check size={18} />
@@ -112,12 +112,12 @@ export default function Page() {
                                 <input
                                     name='price'
                                     className='w-full rounded-md border border-slate-200 p-1 text-xs outline-none transition-colors focus-within:border-slate-300 sm:text-sm'
-                                    defaultValue={currencyFormat(item.price)}
+                                    defaultValue={currencyFormat(item?.oldPrice ? item.price : 0)}
                                 />
                                 <input
                                     name='old-price'
                                     className='w-full rounded-md border border-slate-200 p-1 text-xs outline-none transition-colors focus-within:border-slate-300 sm:text-sm'
-                                    defaultValue={currencyFormat(item?.oldPrice ?? 0)}
+                                    defaultValue={currencyFormat(item?.oldPrice ? item.oldPrice : item.price)}
                                 />
                                 <div className='flex items-center justify-center gap-2'>
                                     <button

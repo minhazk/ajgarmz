@@ -6,6 +6,18 @@ body {
     background-color: rgba(253, 250, 243, 0.081);
 }
 
+@keyframes loading {
+    0% {
+        transform: translate(0, 0) rotate(0deg);
+    }
+    50% {
+        transform: translate(70px, 0) rotate(360deg);
+    }
+    100% {
+        transform: translate(0, 0) rotate(0deg);
+    }
+}
+
 ::-webkit-scrollbar {
     width: 3px;
     height: 5px;

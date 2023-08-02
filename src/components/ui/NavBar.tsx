@@ -68,7 +68,7 @@ export default function NavBar() {
                     </ul>
                 </div>
             </div>
-            <div className='ml-4 flex items-center'>
+            <div className='ml-4 flex items-center text-slate-700'>
                 <SearchForm closeMenus={handleCloseMenus} />
                 {session?.user.type === 'admin' && (
                     <Link href='/admin' className='rounded-full p-2 transition-colors hover:bg-gray-100' onClick={handleCloseMenus}>

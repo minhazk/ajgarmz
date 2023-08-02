@@ -103,7 +103,7 @@ export default function Page({ params: { id } }: PageProps) {
 
                 <div className='w-full divide-y-2 divide-gray-100 md:w-1/2'>
                     <div className='mb-4'>
-                        <h1 className='text-lg font-medium text-slate-500'>{name}</h1>
+                        <h1 className='text-lg font-medium capitalize text-slate-500'>{name}</h1>
                         <div className='flex items-baseline gap-4'>
                             <p className='text-lg font-bold text-slate-500'>{currencyFormatter(price)}</p>
                             {oldPrice != null && <p className='text-md font-semibold text-slate-300 line-through'>{currencyFormatter(oldPrice)}</p>}
@@ -121,7 +121,7 @@ export default function Page({ params: { id } }: PageProps) {
                             {sizes.map((size: InputProps) => (
                                 <button
                                     onClick={() => setSelectedSize(size)}
-                                    className={`flex w-10 items-center justify-center rounded-md border p-2 text-sm font-medium transition-colors ${
+                                    className={`flex w-10 items-center justify-center rounded-md border p-2 text-sm font-medium capitalize transition-colors ${
                                         selectedSize?.name === size.name ? 'border-white bg-slate-600 text-white' : 'border-gray-300 bg-white text-slate-500 hover:bg-slate-50'
                                     }`}
                                     key={size.id}
@@ -138,7 +138,7 @@ export default function Page({ params: { id } }: PageProps) {
                             {colours.map((colour: InputProps) => (
                                 <button
                                     onClick={() => setSelectedColour(colour)}
-                                    className={`flex items-center justify-center rounded-md border p-2 text-sm font-medium transition-colors first-letter:uppercase ${
+                                    className={`flex items-center justify-center rounded-md border p-2 text-sm font-medium capitalize transition-colors ${
                                         selectedColour?.name === colour.name ? 'border-white bg-slate-600 text-white' : 'border-gray-300 bg-white text-slate-500 hover:bg-slate-50'
                                     }`}
                                     key={colour.id}
@@ -160,7 +160,7 @@ export default function Page({ params: { id } }: PageProps) {
                             </button>
                         </div>
                         <CustomButton onClick={handleAddToBasket} disabled={addToBasket.isLoading}>
-                            Add to cart
+                            Add to Cart
                         </CustomButton>
                     </div>
                 </div>

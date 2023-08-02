@@ -72,7 +72,7 @@ export default function Page({ searchParams: { category } }: PageProps) {
                             Object.values(appliedFilters)
                                 .flat()
                                 .map((filter: any, i) => (
-                                    <div key={i} className='flex items-center gap-1 rounded-lg border border-gray-200 bg-white px-3 py-1 text-sm'>
+                                    <div key={i} className='flex items-center gap-1 rounded-lg border border-gray-200 bg-white px-3 py-1 text-sm capitalize'>
                                         {filter}
                                     </div>
                                 ))}

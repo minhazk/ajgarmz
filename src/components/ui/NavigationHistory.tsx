@@ -16,7 +16,7 @@ export default function NavigationHistory({ routes }: NavigationHistoryProps) {
                 .map((route, i) => (
                     <div className='flex flex-wrap items-center gap-2 text-sm' key={i}>
                         <ChevronRight className='text-gray-400 opacity-70' strokeWidth={2} size={18} />
-                        <p className='whitespace-nowrap text-slate-500 last:font-semibold'>{route}</p>
+                        <p className='whitespace-nowrap capitalize text-slate-500 last:font-semibold'>{route}</p>
                     </div>
                 ))}
         </div>
