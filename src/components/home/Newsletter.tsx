@@ -1,4 +1,5 @@
 import { Mail } from 'lucide-react';
+import CustomButton from '../ui/CustomButton';
 
 export default function Newsletter() {
     return (
@@ -12,9 +13,9 @@ export default function Newsletter() {
                     <Mail size={20} />
                 </div>
                 <input type='email' placeholder='Enter your email' required className='w-28 bg-transparent text-xs outline-none sm:w-full sm:text-sm' />
-                <button type='submit' className='rounded bg-black px-4 text-xs text-white sm:text-sm'>
-                    Subscribe
-                </button>
+                <div>
+                    <CustomButton type='submit'>Subscribe</CustomButton>
+                </div>
             </form>
 
             <p className='text-xs text-gray-400'>You are able to unsubscribe anytime</p>

@@ -72,7 +72,6 @@ function FilterButton({ label, options, setAppliedFilters }: FilterButtonProps) 
 
     const handleOnInput = (e: ChangeEvent) => {
         const input = e.target as HTMLInputElement;
-        const isChecked = input.checked;
         const filter = input.id.toLowerCase();
         setAppliedFilters((filters: appliedFiltersProps) => {
             for (const [key, value] of Object.entries(filters)) {

@@ -1,31 +1,31 @@
-import { LucideIcon, Truck, Mailbox, Laugh } from 'lucide-react';
+import { LucideIcon, Truck, Mailbox, Laugh, MessageCircle } from 'lucide-react';
 
 const INFO = [
     {
         Icon: Laugh,
         title: 'Satisfaction Guarantee',
-        description: "Exchange the product you've purchased if it doesn't fit you",
+        description: "Shop with confidence knowing that you can exchange the product you've purchased if it doesn't fit you.",
     },
     {
         Icon: Mailbox,
         title: 'New Arrivals Every Month',
-        description: 'We update our collection every month',
+        description: 'Stay on-trend with our ever-evolving collection as we update our collection every week',
     },
     {
         Icon: Truck,
         title: 'Fast & Free Shipping',
-        description: 'We offer next day delivery service for every product',
+        description: 'Experience lightning-fast and free shipping on all orders with our next day delivery service,',
     },
     {
-        Icon: Truck,
-        title: 'Fast & Free Shipping',
-        description: 'We offer next day delivery service for every product',
+        Icon: MessageCircle,
+        title: '24/7 Customer Support',
+        description: 'Our dedicated support team is available 24/7 to assist you with any questions.',
     },
 ];
 
 export default function InfoBanner() {
     return (
-        <div className='mx-auto my-10 max-w-7xl sm:my-12'>
+        <div className='max-w-8xl mx-auto my-10 sm:my-12'>
             <h2 className='text-xl font-semibold text-primary'>We provide best customer experiences</h2>
             <div className='mt-7 grid grid-cols-2 gap-8 md:grid-cols-4'>
                 {INFO.map((info, i) => (
@@ -48,7 +48,7 @@ function InfoCard({ Icon, title, description }: InfoCardProps) {
             <div className='aspect-square w-fit rounded bg-gray-100 p-3'>
                 <Icon size={20} />
             </div>
-            <p className='text-sm font-semibold'>{title}</p>
+            <p className='text-center text-sm font-semibold md:text-left'>{title}</p>
             <p className='text-xs text-gray-400'>{description}</p>
         </div>
     );

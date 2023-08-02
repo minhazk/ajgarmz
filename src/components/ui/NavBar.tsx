@@ -59,10 +59,10 @@ export default function NavBar() {
                         <li>
                             <Link
                                 onClick={handleCloseMenus}
-                                href='/shop'
+                                href='/shop?category=sale'
                                 className='before-0 relative block w-full py-4 pl-8 pr-2 transition-colors before:absolute before:bottom-1 before:left-1/2 before:h-px before:w-0 before:-translate-x-1/2 before:bg-slate-600 before:transition-all md:hover:before:w-full lg:px-1 lg:py-2'
                             >
-                                Most Wanted
+                                Sale
                             </Link>
                         </li>
                     </ul>

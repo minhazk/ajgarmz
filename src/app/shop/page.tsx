@@ -33,18 +33,6 @@ export default function Page({ searchParams: { category } }: PageProps) {
         refetch();
     }, [appliedFilters, refetch]);
 
-    type T = keyof typeof appliedFilters;
-
-    const handleRemoveFilter = (filter: string) => {
-        setAppliedFilters((filters: appliedFiltersProps) => {
-            const updatedFilters: appliedFiltersProps = {};
-            for (const [key, value] of Object.entries(filters)) {
-                updatedFilters[key as T] = value?.filter(item => item !== filter) || [];
-            }
-            return updatedFilters;
-        });
-    };
-
     return (
         <>
             <NavigationHistory routes={['Browse Products', category ?? null]} />
@@ -84,14 +72,9 @@ export default function Page({ searchParams: { category } }: PageProps) {
                             Object.values(appliedFilters)
                                 .flat()
                                 .map((filter: any, i) => (
-                                    <button
-                                        onClick={() => handleRemoveFilter(filter)}
-                                        key={i}
-                                        className='flex items-center gap-1 rounded-lg border border-gray-200 bg-white px-3 py-1 text-sm transition-colors hover:bg-gray-50'
-                                    >
+                                    <div key={i} className='flex items-center gap-1 rounded-lg border border-gray-200 bg-white px-3 py-1 text-sm'>
                                         {filter}
-                                        <X size={15} className='text-gray-500' />
-                                    </button>
+                                    </div>
                                 ))}
                     </div>
 
