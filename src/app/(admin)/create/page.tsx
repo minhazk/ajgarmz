@@ -33,6 +33,8 @@ export default function Page() {
         },
     });
 
+    console.log(sizes);
+
     const handleCreateItem = (e: FormEvent) => {
         e.preventDefault();
         const form = e.target as HTMLFormElement;
@@ -40,7 +42,7 @@ export default function Page() {
         const name = formData.get('item title')!.toString();
         const description = formData.get('item description')!.toString();
         const price = parseFloat(formData.get('item price')!.toString());
-        if (images.mainImage == null) return showToast('Item requires a main image');
+        if (images.mainImage == null) return showToast('Item requires an image');
         const item = {
             name,
             description,
@@ -103,7 +105,7 @@ export default function Page() {
                         <InputGroup label='Item description' />
                         <InputGroup label='Item price' type='number' />
 
-                        <MultiSelectCreatable setter={setSelectedSizes} options={sizes} label='Available Sizes' isMulti />
+                        <MultiSelectCreatable setter={setSelectedSizes} options={sizes} label='Available Sizes' isMulti insertAll />
 
                         <MultiSelectCreatable setter={setSelectedColours} options={colours} label='Available Colours' isMulti />
 

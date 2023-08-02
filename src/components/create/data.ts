@@ -9,7 +9,6 @@ export const sizes: OptionProps = [
     { value: 'L', label: 'L' },
     { value: 'M', label: 'M' },
     { value: 'S', label: 'S' },
-    { value: 'XS', label: 'XS' },
 ];
 export const colours: OptionProps = [
     { value: 'black', label: 'Black' },
