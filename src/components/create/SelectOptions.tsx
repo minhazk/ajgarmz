@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import Select, { GroupBase } from 'react-select';
+import Select, { GroupBase, PropsValue } from 'react-select';
 import Creatable from 'react-select/creatable';
 
 type MultiSelectProps = {
@@ -13,7 +13,7 @@ type MultiSelectProps = {
 };
 
 export function MultiSelect({ options, setter, label, isMulti, insertAll }: MultiSelectProps) {
-    const [selectedOptions, setSelectedOptions] = useState<{ label: string; value: string }[] | { label: string; value: string }>();
+    const [selectedOptions, setSelectedOptions] = useState<PropsValue<{ label: string; value: string }> | undefined>();
 
     useEffect(() => {
         setter(selectedOptions);
@@ -29,19 +29,13 @@ export function MultiSelect({ options, setter, label, isMulti, insertAll }: Mult
                     </button>
                 )}
             </div>
-            <Select
-                options={options}
-                isMulti={isMulti}
-                closeMenuOnSelect={!isMulti}
-                onChange={(selected: any) => (isMulti ? setSelectedOptions(selected) : setSelectedOptions(selected.value))}
-                value={!selectedOptions ? undefined : selectedOptions}
-            />
+            <Select options={options} isMulti={isMulti} closeMenuOnSelect={!isMulti} onChange={(selected: any) => setSelectedOptions(selected)} value={selectedOptions} />
         </div>
     );
 }
 
 export function MultiSelectCreatable({ options, setter, label, isMulti, insertAll }: MultiSelectProps) {
-    const [selectedOptions, setSelectedOptions] = useState<{ label: string; value: string }[] | { label: string; value: string }>();
+    const [selectedOptions, setSelectedOptions] = useState<PropsValue<{ label: string; value: string }> | undefined>();
 
     useEffect(() => {
         setter(selectedOptions);
@@ -57,13 +51,7 @@ export function MultiSelectCreatable({ options, setter, label, isMulti, insertAl
                     </button>
                 )}
             </div>
-            <Creatable
-                isMulti={isMulti}
-                options={options}
-                closeMenuOnSelect={!isMulti}
-                onChange={(selected: any) => (isMulti ? setSelectedOptions(selected) : setSelectedOptions(selected.value))}
-                value={!selectedOptions ? undefined : selectedOptions}
-            />
+            <Creatable isMulti={isMulti} options={options} closeMenuOnSelect={!isMulti} onChange={(selected: any) => setSelectedOptions(selected)} value={selectedOptions} />
         </div>
     );
 }
