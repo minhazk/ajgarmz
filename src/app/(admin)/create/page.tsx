@@ -12,11 +12,11 @@ import { showToast } from '@/util/toastNotification';
 import CustomButton from '@/components/ui/CustomButton';
 
 export default function Page() {
-    const [selectedSizes, setSelectedSizes] = useState<string[]>([]);
-    const [selectedColours, setSelectedColours] = useState<string[]>([]);
-    const [gender, setGender] = useState<string[]>([]);
-    const [category, setCategory] = useState<string>('');
-    const [type, setType] = useState<string>('');
+    const [selectedSizes, setSelectedSizes] = useState<any[]>([]);
+    const [selectedColours, setSelectedColours] = useState<any[]>([]);
+    const [gender, setGender] = useState<any[]>([]);
+    const [category, setCategory] = useState<any>('');
+    const [type, setType] = useState<any>('');
     const [images, setImages] = useState<ImagesStateProps>({
         mainImage: null,
         images: [],
@@ -47,11 +47,11 @@ export default function Page() {
             name,
             description,
             price,
-            sizes: selectedSizes,
-            colours: selectedColours.map(colour => colour.toLowerCase()),
-            gender: gender.length !== 1 ? 'unisex' : gender[0].toLowerCase(),
-            category: category.toLowerCase(),
-            type: type.toLowerCase(),
+            sizes: selectedSizes.map(v => v.value),
+            colours: selectedColours.map(colour => colour.value.toLowerCase()),
+            gender: gender.length !== 1 ? 'unisex' : gender[0].value.toLowerCase(),
+            category: category.value.toLowerCase(),
+            type: type.value.toLowerCase(),
             images: images.images
                 .filter(img => img.url !== images.mainImage!.url)
                 .map(img => {
@@ -59,6 +59,7 @@ export default function Page() {
                 }),
             mainImage: images.mainImage.url,
         };
+        console.log(item);
         if (
             Object.values(item).some(val => {
                 if (typeof val == 'string') return val == '';

@@ -6,6 +6,8 @@ import { Inter } from 'next/font/google';
 import NavBar from '@/components/ui/NavBar';
 import { SessionProvider } from 'next-auth/react';
 import { TrpcProvider } from '@/util/trpc-provider';
+import GoogleAnalytics from '@/components/GoogleAnalytics';
+import CookieBanner from '@/components/CookieBanner';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -17,6 +19,7 @@ const inter = Inter({ subsets: ['latin'] });
 export default function RootLayout({ children }: { children: React.ReactNode }) {
     return (
         <html lang='en'>
+            {process.env.NEXT_PUBLIC_GA_TRACKING_ID && <GoogleAnalytics GA_MEASUREMENT_ID={process.env.NEXT_PUBLIC_GA_TRACKING_ID as string} />}
             <body className={`${inter.className} flex min-h-screen flex-col`}>
                 <SessionProvider>
                     <TrpcProvider>
@@ -26,6 +29,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                         </div>
                     </TrpcProvider>
                 </SessionProvider>
+                <CookieBanner />
                 <Footer />
             </body>
         </html>
