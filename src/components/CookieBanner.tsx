@@ -28,8 +28,8 @@ export default function CookieBanner() {
         <div
             className={`fixed bottom-0 left-0 right-0
                         mx-auto my-12 max-w-max md:max-w-screen-sm 
-                        ${cookieConsent != null ? 'hidden' : 'flex'} flex-col items-center justify-between gap-4 rounded-lg border border-slate-600 bg-white px-5 py-3  
-                         shadow sm:flex-row md:px-5`}
+                        ${cookieConsent != null ? 'hidden' : 'flex'} z-50 flex-col items-center justify-between gap-4 rounded-lg border border-slate-600 bg-white px-5  
+                         py-3 shadow sm:flex-row md:px-5`}
         >
             <div className='text-center text-sm sm:text-base'>
                 <p>

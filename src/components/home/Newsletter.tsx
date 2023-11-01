@@ -3,7 +3,7 @@ import CustomButton from '../ui/CustomButton';
 
 export default function Newsletter() {
     return (
-        <div className='mb-6 mt-8 flex flex-col items-center justify-center gap-3 py-3  text-center sm:mt-12'>
+        <div className='mb-12 mt-8 flex flex-col items-center justify-center gap-3 py-3  text-center sm:mt-8'>
             <h1 className='text-md font-bold sm:text-2xl'>
                 Subscribe to our newsletter to get updates <br></br> to our latests collections
             </h1>

@@ -27,7 +27,7 @@ const categories = [
 
 export default function CategorySelection() {
     return (
-        <div className='mx-auto my-2 w-full max-w-7xl md:my-7'>
+        <div className='max-w-8xl mx-auto my-2 w-full md:my-7'>
             <h2 className='text-center text-xl font-semibold text-primary'>Featured Categories</h2>
             <div className='mt-7 grid grid-cols-2 gap-4 md:grid-cols-4'>
                 {categories.map(category => (

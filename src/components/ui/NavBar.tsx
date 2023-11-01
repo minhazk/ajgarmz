@@ -33,11 +33,11 @@ export default function NavBar() {
                 <button onClick={() => setBurgerOpen(p => !p)} className='-ml-1 rounded-full p-2 text-slate-800 transition-colors hover:bg-gray-100 lg:hidden'>
                     {burgerOpen ? <X size={20} /> : <Menu size={20} />}
                 </button>
-                <Link href='/' className='text-xl font-semibold text-slate-600'>
+                <Link href='/' className='text-xl font-semibold text-slate-600 lg:text-2xl'>
                     AjGarmz
                 </Link>
                 <div className={`lg:block ${burgerOpen ? 'absolute left-0 top-full z-40 mt-2 block w-52 overflow-hidden rounded-lg border border-gray-300 bg-white lg:hidden' : 'hidden'}`}>
-                    <ul className='flex flex-col text-sm font-semibold text-slate-500 lg:flex-row lg:items-center lg:gap-3'>
+                    <ul className='flex flex-col text-sm font-semibold text-slate-500 lg:flex-row lg:items-center lg:gap-3 lg:text-base'>
                         <li>
                             <Link
                                 onClick={handleCloseMenus}

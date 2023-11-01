@@ -25,8 +25,8 @@ const INFO = [
 
 export default function InfoBanner() {
     return (
-        <div className='max-w-8xl mx-auto my-10 sm:my-12'>
-            <h2 className='text-center text-xl font-semibold text-primary md:text-left'>We provide best customer experiences</h2>
+        <div className='max-w-8xl mx-auto my-8'>
+            <h2 className='text-center text-base font-semibold text-primary md:text-left lg:text-xl'>We provide best customer experiences</h2>
             <div className='mt-7 grid grid-cols-2 gap-8 md:grid-cols-4'>
                 {INFO.map((info, i) => (
                     <InfoCard key={i} {...info} />
@@ -48,8 +48,8 @@ function InfoCard({ Icon, title, description }: InfoCardProps) {
             <div className='aspect-square w-fit rounded bg-gray-100 p-3'>
                 <Icon size={20} />
             </div>
-            <p className='text-center text-sm font-semibold md:text-left'>{title}</p>
-            <p className='text-xs text-gray-400'>{description}</p>
+            <p className='text-center text-sm font-semibold md:text-left xl:text-base'>{title}</p>
+            <p className='text-xs text-gray-400 xl:text-sm'>{description}</p>
         </div>
     );
 }

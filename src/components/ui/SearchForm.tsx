@@ -62,7 +62,7 @@ export default function SearchForm({ closeMenus }: SearchFormProps) {
                 <Search size={19} />
             </button>
 
-            <div className={`${open ? 'absolute left-0 top-full z-50 flex w-full' : 'relative hidden'} mr-2 rounded border border-gray-200 bg-gray-50 sm:flex`}>
+            <div className={`${open ? 'absolute left-0 top-full z-50 flex w-full' : 'relative hidden'} mr-2 rounded border border-gray-300 bg-gray-50 sm:flex`}>
                 <div className='flex items-center p-2 text-gray-500'>
                     <Search size={18} />
                 </div>
