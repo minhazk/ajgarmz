@@ -7,8 +7,11 @@ import AuthForm from '@/components/ui/AuthForm';
 import { FormEvent } from 'react';
 import { signIn } from 'next-auth/react';
 import { showToast } from '@/util/toastNotification';
+import { useRouter } from 'next/navigation';
 
 export default function Page({ searchParams: { error } }: any) {
+    const { push } = useRouter();
+
     const handleSubmit = async (e: FormEvent) => {
         e.preventDefault();
         const form = e.target as HTMLFormElement;
@@ -19,7 +22,14 @@ export default function Page({ searchParams: { error } }: any) {
         signIn('credentials', {
             email,
             password,
-            callbackUrl: '/',
+            redirect: false,
+        }).then(({ error }: any) => {
+            if (error) {
+                console.log(error);
+                showToast('Credentials do not match!');
+            } else {
+                push('/');
+            }
         });
     };
 
