@@ -3,9 +3,6 @@
 import NavigationHistory from '@/components/ui/NavigationHistory';
 import { MultiSelect, MultiSelectCreatable } from '@/components/create/SelectOptions';
 import { FormEvent, useState } from 'react';
-import { FileImage } from 'lucide-react';
-import ImageInput from '@/components/create/ImageInput';
-import ItemImage, { ImagesStateProps } from '@/components/create/ItemImage';
 import { colours, genders, itemCategories, itemTypes, sizes } from '@/components/create/data';
 import { api } from '@/util/trpc';
 import { showToast } from '@/util/toastNotification';
@@ -30,6 +27,7 @@ export default function Page() {
     const [type, setType] = useState<any>('');
     const [newImages, setNewImages] = useState<ImageFile[]>([]);
     const [imageUploadProgress, setImageUploadProgress] = useState<number | null>(null);
+    const [isUploading, setUploading] = useState(true);
 
     console.log('newImages', newImages);
 
@@ -89,50 +87,69 @@ export default function Page() {
                     <h1 className='text-xl font-semibold text-slate-600'>Item Images</h1>
 
                     <div className='mt-5'>
-                        <UploadDropzone
-                            endpoint='imageUploader'
-                            onClientUploadComplete={res => {
-                                console.log('Files: ', res);
-                                console.log('Upload Completed');
-                                if (res)
-                                    setNewImages(prev => [
-                                        ...prev,
-                                        ...res.map((file, i) => {
-                                            return { ...file, main: prev.length === 0 && i === 0 };
-                                        }),
-                                    ]);
-                            }}
-                            onUploadProgress={setImageUploadProgress}
-                            onUploadError={(error: Error) => {
-                                showToast('There was an error uploading your images');
-                                console.log(`ERROR! ${error.message}`);
-                            }}
-                        />
-                        {imageUploadProgress !== null && imageUploadProgress !== 100 && (
-                            <div className='mx-auto mb-4 mt-5 w-[95%] overflow-hidden rounded-lg border border-gray-300'>
-                                <div
-                                    className='bg-primary text-center text-xs text-white transition-all duration-300'
-                                    style={{
-                                        width: `${imageUploadProgress}%`,
-                                    }}
-                                >
-                                    {imageUploadProgress}%
+                        {isUploading && (
+                            <>
+                                <div className='relative'>
+                                    {newImages.length !== 0 && (
+                                        <button
+                                            onClick={e => {
+                                                e.stopPropagation();
+                                                setUploading(false);
+                                            }}
+                                            className='absolute right-2 top-2 z-10 rounded-md border border-gray-400 px-2 py-1 text-xs text-slate-600'
+                                        >
+                                            Minimize
+                                        </button>
+                                    )}
+                                    <UploadDropzone
+                                        endpoint='imageUploader'
+                                        onClientUploadComplete={res => {
+                                            console.log('Files: ', res);
+                                            console.log('Upload Completed');
+                                            if (res) {
+                                                setNewImages(prev => [
+                                                    ...prev,
+                                                    ...res.map((file, i) => {
+                                                        return { ...file, main: prev.length === 0 && i === 0 };
+                                                    }),
+                                                ]);
+                                                setUploading(false);
+                                            }
+                                        }}
+                                        onUploadProgress={setImageUploadProgress}
+                                        onUploadError={(error: Error) => {
+                                            showToast('There was an error uploading your images');
+                                            console.log(`ERROR! ${error.message}`);
+                                        }}
+                                    />
                                 </div>
-                            </div>
+                                {imageUploadProgress !== null && imageUploadProgress !== 100 && (
+                                    <div className='mx-auto mb-4 mt-5 w-[95%] overflow-hidden rounded-lg border border-gray-300'>
+                                        <div
+                                            className='bg-primary text-center text-xs text-white transition-all duration-300'
+                                            style={{
+                                                width: `${imageUploadProgress}%`,
+                                            }}
+                                        >
+                                            {imageUploadProgress}%
+                                        </div>
+                                    </div>
+                                )}
+                                <p className='mt-3 px-5 text-center text-xs text-gray-400'>
+                                    The blue upload button just saves the image in a storage bucket. The item is not created until the grey &apos;Create Listing&apos; button is clicked.
+                                </p>
+                            </>
                         )}
-                        <p className='mt-3 px-5 text-center text-xs text-gray-400'>
-                            The blue upload button just saves the image in a storage bucket. The item is not created until the grey &apos;Create Listing&apos; button is clicked.
-                        </p>
 
                         {newImages.length !== 0 && (
                             <div className='mt-5 flex flex-col gap-2'>
                                 {newImages.map((image: ImageFile, i: number) => (
-                                    <div key={image.key} className='flex gap-3 rounded-lg border border-gray-300 p-2'>
+                                    <div key={image.key} className='flex gap-4 rounded-lg border border-gray-300 p-2'>
                                         <div className='relative aspect-square w-20 shrink-0 overflow-hidden rounded-md lg:w-24'>
                                             <Image src={image.url} fill className='aspect-square w-full object-cover' alt={image.name} />
                                         </div>
                                         <div className='flex w-full flex-col gap-1 text-xs md:text-sm'>
-                                            <div className='mt-2 flex items-center gap-3'>
+                                            <div className='flex items-center gap-3'>
                                                 <label className='whitespace-nowrap text-sm'>Assign colour</label>
                                                 <Select
                                                     className='w-full'
@@ -169,6 +186,13 @@ export default function Page() {
                                         </div>
                                     </div>
                                 ))}
+                            </div>
+                        )}
+                        {!isUploading && (
+                            <div className='my-5 flex justify-center'>
+                                <button onClick={() => setUploading(true)} className='mx-auto w-fit rounded-md border border-gray-400 px-4 py-2 text-xs font-medium text-slate-500'>
+                                    Upload more?
+                                </button>
                             </div>
                         )}
                     </div>
