@@ -84,6 +84,7 @@ model Image {
   itemId       Int?
   itemAsMain   Item?  @relation(name: "MainImage", fields: [itemAsMainId], references: [id], onDelete: Cascade)
   itemAsMainId Int?   @unique
+  colour       String?
 
   @@index([itemId])
 }

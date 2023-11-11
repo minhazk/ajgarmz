@@ -13,9 +13,13 @@ const itemCreateInput = z.object({
     images: z
         .object({
             url: z.string(),
+            colour: z.string().optional(),
         })
         .array(),
-    mainImage: z.string(),
+    mainImage: z.object({
+        url: z.string(),
+        colour: z.string().optional(),
+    }),
 });
 
 const basketItemInput = z.object({
@@ -111,12 +115,14 @@ export const itemRouter = createTRPCRouter({
                     select: {
                         id: true,
                         url: true,
+                        colour: true
                     },
                 },
                 mainImage: {
                     select: {
                         id: true,
                         url: true,
+                        colour: true
                     },
                 },
             },
@@ -143,7 +149,7 @@ export const itemRouter = createTRPCRouter({
                     createMany: { data: images },
                 },
                 mainImage: {
-                    create: { url: mainImage },
+                    create: { url: mainImage.url, colour: mainImage.colour },
                 },
                 colours: {
                     connectOrCreate: colours.map(colour => {

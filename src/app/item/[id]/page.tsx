@@ -76,6 +76,8 @@ export default function Page({ params: { id } }: PageProps) {
         }
     };
 
+    console.log(images);
+
     return (
         <div>
             <NavigationHistory routes={['Browse Products', name]} />
@@ -137,7 +139,13 @@ export default function Page({ params: { id } }: PageProps) {
                         <div className='flex flex-wrap items-center gap-1'>
                             {colours.map((colour: InputProps) => (
                                 <button
-                                    onClick={() => setSelectedColour(colour)}
+                                    onClick={() => {
+                                        setSelectedColour(colour);
+                                        const colourLink = [mainImage, ...images].find(img => img?.colour === colour.name.toLowerCase());
+                                        if (colourLink) {
+                                            setSelectedImage(colourLink.url);
+                                        }
+                                    }}
                                     className={`flex items-center justify-center rounded-md border p-2 text-sm font-medium capitalize transition-colors ${
                                         selectedColour?.name === colour.name ? 'border-white bg-slate-600 text-white' : 'border-gray-300 bg-white text-slate-500 hover:bg-slate-50'
                                     }`}

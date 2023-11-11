@@ -49,6 +49,8 @@ export default function Page() {
         const name = formData.get('item title')!.toString();
         const description = formData.get('item description')!.toString();
         const price = parseFloat(formData.get('item price')!.toString());
+        const mainImage = newImages.find(img => img.main);
+        if (!mainImage) return showToast('Item requires a main image');
         const item = {
             name,
             description,
@@ -61,9 +63,9 @@ export default function Page() {
             images: newImages
                 .filter(img => !img.main)
                 .map(img => {
-                    return { url: img.url };
+                    return { url: img.url, colour: img.colour };
                 }),
-            mainImage: newImages.find(img => img.main)!.url,
+            mainImage: { url: mainImage.url, colour: mainImage.colour },
         };
         console.log(item);
         if (
