@@ -77,7 +77,10 @@ export default function Page() {
         )
             return showToast('Fill all inputs');
         createItem.mutate(item);
-        if (createItem.isSuccess) form.reset();
+        if (createItem.isSuccess) {
+            form.reset();
+            setUploading(true);
+        }
     };
 
     return (
