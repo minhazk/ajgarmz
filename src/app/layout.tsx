@@ -8,6 +8,7 @@ import { SessionProvider } from 'next-auth/react';
 import { TrpcProvider } from '@/util/trpc-provider';
 import GoogleAnalytics from '@/components/GoogleAnalytics';
 import CookieBanner from '@/components/CookieBanner';
+import { Analytics } from '@vercel/analytics/react';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -31,6 +32,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                 </SessionProvider>
                 <CookieBanner />
                 <Footer />
+                <Analytics />
             </body>
         </html>
     );
