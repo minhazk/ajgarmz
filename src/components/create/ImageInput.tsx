@@ -68,7 +68,7 @@ export default function ImageInput({ onChange }: ImageInputProps) {
                 console.log(data);
                 onChange([
                     ...data.docs.map(({ name, id }: DriveImageProps) => {
-                        return { name, url: `https://drive.google.com/uc?export=view&id=${id}` };
+                        return { name, url: `https://drive.google.com/uc?export=view&name=${name}&id=${id}` };
                     }),
                 ]);
             },

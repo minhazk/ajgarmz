@@ -10,6 +10,17 @@ import { colours, genders, itemCategories, itemTypes, sizes } from '@/components
 import { api } from '@/util/trpc';
 import { showToast } from '@/util/toastNotification';
 import CustomButton from '@/components/ui/CustomButton';
+import { UploadDropzone } from '@/util/uploadthing';
+import Image from 'next/image';
+import { UploadFileResponse } from 'uploadthing/client';
+import Select from 'react-select';
+import Toggle from 'react-toggle';
+import 'react-toggle/style.css';
+
+type ImageFile = UploadFileResponse & {
+    colour?: string;
+    main?: boolean;
+};
 
 export default function Page() {
     const [selectedSizes, setSelectedSizes] = useState<any[]>([]);
@@ -17,17 +28,15 @@ export default function Page() {
     const [gender, setGender] = useState<any[]>([]);
     const [category, setCategory] = useState<any>('');
     const [type, setType] = useState<any>('');
-    const [images, setImages] = useState<ImagesStateProps>({
-        mainImage: null,
-        images: [],
-    });
+    const [newImages, setNewImages] = useState<ImageFile[]>([]);
+    const [imageUploadProgress, setImageUploadProgress] = useState<number | null>(null);
 
-    console.log(images);
+    console.log('newImages', newImages);
 
     const createItem = api.items.createItem.useMutation({
         onSuccess() {
             showToast('Item successfully created');
-            setImages({ mainImage: null, images: [] });
+            setNewImages([]);
         },
         onError(err) {
             showToast('There was an error creating your item.');
@@ -42,7 +51,6 @@ export default function Page() {
         const name = formData.get('item title')!.toString();
         const description = formData.get('item description')!.toString();
         const price = parseFloat(formData.get('item price')!.toString());
-        if (images.mainImage == null) return showToast('Item requires an image');
         const item = {
             name,
             description,
@@ -52,12 +60,12 @@ export default function Page() {
             gender: gender.length !== 1 ? 'unisex' : gender[0].value.toLowerCase(),
             category: category.value.toLowerCase(),
             type: type.value.toLowerCase(),
-            images: images.images
-                .filter(img => img.url !== images.mainImage!.url)
+            images: newImages
+                .filter(img => !img.main)
                 .map(img => {
                     return { url: img.url };
                 }),
-            mainImage: images.mainImage.url,
+            mainImage: newImages.find(img => img.main)!.url,
         };
         console.log(item);
         if (
@@ -72,10 +80,6 @@ export default function Page() {
         if (createItem.isSuccess) form.reset();
     };
 
-    const onImageInput = (images: any[]) => {
-        setImages((prev: ImagesStateProps) => ({ mainImage: prev.mainImage != null || prev.images.length !== 0 ? prev.mainImage : images[0] ?? null, images: [...prev.images, ...images] }));
-    };
-
     return (
         <div>
             <NavigationHistory routes={['admin', 'create listing']} />
@@ -85,16 +89,88 @@ export default function Page() {
                     <h1 className='text-xl font-semibold text-slate-600'>Item Images</h1>
 
                     <div className='mt-5'>
-                        <div className={`${images.mainImage != null ? 'mb-10' : 'mb-4'} mt-4 flex flex-wrap gap-2 md:gap-4`}>
-                            {images.images.length === 0
-                                ? Array.from({ length: 2 }).map((_, i) => (
-                                      <div key={i} className='flex aspect-square w-24 items-center justify-center overflow-hidden rounded-lg border border-gray-300 p-2 lg:w-32'>
-                                          <FileImage size={32} className='text-gray-300' />
-                                      </div>
-                                  ))
-                                : images.images.map((image, i) => <ItemImage key={i} image={image} setImages={setImages} images={images} />)}
-                        </div>
-                        <ImageInput onChange={onImageInput} />
+                        <UploadDropzone
+                            endpoint='imageUploader'
+                            onClientUploadComplete={res => {
+                                console.log('Files: ', res);
+                                console.log('Upload Completed');
+                                if (res)
+                                    setNewImages(prev => [
+                                        ...prev,
+                                        ...res.map((file, i) => {
+                                            return { ...file, main: prev.length === 0 && i === 0 };
+                                        }),
+                                    ]);
+                            }}
+                            onUploadProgress={setImageUploadProgress}
+                            onUploadError={(error: Error) => {
+                                showToast('There was an error uploading your images');
+                                console.log(`ERROR! ${error.message}`);
+                            }}
+                        />
+                        {imageUploadProgress !== null && imageUploadProgress !== 100 && (
+                            <div className='mx-auto mb-4 mt-5 w-[95%] overflow-hidden rounded-lg border border-gray-300'>
+                                <div
+                                    className='bg-primary text-center text-xs text-white transition-all duration-300'
+                                    style={{
+                                        width: `${imageUploadProgress}%`,
+                                    }}
+                                >
+                                    {imageUploadProgress}%
+                                </div>
+                            </div>
+                        )}
+                        <p className='mt-3 px-5 text-center text-xs text-gray-400'>
+                            The blue upload button just saves the image in a storage bucket. The item is not created until the grey &apos;Create Listing&apos; button is clicked.
+                        </p>
+
+                        {newImages.length !== 0 && (
+                            <div className='mt-5 flex flex-col gap-2'>
+                                {newImages.map((image: ImageFile, i: number) => (
+                                    <div key={image.key} className='flex gap-3 rounded-lg border border-gray-300 p-2'>
+                                        <div className='relative aspect-square w-20 shrink-0 overflow-hidden rounded-md lg:w-24'>
+                                            <Image src={image.url} fill className='aspect-square w-full object-cover' alt={image.name} />
+                                        </div>
+                                        <div className='flex w-full flex-col gap-1 text-xs md:text-sm'>
+                                            <div className='mt-2 flex items-center gap-3'>
+                                                <label className='whitespace-nowrap text-sm'>Assign colour</label>
+                                                <Select
+                                                    className='w-full'
+                                                    options={selectedColours}
+                                                    closeMenuOnSelect
+                                                    onChange={(selected: any) => {
+                                                        setNewImages((prev: any) => {
+                                                            return prev.map((file: any) => {
+                                                                if (file !== image) return file;
+                                                                return { ...file, colour: selected.value };
+                                                            });
+                                                        });
+                                                    }}
+                                                />
+                                            </div>
+                                            <div className='mt-2 flex items-center gap-3'>
+                                                <label className='text-sm' htmlFor={image.name}>
+                                                    Mark as Main Image
+                                                </label>
+                                                <Toggle
+                                                    id={image.name}
+                                                    checked={image.main}
+                                                    onChange={e => {
+                                                        setNewImages((prev: any) => {
+                                                            return prev.map((file: any, i: number) => {
+                                                                const isChecked = e.target.checked;
+                                                                if (file !== image) return { ...file, main: !isChecked ? (i === 0 ? true : file.main) : false };
+                                                                return { ...file, main: isChecked };
+                                                            });
+                                                        });
+                                                    }}
+                                                />
+                                            </div>
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        )}
                     </div>
                 </div>
 
