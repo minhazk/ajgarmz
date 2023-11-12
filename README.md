@@ -128,3 +128,8 @@ The Stripe API is utilized to handle secure payment processing. When users make 
 ### Uploadthing API
 
 The Uploadthing API serves as an image bucket for storing product images. Product images are stored on the Uploadthing platform, and their corresponding links are saved in the database for reference. This allows for efficient management and retrieval of product images, enhancing the overall user experience.
+
+## License
+
+This project is licensed under the [GNU General Public License v3.0](LICENSE.md). See the [LICENSE.md](LICENSE.md) file for the full text of the license.
+
