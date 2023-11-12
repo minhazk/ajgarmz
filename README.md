@@ -62,10 +62,9 @@ Before you begin, ensure you have met the following requirements:
     ```bash
     git clone https://github.com/minhazk/ajgarmz.git
     cd ajgarmz
-
     ```
 
-    2. Install the required Node.js modules:
+2. Install the required Node.js modules:
     
     ```bash
      npm install
