@@ -158,3 +158,9 @@ model Address {
   recipientName     String
   orderItems        OrderItem[]
 }
+
+model EmailSubscriptions {
+  email             String       @id @unique
+  subscriptionDate  DateTime     @default(now())
+  status            String       @default("subscribed")
+}
