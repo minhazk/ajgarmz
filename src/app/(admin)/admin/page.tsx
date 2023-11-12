@@ -1,4 +1,4 @@
-import { Edit3, PackagePlus, Truck } from 'lucide-react';
+import { Edit3, Mail, PackagePlus, Truck } from 'lucide-react';
 import Link from 'next/link';
 
 export default function Page() {
@@ -7,6 +7,7 @@ export default function Page() {
             <BubbleButton href='/create' icon={<PackagePlus size={33} />} label='Create Item' />
             <BubbleButton href='/orders' icon={<Truck size={33} />} label='Orders' />
             <BubbleButton href='/edit' icon={<Edit3 size={33} />} label='Edit Items' />
+            <BubbleButton href='/email' icon={<Mail size={33} />} label='Email clients' />
         </div>
     );
 }

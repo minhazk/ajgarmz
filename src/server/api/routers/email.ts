@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { createTRPCRouter, publicProcedure } from '@/server/api/trpc';
+import { adminProcedure, createTRPCRouter, publicProcedure } from '@/server/api/trpc';
 
 export const emailRouter = createTRPCRouter({
     subscribeEmail: publicProcedure.input(z.string()).mutation(async ({ ctx, input: email }) => {
@@ -12,5 +12,15 @@ export const emailRouter = createTRPCRouter({
                 data: { email },
             });
         }
+    }),
+    getEmails: adminProcedure.query(async ({ ctx }) => {
+        return await ctx.prisma.emailSubscriptions.findMany({
+            select: {
+                email: true,
+            },
+            where: {
+                status: 'subscribed',
+            },
+        });
     }),
 });
