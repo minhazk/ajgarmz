@@ -65,11 +65,11 @@ Before you begin, ensure you have met the following requirements:
 
     ```
 
-2. Install the required Node.js modules:
-
-```bash
- npm install
-```
+    2. Install the required Node.js modules:
+    
+    ```bash
+     npm install
+    ```
 
 ## Configuration
 
