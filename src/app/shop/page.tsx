@@ -79,18 +79,6 @@ export default function Page({ searchParams: { category } }: PageProps) {
                     </div>
 
                     <div className='grid grid-cols-2 gap-2 sm:gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4'>
-                        <ItemCard
-                            id={3}
-                            mainImage={{ url: '/dummy_tee.jpg' }}
-                            name='Palm Angels Tshirt'
-                            price={50}
-                            oldPrice={70}
-                            colours={[
-                                { id: 1, name: 'Black' },
-                                { id: 2, name: 'White' },
-                            ]}
-                            key={Infinity}
-                        />
                         {pages?.pages.map((page: any) => page.items.map((item: any) => <ItemCard key={item.id} {...item} />))}
                     </div>
 
