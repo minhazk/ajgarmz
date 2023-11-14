@@ -1,3 +1,4 @@
+import { useUserContext } from '@/util/UserContext';
 import currencyFormatter from '@/util/currencyFormat';
 import { X } from 'lucide-react';
 import Image from 'next/image';
@@ -28,9 +29,12 @@ export type removeItemProps = {
 };
 
 export default function BasketItem({ item, colour, size, quantity, removeItem, loading }: BasketItemProps) {
+    const { setBasketCount } = useUserContext();
+
     const handleRemoveItem = (e: React.MouseEvent<HTMLElement>) => {
         e.stopPropagation();
         removeItem({ itemId: item.id, colour, size, quantity });
+        setBasketCount((prev: number) => (prev -= 1));
     };
 
     return (

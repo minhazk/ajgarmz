@@ -115,14 +115,14 @@ export const itemRouter = createTRPCRouter({
                     select: {
                         id: true,
                         url: true,
-                        colour: true
+                        colour: true,
                     },
                 },
                 mainImage: {
                     select: {
                         id: true,
                         url: true,
-                        colour: true
+                        colour: true,
                     },
                 },
             },
@@ -193,6 +193,16 @@ export const itemRouter = createTRPCRouter({
                 quantity: true,
             },
         });
+    }),
+    getUserBasketQuantity: authedProcedure.input(z.string().nullish()).query(async ({ ctx, input: id }) => {
+        if (id == null) return 'Not logged in';
+        const items = await ctx.prisma.basketItem.findMany({
+            where: { userId: id },
+            select: {
+                quantity: true,
+            },
+        });
+        return items.length + items.reduce((prev, curr) => curr.quantity + prev - 1, 0);
     }),
     addToBasket: authedProcedure.input(basketItemInput).mutation(({ ctx, input: { userId, itemId, sizeId, colourId, quantity } }) => {
         return ctx.prisma.basketItem.upsert({

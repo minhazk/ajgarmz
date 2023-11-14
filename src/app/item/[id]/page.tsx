@@ -11,6 +11,7 @@ import { showToast } from '@/util/toastNotification';
 import useLocalStorage from '@/hooks/useLocalStorage';
 import { notFound } from 'next/navigation';
 import Loading from '@/components/Item/Loading';
+import { useUserContext } from '@/util/UserContext';
 
 type PageProps = {
     params: {
@@ -30,6 +31,7 @@ export default function Page({ params: { id } }: PageProps) {
     const [quantity, setQuantity] = useState<number>(1);
     const [selectedImage, setSelectedImage] = useState<string>();
     const { addItem } = useLocalStorage();
+    const { setBasketCount } = useUserContext();
 
     const addToBasket = api.items.addToBasket.useMutation({
         onSuccess() {
@@ -64,7 +66,7 @@ export default function Page({ params: { id } }: PageProps) {
                 size: { name: selectedSize.name },
                 quantity,
             });
-            return showToast('Item added to basket');
+            showToast('Item added to basket');
         } else {
             void addToBasket.mutate({
                 userId: session.user.id,
@@ -74,6 +76,7 @@ export default function Page({ params: { id } }: PageProps) {
                 quantity,
             });
         }
+        setBasketCount((prev: number) => prev + 1);
     };
 
     console.log(images);

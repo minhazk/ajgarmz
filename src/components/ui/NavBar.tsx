@@ -1,16 +1,18 @@
 'use client';
 
 import { showToast } from '@/util/toastNotification';
-import { User2, ShoppingCart, Search, Menu, PackagePlus, X } from 'lucide-react';
+import { User2, ShoppingCart, Menu, PackagePlus, X } from 'lucide-react';
 import { signIn, signOut, useSession } from 'next-auth/react';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import SearchForm from './SearchForm';
+import { useUserContext } from '@/util/UserContext';
 
 export default function NavBar() {
     const [burgerOpen, setBurgerOpen] = useState<boolean>(false);
     const [userMenuOpen, setUserMenuOpen] = useState<boolean>(false);
-    const { data: session } = useSession();
+    const {basketCount, session } = useUserContext()
+    console.log(basketCount)
 
     useEffect(() => {
         const resize = () => {
@@ -75,7 +77,10 @@ export default function NavBar() {
                         <PackagePlus size={20} strokeWidth={2} />
                     </Link>
                 )}
-                <Link href='/basket' className='rounded-full p-2 transition-colors hover:bg-gray-100' onClick={handleCloseMenus}>
+                <Link href='/basket' className='rounded-full p-2 transition-colors hover:bg-gray-100 relative' onClick={handleCloseMenus}>
+                    {basketCount === undefined || basketCount !== 0 &&
+                    <div className='absolute -top-px -right-px min-w-[16px] py-px px-1 p-[.5px] flex justify-center items-center rounded-full bg-orange-500 text-[0.6rem] font-medium text-white'>{basketCount > 99 ? '99+' : basketCount}</div>
+                    }
                     <ShoppingCart size={20} strokeWidth={2} />
                 </Link>
                 <div className='relative'>

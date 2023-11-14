@@ -36,6 +36,11 @@ const useLocalStorage = () => {
             ];
         });
     };
+    console.log(1231, value);
+    const getItemCount = () => {
+        const items = JSON.parse(localStorage.getItem(LOCAL_STORAGE_ITEMS_KEY) ?? '[]');
+        return !items.length ? 0 : items.length + items.reduce((prev: number, curr: LocalStorageItem) => curr.quantity + prev - 1, 0);
+    };
 
     const removeItem = (itemId: number, colour: string, size: string) => {
         setValue((prev: LocalStorageItem[]) => {
@@ -60,7 +65,7 @@ const useLocalStorage = () => {
         setValue([]);
     };
 
-    return { items: value, addItem, removeItem, retrieveItem, clearItems };
+    return { items: value, addItem, removeItem, retrieveItem, clearItems, getItemCount };
 };
 
 export default useLocalStorage;
