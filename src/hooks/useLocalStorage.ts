@@ -57,6 +57,19 @@ const useLocalStorage = () => {
         });
     };
 
+    const updateItemQuantity = (itemId: number, colour: string, size: string, quantity: number) => {
+        setValue((prev: LocalStorageItem[]) => {
+            const basketItem = retrieveItem(itemId, colour, size);
+            return [
+                ...prev.map(item => {
+                    if (basketItem !== item) return item;
+                    item.quantity = quantity;
+                    return item;
+                }),
+            ];
+        });
+    };
+
     const retrieveItem = (itemId: number, colour: string, size: string) => {
         return value.find(item => item.item.id === itemId && item.colour.name === colour && item.size.name === size);
     };
@@ -65,7 +78,7 @@ const useLocalStorage = () => {
         setValue([]);
     };
 
-    return { items: value, addItem, removeItem, retrieveItem, clearItems, getItemCount };
+    return { items: value, addItem, removeItem, retrieveItem, clearItems, getItemCount, updateItemQuantity };
 };
 
 export default useLocalStorage;

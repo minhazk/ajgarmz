@@ -88,8 +88,8 @@ export default function Page({ params: { id } }: PageProps) {
                         <Image src={selectedImage ?? mainImage!.url} alt={name} fill className='object-cover' />
                     </div>
                     <div className='text-slate-600 flex flex-col gap-1'>
-                        <div className='w-full text-start'>
-                            <span className='font-semibold'>Colour:</span> {selectedColour?.name}
+                        <div className='w-full text-start capitalize'>
+                            <span className='font-semibold capitalize'>Colour:</span> {selectedColour?.name}
                         </div>
                         <div className='w-full text-start'>
                             <span className='font-semibold'>Size:</span> {selectedSize?.name}

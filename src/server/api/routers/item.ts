@@ -204,6 +204,18 @@ export const itemRouter = createTRPCRouter({
         });
         return items.length + items.reduce((prev, curr) => curr.quantity + prev - 1, 0);
     }),
+    updateItemQuantity: authedProcedure
+        .input(z.object({ userId: z.string(), itemId: z.number(), sizeId: z.number(), colourId: z.number(), quantity: z.number() }))
+        .mutation(({ ctx, input: { userId, itemId, sizeId, colourId, quantity } }) => {
+            return ctx.prisma.basketItem.update({
+                where: {
+                    itemId_userId_colourId_sizeId: { itemId, userId, colourId, sizeId },
+                },
+                data: {
+                    quantity,
+                },
+            });
+        }),
     addToBasket: authedProcedure.input(basketItemInput).mutation(({ ctx, input: { userId, itemId, sizeId, colourId, quantity } }) => {
         return ctx.prisma.basketItem.upsert({
             where: { itemId_userId_colourId_sizeId: { itemId, userId, colourId, sizeId } },
