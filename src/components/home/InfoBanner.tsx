@@ -48,8 +48,8 @@ function InfoCard({ Icon, title, description }: InfoCardProps) {
             <div className='aspect-square w-fit rounded bg-gray-100 p-3'>
                 <Icon size={20} />
             </div>
-            <p className='text-center text-sm font-semibold md:text-left xl:text-base'>{title}</p>
-            <p className='text-xs text-gray-400 xl:text-sm'>{description}</p>
+            <p className='text-center text-sm font-semibold md:text-left xl:text-base whitespace-nowrap'>{title}</p>
+            <p className='text-xs text-gray-400 xl:text-sm text-center md:text-left'>{description}</p>
         </div>
     );
 }

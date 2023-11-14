@@ -11,6 +11,7 @@ type FilterMenuProps = {
           }[]
         | undefined;
     setAppliedFilters: Dispatch<SetStateAction<appliedFiltersProps>>;
+    appliedFilters: appliedFiltersProps;
 };
 
 export type appliedFiltersProps = {
@@ -26,7 +27,7 @@ type FilterProps = {
 
 export type FilterLabels = 'Category' | 'Department' | 'Gender';
 
-export default function FilterMenu({ categories, setAppliedFilters }: FilterMenuProps) {
+export default function FilterMenu({ categories, setAppliedFilters, appliedFilters }: FilterMenuProps) {
     const [filters, setFilters] = useState<FilterProps>([
         {
             label: 'Gender',
@@ -54,7 +55,7 @@ export default function FilterMenu({ categories, setAppliedFilters }: FilterMenu
     return (
         <div className='divide-y-2 divide-gray-50 rounded-md border border-gray-200 p-3'>
             {filters.map((filter, i) => (
-                <FilterButton key={i} {...filter} setAppliedFilters={setAppliedFilters} />
+                <FilterButton key={i} {...filter} setAppliedFilters={setAppliedFilters} appliedFilters={appliedFilters} />
             ))}
         </div>
     );
@@ -65,9 +66,10 @@ type FilterButtonProps = {
     label: FilterLabels;
     options: string[] | FilterProps;
     setAppliedFilters: Dispatch<SetStateAction<appliedFiltersProps>>;
+    appliedFilters: appliedFiltersProps;
 };
 
-function FilterButton({ label, options, setAppliedFilters }: FilterButtonProps) {
+function FilterButton({ label, options, setAppliedFilters, appliedFilters }: FilterButtonProps) {
     const [isOpen, setIsOpen] = useState(false);
 
     const handleOnInput = (e: ChangeEvent) => {
@@ -100,13 +102,13 @@ function FilterButton({ label, options, setAppliedFilters }: FilterButtonProps) 
                     {options.map((option, i) => {
                         return typeof option === 'string' ? (
                             <div key={i} className='flex cursor-pointer items-center gap-2 py-2'>
-                                <input id={option} type='checkbox' onChange={handleOnInput} />
+                                <input id={option} type='checkbox' checked={Object.values(appliedFilters).flat().includes(option.toLowerCase())} onChange={handleOnInput} />
                                 <label htmlFor={option} className='text-xs font-medium text-gray-500 first-letter:uppercase'>
                                     {option}
                                 </label>
                             </div>
                         ) : (
-                            <FilterButton key={i} {...option} setAppliedFilters={setAppliedFilters} />
+                            <FilterButton key={i} {...option} setAppliedFilters={setAppliedFilters} appliedFilters={appliedFilters} />
                         );
                     })}
                 </div>

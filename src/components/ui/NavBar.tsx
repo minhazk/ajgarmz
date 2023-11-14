@@ -2,7 +2,7 @@
 
 import { showToast } from '@/util/toastNotification';
 import { User2, ShoppingCart, Menu, PackagePlus, X } from 'lucide-react';
-import { signIn, signOut, useSession } from 'next-auth/react';
+import { signIn, signOut } from 'next-auth/react';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import SearchForm from './SearchForm';
@@ -12,7 +12,6 @@ export default function NavBar() {
     const [burgerOpen, setBurgerOpen] = useState<boolean>(false);
     const [userMenuOpen, setUserMenuOpen] = useState<boolean>(false);
     const {basketCount, session } = useUserContext()
-    console.log(basketCount)
 
     useEffect(() => {
         const resize = () => {
@@ -52,19 +51,19 @@ export default function NavBar() {
                         <li>
                             <Link
                                 onClick={handleCloseMenus}
-                                href='/shop'
+                                href='/shop?category=men'
                                 className='before-0 relative block w-full py-4 pl-8 pr-2 transition-colors before:absolute before:bottom-1 before:left-1/2 before:h-px before:w-0 before:-translate-x-1/2 before:bg-slate-600 before:transition-all md:hover:before:w-full lg:px-1 lg:py-2'
                             >
-                                New Arrival
+                                Men
                             </Link>
                         </li>
                         <li>
                             <Link
                                 onClick={handleCloseMenus}
-                                href='/shop?category=sale'
+                                href='/shop?category=women'
                                 className='before-0 relative block w-full py-4 pl-8 pr-2 transition-colors before:absolute before:bottom-1 before:left-1/2 before:h-px before:w-0 before:-translate-x-1/2 before:bg-slate-600 before:transition-all md:hover:before:w-full lg:px-1 lg:py-2'
                             >
-                                Sale
+                                Women
                             </Link>
                         </li>
                     </ul>

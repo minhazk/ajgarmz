@@ -30,6 +30,17 @@ export default function Page({ searchParams: { category } }: PageProps) {
         }
     );
 
+    console.log(appliedFilters);
+
+    useEffect(() => {
+        if (category === 'men') {
+            setAppliedFilters({ Gender: ['men'] });
+        } else if (category === 'women') {
+            setAppliedFilters({ Gender: ['women'] });
+        }
+        refetch();
+    }, [category]);
+
     useEffect(() => {
         refetch();
     }, [appliedFilters, refetch]);
@@ -39,7 +50,7 @@ export default function Page({ searchParams: { category } }: PageProps) {
             <NavigationHistory routes={['Browse Products', category ?? null]} />
             <div className='flex items-start gap-4'>
                 <div className='hidden w-64 sm:block'>
-                    <FilterMenu categories={categories} setAppliedFilters={setAppliedFilters} />
+                    <FilterMenu categories={categories} setAppliedFilters={setAppliedFilters} appliedFilters={appliedFilters} />
                 </div>
 
                 <div className='w-full'>
@@ -50,7 +61,7 @@ export default function Page({ searchParams: { category } }: PageProps) {
                             </label>
                             <input id='filter' type='checkbox' className='peer hidden text-slate-500' />
                             <div className='absolute left-0 top-full z-40 my-3 hidden w-52 bg-white peer-checked:block'>
-                                <FilterMenu categories={categories} setAppliedFilters={setAppliedFilters} />
+                                <FilterMenu categories={categories} setAppliedFilters={setAppliedFilters} appliedFilters={appliedFilters} />
                             </div>
 
                             <p>
