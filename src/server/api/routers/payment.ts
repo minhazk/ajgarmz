@@ -299,15 +299,15 @@ export const paymentRouter = createTRPCRouter({
                             amount: 0,
                             currency: 'gbp',
                         },
-                        display_name: 'Free shipping',
+                        display_name: 'Royal Mail Free shipping',
                         delivery_estimate: {
                             minimum: {
                                 unit: 'business_day',
-                                value: 4,
+                                value: 2,
                             },
                             maximum: {
                                 unit: 'business_day',
-                                value: 5,
+                                value: 3,
                             },
                         },
                     },
@@ -319,7 +319,7 @@ export const paymentRouter = createTRPCRouter({
                             amount: 1000,
                             currency: 'gbp',
                         },
-                        display_name: 'Next day delivery',
+                        display_name: 'DPD Next day delivery',
                         delivery_estimate: {
                             minimum: {
                                 unit: 'business_day',
