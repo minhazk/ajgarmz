@@ -115,7 +115,7 @@ export default function Page({ searchParams: { order } }: PageProps) {
                             Loading
                         </div>
                     )}
-                    <div className='w-full grid grid-cols-[min-content_auto_min-content_min-content_min-content] items-center gap-x-2 gap-y-4 text-left sm:gap-5 xl:gap-x-8 xl:gap-y-6'>
+                    <div className='w-full grid grid-cols-[min-content_auto_min-content_min-content_min-content] items-center gap-x-4 gap-y-4 text-left sm:gap-5 xl:gap-x-8 xl:gap-y-6'>
                         <div className='relative'>
                             <h1 className='absolute text-xl font-semibold text-slate-600 whitespace-nowrap'>Your items</h1>
                             <h1 className='opacity-0 text-xl font-semibold'>Your</h1>

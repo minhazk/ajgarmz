@@ -93,7 +93,6 @@ export default function Page({ searchParams: { category } }: PageProps) {
                             }
                         })}
                     </div>
-                    {/* // {pages?.pages.map((page: any) => page.items.map((item: any) => <ItemCard key={item.id} {...item} />))} */}
 
                     {hasNextPage && (
                         <div className='my-5 flex justify-center'>
