@@ -20,12 +20,17 @@ export default function ItemCard({ id, mainImage, name, price, oldPrice, colours
 
     return (
         <div
-            className='rounded-md border border-gray-200 p-3 shadow shadow-transparent transition-all duration-700 hover:border-gray-400/30 hover:bg-slate-300/10 hover:shadow-lg'
+            className='rounded-md border border-gray-200 p-3 shadow shadow-transparent transition-all duration-700 hover:border-gray-400/30 hover:bg-slate-300/10 hover:shadow-lg relative overflow-hidden'
             onMouseEnter={() => {
                 setTimeout(() => setHovering(true), 350);
             }}
             onMouseLeave={() => setTimeout(() => setHovering(false), 500)}
         >
+            {oldPrice && (
+                <div className='absolute top-0 left-0 z-10'>
+                    <p className='font-medium text-xs md:text-sm bg-red-800 rounded py-1 px-4 m-2 flex justify-center items-center text-white'>{Math.round(((oldPrice - price) / oldPrice) * 100)}%</p>
+                </div>
+            )}
             <Link href={`/item/${id}`}>
                 <div className='relative aspect-square overflow-hidden rounded-md'>
                     <Image src={mainImage!.url} fill className='object-cover' alt={name} />
@@ -36,7 +41,7 @@ export default function ItemCard({ id, mainImage, name, price, oldPrice, colours
                     </p>
                     <p className='sm:text-md text-end text-sm font-bold text-slate-500'>{currencyFormatter(price)}</p>
                     <p className='text-xs text-slate-400 sm:text-sm'>{colours.length} colours</p>
-                    {oldPrice != null && <p className='text-end text-xs text-gray-400 line-through'>{currencyFormatter(oldPrice)}</p>}
+                    {oldPrice != null && <p className='text-end text-xs text-orange-600 font-semibold line-through'>{currencyFormatter(oldPrice)}</p>}
                 </div>
             </Link>
 

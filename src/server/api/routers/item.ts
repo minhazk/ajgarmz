@@ -66,7 +66,11 @@ export const itemRouter = createTRPCRouter({
             dep = Department ?? [];
         }
 
-        if (Gender != undefined && Gender.length !== 0) filters.gender = { in: Gender };
+        if (Gender != undefined && Gender.length !== 0) {
+            if (Gender.length === 1) {
+                filters.gender = { in: Gender };
+            } else filters.gender = { in: ['unisex'] };
+        }
         if (Category != undefined && Category.length !== 0) filters.category = { is: { name: { in: Category } } };
         if (dep != undefined && dep.length !== 0) filters.type = { in: dep };
         if (isSale) filters.oldPrice = { not: null };
