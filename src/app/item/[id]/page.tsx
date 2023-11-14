@@ -7,11 +7,13 @@ import { useState } from 'react';
 import CustomButton from '@/components/ui/CustomButton';
 import { api } from '@/util/trpc';
 import { useSession } from 'next-auth/react';
-import { showToast } from '@/util/toastNotification';
+import { showBanner, showToast } from '@/util/toastNotification';
 import useLocalStorage from '@/hooks/useLocalStorage';
 import { notFound } from 'next/navigation';
 import Loading from '@/components/Item/Loading';
 import { useUserContext } from '@/util/UserContext';
+import { CheckCircle } from 'lucide-react';
+import Link from 'next/link';
 
 type PageProps = {
     params: {
@@ -32,11 +34,10 @@ export default function Page({ params: { id } }: PageProps) {
     const [selectedImage, setSelectedImage] = useState<string>();
     const { addItem } = useLocalStorage();
     const { setBasketCount } = useUserContext();
+    const [showNotification, setShowNotification] = useState(false);
 
     const addToBasket = api.items.addToBasket.useMutation({
-        onSuccess() {
-            showToast('Item added to basket');
-        },
+        onSuccess() {},
         onError() {
             showToast('There was an error adding your item.');
         },
@@ -66,7 +67,6 @@ export default function Page({ params: { id } }: PageProps) {
                 size: { name: selectedSize.name },
                 quantity,
             });
-            showToast('Item added to basket');
         } else {
             void addToBasket.mutate({
                 userId: session.user.id,
@@ -77,6 +77,30 @@ export default function Page({ params: { id } }: PageProps) {
             });
         }
         setBasketCount((prev: number) => prev + 1);
+        showBanner(
+            <div className='md:first:mt-10 text-sm md:text-base shadow-lg border border-gray-300 py-3 px-4 bg-white rounded-md'>
+                <div className='flex items-center gap-3 mx-3 justify-center text-slate-500'>
+                    <CheckCircle size={20} strokeWidth={3} className='text-slate-600' /> Item added to basket
+                </div>
+                <div className='h-px bg-slate-300 w-full my-3 ' />
+                <div className='flex items-center gap-5 text-sm'>
+                    <div className='w-16 aspect-square rounded-md overflow-hidden relative'>
+                        <Image src={selectedImage ?? mainImage!.url} alt={name} fill className='object-cover' />
+                    </div>
+                    <div className='text-slate-600 flex flex-col gap-1'>
+                        <div className='w-full text-start'>
+                            <span className='font-semibold'>Colour:</span> {selectedColour?.name}
+                        </div>
+                        <div className='w-full text-start'>
+                            <span className='font-semibold'>Size:</span> {selectedSize?.name}
+                        </div>
+                    </div>
+                </div>
+                <Link href='/basket' className='mt-3 flex'>
+                    <CustomButton>GO TO CHECKOUT</CustomButton>
+                </Link>
+            </div>
+        );
     };
 
     console.log(images);
@@ -84,6 +108,8 @@ export default function Page({ params: { id } }: PageProps) {
     return (
         <div>
             <NavigationHistory routes={['Browse Products', name]} />
+
+            <div className='absolute top-0 right-0 m-20'></div>
 
             <div className='flex flex-col gap-8 md:flex-row'>
                 <div className='flex w-full flex-col gap-4 md:w-1/2 md:max-w-xl'>

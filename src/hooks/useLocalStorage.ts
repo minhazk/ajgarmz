@@ -36,7 +36,7 @@ const useLocalStorage = () => {
             ];
         });
     };
-    console.log(1231, value);
+
     const getItemCount = () => {
         const items = JSON.parse(localStorage.getItem(LOCAL_STORAGE_ITEMS_KEY) ?? '[]');
         return !items.length ? 0 : items.length + items.reduce((prev: number, curr: LocalStorageItem) => curr.quantity + prev - 1, 0);

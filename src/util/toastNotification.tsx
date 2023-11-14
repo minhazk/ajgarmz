@@ -14,3 +14,13 @@ export const showToast = (text: string) => {
         ),
     });
 };
+
+export const showBanner = (el: ReactNode) => {
+    void toast(el, {
+        duration: 3000,
+        position: 'top-right',
+        clickable: true,
+        clickClosable: true,
+        render: (banner: ReactNode) => banner,
+    });
+};

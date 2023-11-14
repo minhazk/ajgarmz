@@ -14,7 +14,7 @@ type UserProviderType = {
 export const UserProvider = ({ children }: UserProviderType) => {
     const { getItemCount } = useLocalStorage();
     const { data: session, status } = useSession();
-    const { data: authedBasketCount, refetch, isRefetching } = api.items.getUserBasketQuantity.useQuery(session?.user.id);
+    const { data: authedBasketCount } = api.items.getUserBasketQuantity.useQuery(session?.user.id);
     const [basketCount, setBasketCount] = useState<number | undefined>(() => {
         if (status === 'authenticated' && typeof authedBasketCount !== 'string') {
             return authedBasketCount;
@@ -27,5 +27,5 @@ export const UserProvider = ({ children }: UserProviderType) => {
         }
     }, [status, authedBasketCount]);
 
-    return <UserContext.Provider value={{ session, status, basketCount, setBasketCount, isRefetching }}>{children}</UserContext.Provider>;
+    return <UserContext.Provider value={{ session, status, basketCount, setBasketCount }}>{children}</UserContext.Provider>;
 };
