@@ -68,7 +68,7 @@ export const itemRouter = createTRPCRouter({
 
         if (Gender != undefined && Gender.length !== 0) {
             if (Gender.length === 1) {
-                filters.gender = { in: Gender };
+                filters.gender = { in: [Gender[0], 'unisex'] };
             } else filters.gender = { in: ['unisex'] };
         }
         if (Category != undefined && Category.length !== 0) filters.category = { is: { name: { in: Category } } };

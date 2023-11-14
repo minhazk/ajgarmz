@@ -8,7 +8,7 @@ export default function Carousel() {
         <div className='bg-black-300 relative mt-4 h-96 overflow-hidden rounded-lg border border-black'>
             <div className='absolute inset-0 flex flex-col items-center justify-center gap-3 bg-[rgb(0,0,0,0.4)] text-center'>
                 <h3 className='mx-5 text-2xl font-semibold text-white sm:text-3xl'>
-                    Level up your style with our<br></br>summer collections
+                    Level up your style with our<br></br>christmas collections
                 </h3>
                 <Link href='/shop' className='mt-4 flex items-center justify-center gap-2 rounded bg-white px-5 py-2 text-sm font-semibold'>
                     Shop now
