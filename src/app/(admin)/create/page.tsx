@@ -2,7 +2,7 @@
 
 import NavigationHistory from '@/components/ui/NavigationHistory';
 import { MultiSelect, MultiSelectCreatable } from '@/components/create/SelectOptions';
-import { FormEvent, useState } from 'react';
+import { FormEvent, HTMLProps, useState } from 'react';
 import { colours, genders, itemCategories, itemTypes, sizes } from '@/components/create/data';
 import { api } from '@/util/trpc';
 import { showToast } from '@/util/toastNotification';
@@ -209,7 +209,7 @@ export default function Page() {
                     <form onSubmit={handleCreateItem}>
                         <InputGroup label='Item title' />
                         <InputGroup label='Item description' />
-                        <InputGroup label='Item price' type='number' />
+                        <InputGroup label='Item price' type='number' min={1} step={0.01} />
 
                         <MultiSelectCreatable setter={setSelectedSizes} options={sizes} label='Available Sizes' isMulti insertAll />
 
@@ -233,8 +233,7 @@ export default function Page() {
 
 type InputGroupProps = {
     label: string;
-    type?: string;
-};
+} & HTMLProps<HTMLInputElement>;
 
 function InputGroup({ label, ...inputProps }: InputGroupProps) {
     return (
