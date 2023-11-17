@@ -18,6 +18,7 @@ export type appliedFiltersProps = {
     Category?: string[] | undefined;
     Department?: string[] | undefined;
     Gender?: string[] | undefined;
+    Sale?: string[] | undefined;
 };
 
 type FilterProps = {
@@ -25,7 +26,7 @@ type FilterProps = {
     options: string[] | FilterProps;
 }[];
 
-export type FilterLabels = 'Category' | 'Department' | 'Gender';
+export type FilterLabels = 'Category' | 'Department' | 'Gender' | 'Sale';
 
 export default function FilterMenu({ categories, setAppliedFilters, appliedFilters }: FilterMenuProps) {
     const [filters, setFilters] = useState<FilterProps>([
@@ -37,17 +38,22 @@ export default function FilterMenu({ categories, setAppliedFilters, appliedFilte
             label: 'Department',
             options: ['Clothing', 'Footwear', 'Accessories'],
         },
+        {
+            label: 'Sale',
+            options: ['Sale'],
+        },
     ]);
 
     useEffect(() => {
         if (!categories) return;
-        setFilters(filters => {
+        setFilters(([gender, dep, sale]) => {
             return [
-                ...filters,
+                ...[gender, dep],
                 {
                     label: 'Category',
                     options: categories.map(category => category.name),
                 },
+                sale,
             ];
         });
     }, [categories]);

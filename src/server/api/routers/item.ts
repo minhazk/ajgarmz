@@ -37,6 +37,7 @@ const getItemsInput = z.object({
         Gender: z.string().array().optional(),
         Category: z.string().array().optional(),
         Department: z.string().array().optional(),
+        Sale: z.string().array().optional(),
     }),
     searchParam: z.string().optional(),
 });
@@ -46,8 +47,7 @@ export const itemRouter = createTRPCRouter({
         const limit = input.limit ?? 50;
         const {
             cursor,
-            filters: { Gender, Category, Department },
-            searchParam,
+            filters: { Gender, Category, Department, Sale },
         } = input;
 
         const filters: {
@@ -57,23 +57,29 @@ export const itemRouter = createTRPCRouter({
             oldPrice?: { not: null };
         } = {};
 
-        const isSale = searchParam === 'sale';
-
-        let dep: string[] = [];
-        // if (searchParam && !isSale) {
-        //     dep = Department?.includes(searchParam) ? Department : Department?.filter(type => type !== searchParam) ?? [searchParam];
-        // } else {
-        //     dep = Department ?? [];
-        // }
-
+        // gender filter eg. men, women, unisex
         if (Gender != undefined && Gender.length !== 0) {
             if (Gender.length === 1) {
                 filters.gender = { in: [Gender[0], 'unisex'] };
-            } else filters.gender = { in: ['unisex'] };
+            } else {
+                filters.gender = { in: ['unisex'] };
+            }
         }
-        if (Category != undefined && Category.length !== 0) filters.category = { is: { name: { in: Category } } };
-        // if (dep != undefined && dep.length !== 0) filters.type = { in: dep };
-        if (isSale) filters.oldPrice = { not: null };
+
+        // category filter eg. hoodies, jackets, shorts etc...
+        if (Category != undefined && Category.length !== 0) {
+            filters.category = { is: { name: { in: Category } } };
+        }
+
+        // department filter eg. clothing, accessory, footwear
+        if (Department != undefined && Department.length !== 0) {
+            filters.type = { in: Department };
+        }
+
+        // sale filter
+        if (Sale != undefined && Sale.length !== 0) {
+            filters.oldPrice = { not: null };
+        }
 
         const items = await ctx.prisma.item.findMany({
             take: limit + 1,

@@ -10,10 +10,12 @@ import { api } from '@/util/trpc';
 type PageProps = {
     searchParams: {
         category?: string;
+        type?: string;
+        sale?: string;
     };
 };
 
-export default function Page({ searchParams: { category } }: PageProps) {
+export default function Page({ searchParams: { category, type, sale } }: PageProps) {
     const [appliedFilters, setAppliedFilters] = useState<appliedFiltersProps>({});
     const [sortingOrder, setSortingOrder] = useState<'newest' | 'highest' | 'lowest'>('newest');
     const { data: categories } = api.items.getCategories.useQuery();
@@ -24,7 +26,7 @@ export default function Page({ searchParams: { category } }: PageProps) {
         isLoading,
         refetch,
     } = api.items.getAll.useInfiniteQuery(
-        { filters: appliedFilters, searchParam: category?.toLowerCase(), limit: 50 },
+        { filters: appliedFilters, limit: 50 },
         {
             getNextPageParam: lastPage => lastPage.nextCursor,
         }
@@ -38,8 +40,28 @@ export default function Page({ searchParams: { category } }: PageProps) {
         } else if (category === 'women') {
             setAppliedFilters({ Gender: ['women'] });
         }
-        refetch();
     }, [category]);
+
+    useEffect(() => {
+        switch (type) {
+            case 'clothing':
+                return setAppliedFilters({ Department: ['clothing'] });
+            case 'footwear':
+                return setAppliedFilters({ Department: ['footwear'] });
+            case 'accessories':
+                return setAppliedFilters({ Department: ['accessories'] });
+        }
+    }, [type]);
+
+    useEffect(() => {
+        setAppliedFilters({
+            Sale: ['sale'],
+        });
+    }, [sale]);
+
+    useEffect(() => {
+        refetch();
+    }, [appliedFilters]);
 
     useEffect(() => {
         refetch();
