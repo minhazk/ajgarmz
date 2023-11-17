@@ -170,7 +170,7 @@ export default function Page({ params: { id } }: PageProps) {
                                 <button
                                     onClick={() => {
                                         setSelectedColour(colour);
-                                        const colourLink = [mainImage, ...images].find(img => img?.colour === colour.name.toLowerCase());
+                                        const colourLink = [mainImage, ...images].find(img => img?.colour?.toLowerCase() === colour.name.toLowerCase());
                                         if (colourLink) {
                                             setSelectedImage(colourLink.url);
                                         }
