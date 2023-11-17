@@ -6,6 +6,7 @@ import ItemCard from '@/components/shop/ItemCard';
 import NavigationHistory from '@/components/ui/NavigationHistory';
 import { SetStateAction, useEffect, useState } from 'react';
 import { api } from '@/util/trpc';
+import { useSearchParams } from 'next/navigation';
 
 type PageProps = {
     searchParams: {
@@ -16,6 +17,7 @@ type PageProps = {
 };
 
 export default function Page({ searchParams: { category, type, sale } }: PageProps) {
+    const searchParams = useSearchParams();
     const [appliedFilters, setAppliedFilters] = useState<appliedFiltersProps>({});
     const [sortingOrder, setSortingOrder] = useState<'newest' | 'highest' | 'lowest'>('newest');
     const { data: categories } = api.items.getCategories.useQuery();
@@ -33,36 +35,51 @@ export default function Page({ searchParams: { category, type, sale } }: PagePro
     );
 
     console.log(appliedFilters);
-    console.log(category);
+    console.log(searchParams);
 
     useEffect(() => {
         console.log(1, appliedFilters);
-        if (category === 'men') {
-            setAppliedFilters({ Gender: ['men'] });
-        } else if (category === 'women') {
-            setAppliedFilters({ Gender: ['women'] });
+        if (searchParams.has('category')) {
+            const category = searchParams.get('category');
+            if (category === 'men') {
+                setAppliedFilters({ Gender: ['men'] });
+            } else if (category === 'women') {
+                setAppliedFilters({ Gender: ['women'] });
+            }
         }
         console.log(2, appliedFilters);
-    }, [category]);
+    }, [searchParams]);
 
     useEffect(() => {
-        switch (type) {
-            case 'clothing':
-                return setAppliedFilters({ Department: ['clothing'] });
-            case 'footwear':
-                return setAppliedFilters({ Department: ['footwear'] });
-            case 'accessories':
-                return setAppliedFilters({ Department: ['accessories'] });
+        if (searchParams.has('type')) {
+            const type = searchParams.get('type');
+            switch (type) {
+                case 'clothing':
+                    return setAppliedFilters({ Department: ['clothing'] });
+                case 'footwear':
+                    return setAppliedFilters({ Department: ['footwear'] });
+                case 'accessories':
+                    return setAppliedFilters({ Department: ['accessories'] });
+            }
         }
-    }, [type]);
+    }, [searchParams]);
 
     useEffect(() => {
-        if (sale && sale === 'active') {
-            setAppliedFilters({
-                Sale: ['sale'],
-            });
+        if (searchParams.has('sale')) {
+            const sale = searchParams.get('sale');
+            if (sale && sale === 'active') {
+                setAppliedFilters({
+                    Sale: ['sale'],
+                });
+            }
         }
-    }, [sale]);
+    }, [searchParams]);
+
+    useEffect(() => {
+        if (!searchParams.has('sale') && !searchParams.has('type') && !searchParams.has('category')) {
+            setAppliedFilters({});
+        }
+    }, []);
 
     useEffect(() => {
         refetch();
