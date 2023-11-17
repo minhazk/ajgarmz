@@ -34,11 +34,7 @@ export default function Page({ searchParams: { category, type, sale } }: PagePro
         }
     );
 
-    console.log(appliedFilters);
-    console.log(searchParams);
-
     useEffect(() => {
-        console.log(1, appliedFilters);
         if (searchParams.has('category')) {
             const category = searchParams.get('category');
             if (category === 'men') {
@@ -47,7 +43,6 @@ export default function Page({ searchParams: { category, type, sale } }: PagePro
                 setAppliedFilters({ Gender: ['women'] });
             }
         }
-        console.log(2, appliedFilters);
     }, [searchParams]);
 
     useEffect(() => {
@@ -79,7 +74,7 @@ export default function Page({ searchParams: { category, type, sale } }: PagePro
         if (!searchParams.has('sale') && !searchParams.has('type') && !searchParams.has('category')) {
             setAppliedFilters({});
         }
-    }, []);
+    }, [searchParams]);
 
     useEffect(() => {
         refetch();
