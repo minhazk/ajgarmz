@@ -33,13 +33,16 @@ export default function Page({ searchParams: { category, type, sale } }: PagePro
     );
 
     console.log(appliedFilters);
+    console.log(category);
 
     useEffect(() => {
+        console.log(1, appliedFilters);
         if (category === 'men') {
             setAppliedFilters({ Gender: ['men'] });
         } else if (category === 'women') {
             setAppliedFilters({ Gender: ['women'] });
         }
+        console.log(2, appliedFilters);
     }, [category]);
 
     useEffect(() => {
@@ -60,10 +63,6 @@ export default function Page({ searchParams: { category, type, sale } }: PagePro
             });
         }
     }, [sale]);
-
-    useEffect(() => {
-        refetch();
-    }, [appliedFilters]);
 
     useEffect(() => {
         refetch();
