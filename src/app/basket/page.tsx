@@ -8,17 +8,13 @@ import CustomButton from '@/components/ui/CustomButton';
 import BasketItem, { removeItemProps } from '@/components/basket/BasketItem';
 import { showToast } from '@/util/toastNotification';
 import { BadgeCheck, Cookie, Loader2, Lock, Truck } from 'lucide-react';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import useLocalStorage from '@/hooks/useLocalStorage';
+import { useUserContext } from '@/util/UserContext';
 
-type PageProps = {
-    searchParams: {
-        order: string;
-    };
-};
-
-export default function Page({ searchParams: { order } }: PageProps) {
+export default function Page() {
+    const searchParams = useSearchParams();
     const { data: session, status } = useSession();
     const { data: items, refetch } = api.items.getUserItems.useQuery(session?.user?.id ?? null, {
         refetchOnMount: true,
@@ -27,6 +23,7 @@ export default function Page({ searchParams: { order } }: PageProps) {
     const { push } = useRouter();
     const { items: localStorageItems, removeItem: removeLocalStorageItem, clearItems, updateItemQuantity: updateLocalStorageItemQuantity } = useLocalStorage();
     const [basketItems, setBasketItems] = useState<any>([]);
+    const { setBasketCount } = useUserContext();
 
     useEffect(() => {
         if (status === 'unauthenticated') {
@@ -38,6 +35,7 @@ export default function Page({ searchParams: { order } }: PageProps) {
 
     useEffect(() => {
         (async () => {
+            const order = searchParams.get('order');
             if (order == null) return;
             if (status === 'loading') return;
             if (order == 'success') {
@@ -48,10 +46,11 @@ export default function Page({ searchParams: { order } }: PageProps) {
                     await clearBasket.mutateAsync(session!.user.id);
                     refetch();
                 }
+                setBasketCount(0);
                 push('/basket');
             }
         })();
-    }, [order, status, refetch]);
+    }, [searchParams, status, refetch]);
 
     const removeItem = api.items.removeItemFromBasket.useMutation({
         onSuccess() {
