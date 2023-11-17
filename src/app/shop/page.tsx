@@ -24,7 +24,7 @@ export default function Page({ searchParams: { category } }: PageProps) {
         isLoading,
         refetch,
     } = api.items.getAll.useInfiniteQuery(
-        { filters: appliedFilters, searchParam: category?.toLowerCase(), limit: 10 },
+        { filters: appliedFilters, searchParam: category?.toLowerCase(), limit: 100 },
         {
             getNextPageParam: lastPage => lastPage.nextCursor,
         }
