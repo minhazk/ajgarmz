@@ -54,9 +54,11 @@ export default function Page({ searchParams: { category, type, sale } }: PagePro
     }, [type]);
 
     useEffect(() => {
-        setAppliedFilters({
-            Sale: ['sale'],
-        });
+        if (sale && sale === 'active') {
+            setAppliedFilters({
+                Sale: ['sale'],
+            });
+        }
     }, [sale]);
 
     useEffect(() => {
