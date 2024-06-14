@@ -1,34 +1,37 @@
-import currencyFormatter from '@/util/currencyFormat';
-import { Eye, Heart } from 'lucide-react';
-import Image from 'next/image';
-import Link from 'next/link';
-import { useState } from 'react';
+import currencyFormatter from '@/util/currencyFormat'
+import { Eye, Heart } from 'lucide-react'
+import Image from 'next/image'
+import Link from 'next/link'
+import { useState } from 'react'
+import { StaticImageData } from 'next/image'
 
 export type ItemCardProps = {
-    id: number;
+    id: number
     mainImage: {
-        url: string;
-    } | null;
-    name: string;
-    price: number;
-    oldPrice: number | null;
-    colours: { id: number; name: string }[];
-};
+        url: string | StaticImageData
+    } | null
+    name: string
+    price: number
+    oldPrice: number | null
+    colours: { id: number; name: string }[]
+}
 
 export default function ItemCard({ id, mainImage, name, price, oldPrice, colours }: ItemCardProps) {
-    const [isHovering, setHovering] = useState(false);
+    const [isHovering, setHovering] = useState(false)
 
     return (
         <div
             className='rounded-md border border-gray-200 p-3 shadow shadow-transparent transition-all duration-700 hover:border-gray-400/30 hover:bg-slate-300/10 hover:shadow-lg relative overflow-hidden'
             onMouseEnter={() => {
-                setTimeout(() => setHovering(true), 350);
+                setTimeout(() => setHovering(true), 350)
             }}
             onMouseLeave={() => setTimeout(() => setHovering(false), 500)}
         >
             {oldPrice && (
                 <div className='absolute top-0 left-0 z-10'>
-                    <p className='font-medium text-xs md:text-sm bg-red-800 rounded py-1 px-4 m-2 flex justify-center items-center text-white'>{Math.round(((oldPrice - price) / oldPrice) * 100)}%</p>
+                    <p className='font-medium text-xs md:text-sm bg-red-800/80 rounded py-1 px-4 m-2 flex justify-center items-center text-white'>
+                        {Math.round(((oldPrice - price) / oldPrice) * 100)}%
+                    </p>
                 </div>
             )}
             <Link href={`/item/${id}`}>
@@ -67,5 +70,5 @@ export default function ItemCard({ id, mainImage, name, price, oldPrice, colours
                 </div>
             </div> */}
         </div>
-    );
+    )
 }

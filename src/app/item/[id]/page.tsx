@@ -1,59 +1,63 @@
-'use client';
+'use client'
 
-import Image from 'next/image';
-import NavigationHistory from '@/components/ui/NavigationHistory';
-import currencyFormatter from '@/util/currencyFormat';
-import { useState } from 'react';
-import CustomButton from '@/components/ui/CustomButton';
-import { api } from '@/util/trpc';
-import { useSession } from 'next-auth/react';
-import { showBanner, showToast } from '@/util/toastNotification';
-import useLocalStorage from '@/hooks/useLocalStorage';
-import { notFound } from 'next/navigation';
-import Loading from '@/components/Item/Loading';
-import { useUserContext } from '@/util/UserContext';
-import { CheckCircle } from 'lucide-react';
-import Link from 'next/link';
+import Image from 'next/image'
+import NavigationHistory from '@/components/ui/NavigationHistory'
+import currencyFormatter from '@/util/currencyFormat'
+import { useEffect, useState } from 'react'
+import CustomButton from '@/components/ui/CustomButton'
+import { api } from '@/util/trpc'
+import { useSession } from 'next-auth/react'
+import { showBanner, showToast } from '@/util/toastNotification'
+import useLocalStorage from '@/hooks/useLocalStorage'
+import { notFound } from 'next/navigation'
+import Loading from '@/components/Item/Loading'
+import { useUserContext } from '@/util/UserContext'
+import { CheckCircle } from 'lucide-react'
+import Link from 'next/link'
 
 type PageProps = {
     params: {
-        id: string;
-    };
-};
+        id: string
+    }
+}
 
 type InputProps = {
-    id: number;
-    name: string;
-};
+    id: number
+    name: string
+}
 
 export default function Page({ params: { id } }: PageProps) {
-    const { data: session } = useSession();
-    const [selectedSize, setSelectedSize] = useState<InputProps>();
-    const [selectedColour, setSelectedColour] = useState<InputProps>();
-    const [quantity, setQuantity] = useState<number>(1);
-    const [selectedImage, setSelectedImage] = useState<string>();
-    const { addItem } = useLocalStorage();
-    const { setBasketCount } = useUserContext();
-    const [showNotification, setShowNotification] = useState(false);
+    const { data: session } = useSession()
+    const [selectedSize, setSelectedSize] = useState<InputProps>()
+    const [selectedColour, setSelectedColour] = useState<InputProps>()
+    const [quantity, setQuantity] = useState<number>(1)
+    const [selectedImage, setSelectedImage] = useState<string>()
+    const { addItem } = useLocalStorage()
+    const { setBasketCount } = useUserContext()
+    const [showNotification, setShowNotification] = useState(false)
 
     const addToBasket = api.items.addToBasket.useMutation({
         onSuccess() {},
         onError() {
-            showToast('There was an error adding your item.');
+            showToast('There was an error adding your item.')
         },
-    });
+    })
 
-    if (isNaN(Number(id)) || id == null) return notFound();
+    useEffect(() => {
+        showToast('Database is currently asleep undergoing changes')
+    }, [])
 
-    const { data } = api.items.getItem.useQuery(Number(id));
+    if (isNaN(Number(id)) || id == null) return notFound()
 
-    if (!data) return <Loading />;
+    const { data } = api.items.getItem.useQuery(Number(id))
 
-    const { name, description, mainImage, price, oldPrice, sizes, colours, images } = data;
+    if (!data) return <Loading />
+
+    const { name, description, mainImage, price, oldPrice, sizes, colours, images } = data
 
     const handleAddToBasket = () => {
-        if (selectedSize == null) return showToast('Please choose a size');
-        if (selectedColour == null) return showToast('Please choose a colour');
+        if (selectedSize == null) return showToast('Please choose a size')
+        if (selectedColour == null) return showToast('Please choose a colour')
         if (session?.user.id == null) {
             addItem({
                 item: {
@@ -66,7 +70,7 @@ export default function Page({ params: { id } }: PageProps) {
                 colour: { name: selectedColour.name },
                 size: { name: selectedSize.name },
                 quantity,
-            });
+            })
         } else {
             void addToBasket.mutate({
                 userId: session.user.id,
@@ -74,9 +78,9 @@ export default function Page({ params: { id } }: PageProps) {
                 sizeId: selectedSize.id,
                 colourId: selectedColour.id,
                 quantity,
-            });
+            })
         }
-        setBasketCount((prev: number) => prev + 1);
+        setBasketCount((prev: number) => prev + 1)
         showBanner(
             <div className='md:first:mt-10 text-sm md:text-base shadow-lg border border-gray-300 py-3 px-4 bg-white rounded-md'>
                 <div className='flex items-center gap-3 mx-3 justify-center text-slate-500'>
@@ -100,10 +104,10 @@ export default function Page({ params: { id } }: PageProps) {
                     <CustomButton>GO TO CHECKOUT</CustomButton>
                 </Link>
             </div>
-        );
-    };
+        )
+    }
 
-    console.log(images);
+    console.log(images)
 
     return (
         <div>
@@ -169,10 +173,10 @@ export default function Page({ params: { id } }: PageProps) {
                             {colours.map((colour: InputProps) => (
                                 <button
                                     onClick={() => {
-                                        setSelectedColour(colour);
-                                        const colourLink = [mainImage, ...images].find(img => img?.colour?.toLowerCase() === colour.name.toLowerCase());
+                                        setSelectedColour(colour)
+                                        const colourLink = [mainImage, ...images].find(img => img?.colour?.toLowerCase() === colour.name.toLowerCase())
                                         if (colourLink) {
-                                            setSelectedImage(colourLink.url);
+                                            setSelectedImage(colourLink.url)
                                         }
                                     }}
                                     className={`flex items-center justify-center rounded-md border p-2 text-sm font-medium capitalize transition-colors ${
@@ -203,5 +207,5 @@ export default function Page({ params: { id } }: PageProps) {
                 </div>
             </div>
         </div>
-    );
+    )
 }

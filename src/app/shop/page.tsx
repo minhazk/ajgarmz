@@ -1,26 +1,56 @@
-'use client';
+'use client'
 
-import { SlidersHorizontal, X } from 'lucide-react';
-import FilterMenu, { appliedFiltersProps } from '@/components/shop/FilterMenu';
-import ItemCard from '@/components/shop/ItemCard';
-import NavigationHistory from '@/components/ui/NavigationHistory';
-import { SetStateAction, useEffect, useState } from 'react';
-import { api } from '@/util/trpc';
-import { useSearchParams } from 'next/navigation';
+import { SlidersHorizontal, X } from 'lucide-react'
+import FilterMenu, { appliedFiltersProps } from '@/components/shop/FilterMenu'
+import ItemCard from '@/components/shop/ItemCard'
+import NavigationHistory from '@/components/ui/NavigationHistory'
+import { SetStateAction, useEffect, useState } from 'react'
+import { api } from '@/util/trpc'
+import { useSearchParams } from 'next/navigation'
+import dummy_tee from '@/assets/dummy_tee.jpg'
+import dummy_tee2 from '@/assets/clothing.jpg'
+import { showToast } from '@/util/toastNotification'
 
 type PageProps = {
     searchParams: {
-        category?: string;
-        type?: string;
-        sale?: string;
-    };
-};
+        category?: string
+        type?: string
+        sale?: string
+    }
+}
+
+const dummyItem1 = {
+    id: 1,
+    mainImage: { url: dummy_tee },
+    name: 'Display Item',
+    price: 99.99,
+    oldPrice: null,
+    colours: [
+        { id: 1, name: 'black' },
+        { id: 2, name: 'white' },
+        { id: 3, name: 'red' },
+    ],
+}
+
+const dummyItem2 = {
+    id: 2,
+    mainImage: { url: dummy_tee2 },
+    name: 'Display Item 2',
+    price: 199,
+    oldPrice: 299,
+    colours: [
+        { id: 1, name: 'black' },
+        { id: 2, name: 'grey' },
+        { id: 3, name: 'blue' },
+        { id: 1, name: 'yellow' },
+    ],
+}
 
 export default function Page({ searchParams: { category, type, sale } }: PageProps) {
-    const searchParams = useSearchParams();
-    const [appliedFilters, setAppliedFilters] = useState<appliedFiltersProps>({});
-    const [sortingOrder, setSortingOrder] = useState<'newest' | 'highest' | 'lowest'>('newest');
-    const { data: categories } = api.items.getCategories.useQuery();
+    const searchParams = useSearchParams()
+    const [appliedFilters, setAppliedFilters] = useState<appliedFiltersProps>({})
+    const [sortingOrder, setSortingOrder] = useState<'newest' | 'highest' | 'lowest'>('newest')
+    const { data: categories } = api.items.getCategories.useQuery()
     const {
         data: pages,
         hasNextPage,
@@ -32,66 +62,70 @@ export default function Page({ searchParams: { category, type, sale } }: PagePro
         {
             getNextPageParam: lastPage => lastPage.nextCursor,
         }
-    );
+    )
+
+    useEffect(() => {
+        showToast('Database is currently asleep undergoing changes')
+    }, [])
 
     useEffect(() => {
         if (searchParams.has('category')) {
-            const category = searchParams.get('category');
+            const category = searchParams.get('category')
             if (category === 'men') {
-                setAppliedFilters({ Gender: ['men'] });
+                setAppliedFilters({ Gender: ['men'] })
             } else if (category === 'women') {
-                setAppliedFilters({ Gender: ['women'] });
+                setAppliedFilters({ Gender: ['women'] })
             }
         }
-    }, [searchParams]);
+    }, [searchParams])
 
     useEffect(() => {
         if (searchParams.has('type')) {
-            const type = searchParams.get('type');
+            const type = searchParams.get('type')
             switch (type) {
                 case 'clothing':
-                    return setAppliedFilters({ Department: ['clothing'] });
+                    return setAppliedFilters({ Department: ['clothing'] })
                 case 'footwear':
-                    return setAppliedFilters({ Department: ['footwear'] });
+                    return setAppliedFilters({ Department: ['footwear'] })
                 case 'accessories':
-                    return setAppliedFilters({ Department: ['accessories'] });
+                    return setAppliedFilters({ Department: ['accessories'] })
             }
         }
-    }, [searchParams]);
+    }, [searchParams])
 
     useEffect(() => {
         if (searchParams.has('sale')) {
-            const sale = searchParams.get('sale');
+            const sale = searchParams.get('sale')
             if (sale && sale === 'active') {
                 setAppliedFilters({
                     Sale: ['sale'],
-                });
+                })
             }
         }
-    }, [searchParams]);
+    }, [searchParams])
 
     useEffect(() => {
         if (!searchParams.has('sale') && !searchParams.has('type') && !searchParams.has('category')) {
-            setAppliedFilters({});
+            setAppliedFilters({})
         }
-    }, [searchParams]);
+    }, [searchParams])
 
     useEffect(() => {
-        refetch();
-    }, [appliedFilters, refetch]);
+        refetch()
+    }, [appliedFilters, refetch])
 
     const handleRemoveFilter = (filter: string) => {
-        type T = keyof typeof appliedFilters;
+        type T = keyof typeof appliedFilters
         setAppliedFilters((filters: appliedFiltersProps) => {
             for (const [key, value] of Object.entries(filters)) {
                 if (value.includes(filter)) {
-                    filters[key as T] = filters[key as T]?.filter(items => items !== filter);
-                    break;
+                    filters[key as T] = filters[key as T]?.filter(items => items !== filter)
+                    break
                 }
             }
-            return { ...filters };
-        });
-    };
+            return { ...filters }
+        })
+    }
 
     return (
         <>
@@ -144,16 +178,18 @@ export default function Page({ searchParams: { category, type, sale } }: PagePro
                     </div>
 
                     <div className='grid grid-cols-2 gap-2 sm:gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4'>
+                        <ItemCard key='dummy1' {...dummyItem1} />
+                        <ItemCard key='dummy2' {...dummyItem2} />
                         {pages?.pages.map((page: any) => {
                             switch (sortingOrder) {
                                 case 'newest':
-                                    return page.items.sort((a: any, b: any) => b.id - a.id).map((item: any) => <ItemCard key={item.id} {...item} />);
+                                    return page.items.sort((a: any, b: any) => b.id - a.id).map((item: any) => <ItemCard key={item.id} {...item} />)
                                 case 'highest':
-                                    return page.items.sort((a: any, b: any) => b.price - a.price).map((item: any) => <ItemCard key={item.id} {...item} />);
+                                    return page.items.sort((a: any, b: any) => b.price - a.price).map((item: any) => <ItemCard key={item.id} {...item} />)
                                 case 'lowest':
-                                    return page.items.sort((a: any, b: any) => a.price - b.price).map((item: any) => <ItemCard key={item.id} {...item} />);
+                                    return page.items.sort((a: any, b: any) => a.price - b.price).map((item: any) => <ItemCard key={item.id} {...item} />)
                                 default:
-                                    return page.items.map((item: any) => <ItemCard key={item.id} {...item} />);
+                                    return page.items.map((item: any) => <ItemCard key={item.id} {...item} />)
                             }
                         })}
                     </div>
@@ -172,5 +208,5 @@ export default function Page({ searchParams: { category, type, sale } }: PagePro
                 </div>
             </div>
         </>
-    );
+    )
 }
