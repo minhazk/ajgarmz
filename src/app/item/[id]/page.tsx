@@ -43,13 +43,13 @@ export default function Page({ params: { id } }: PageProps) {
         },
     })
 
+    const { data, isError } = api.items.getItem.useQuery(Number(id))
+
     useEffect(() => {
-        showToast('Database is currently asleep undergoing changes')
-    }, [])
+        if (isError) showToast('Database is currently asleep undergoing changes')
+    }, [isError])
 
     if (isNaN(Number(id)) || id == null) return notFound()
-
-    const { data } = api.items.getItem.useQuery(Number(id))
 
     if (!data) return <Loading />
 

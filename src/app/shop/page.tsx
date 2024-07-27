@@ -57,6 +57,8 @@ export default function Page({ searchParams: { category, type, sale } }: PagePro
         fetchNextPage,
         isLoading,
         refetch,
+        error,
+        isError,
     } = api.items.getAll.useInfiniteQuery(
         { filters: appliedFilters, limit: 50 },
         {
@@ -65,8 +67,8 @@ export default function Page({ searchParams: { category, type, sale } }: PagePro
     )
 
     useEffect(() => {
-        showToast('Database is currently asleep undergoing changes')
-    }, [])
+        if (isError) showToast('Database is currently asleep undergoing changes')
+    }, [isError])
 
     useEffect(() => {
         if (searchParams.has('category')) {
