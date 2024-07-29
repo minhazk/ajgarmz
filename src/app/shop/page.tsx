@@ -180,8 +180,8 @@ export default function Page({ searchParams: { category, type, sale } }: PagePro
                     </div>
 
                     <div className='grid grid-cols-2 gap-2 sm:gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4'>
-                        <ItemCard key='dummy1' {...dummyItem1} />
-                        <ItemCard key='dummy2' {...dummyItem2} />
+                        {/* <ItemCard key='dummy1' {...dummyItem1} />
+                        <ItemCard key='dummy2' {...dummyItem2} /> */}
                         {pages?.pages.map((page: any) => {
                             switch (sortingOrder) {
                                 case 'newest':

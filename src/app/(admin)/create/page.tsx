@@ -1,56 +1,56 @@
-'use client';
+'use client'
 
-import NavigationHistory from '@/components/ui/NavigationHistory';
-import { MultiSelect, MultiSelectCreatable } from '@/components/create/SelectOptions';
-import { FormEvent, HTMLProps, useState } from 'react';
-import { colours, genders, itemCategories, itemTypes, sizes } from '@/components/create/data';
-import { api } from '@/util/trpc';
-import { showToast } from '@/util/toastNotification';
-import CustomButton from '@/components/ui/CustomButton';
-import { UploadDropzone } from '@/util/uploadthing';
-import Image from 'next/image';
-import { UploadFileResponse } from 'uploadthing/client';
-import Select from 'react-select';
-import Toggle from 'react-toggle';
-import 'react-toggle/style.css';
+import NavigationHistory from '@/components/ui/NavigationHistory'
+import { MultiSelect, MultiSelectCreatable } from '@/components/create/SelectOptions'
+import { FormEvent, HTMLProps, useState } from 'react'
+import { colours, genders, itemCategories, itemTypes, sizes } from '@/components/create/data'
+import { api } from '@/util/trpc'
+import { showToast } from '@/util/toastNotification'
+import CustomButton from '@/components/ui/CustomButton'
+import { UploadDropzone } from '@/util/uploadthing'
+import Image from 'next/image'
+import { UploadFileResponse } from 'uploadthing/client'
+import Select from 'react-select'
+import Toggle from 'react-toggle'
+import 'react-toggle/style.css'
 
 type ImageFile = UploadFileResponse & {
-    colour?: string;
-    main?: boolean;
-};
+    colour?: string
+    main?: boolean
+}
 
 export default function Page() {
-    const [selectedSizes, setSelectedSizes] = useState<any[]>([]);
-    const [selectedColours, setSelectedColours] = useState<any[]>([]);
-    const [gender, setGender] = useState<any[]>([]);
-    const [category, setCategory] = useState<any>('');
-    const [type, setType] = useState<any>('');
-    const [newImages, setNewImages] = useState<ImageFile[]>([]);
-    const [imageUploadProgress, setImageUploadProgress] = useState<number | null>(null);
-    const [isUploading, setUploading] = useState(true);
+    const [selectedSizes, setSelectedSizes] = useState<any[]>([])
+    const [selectedColours, setSelectedColours] = useState<any[]>([])
+    const [gender, setGender] = useState<any[]>([])
+    const [category, setCategory] = useState<any>('')
+    const [type, setType] = useState<any>('')
+    const [newImages, setNewImages] = useState<ImageFile[]>([])
+    const [imageUploadProgress, setImageUploadProgress] = useState<number | null>(null)
+    const [isUploading, setUploading] = useState(true)
 
-    console.log('newImages', newImages);
+    console.log('newImages', newImages)
 
     const createItem = api.items.createItem.useMutation({
         onSuccess() {
-            showToast('Item successfully created');
-            setNewImages([]);
+            showToast('Item successfully created')
+            setNewImages([])
         },
         onError(err) {
-            showToast('There was an error creating your item.');
-            console.log(err);
+            showToast('There was an error creating your item.')
+            console.log(err)
         },
-    });
+    })
 
     const handleCreateItem = (e: FormEvent) => {
-        e.preventDefault();
-        const form = e.target as HTMLFormElement;
-        const formData = new FormData(form);
-        const name = formData.get('item title')!.toString();
-        const description = formData.get('item description')!.toString();
-        const price = parseFloat(formData.get('item price')!.toString());
-        const mainImage = newImages.find(img => img.main);
-        if (!mainImage) return showToast('Item requires a main image');
+        e.preventDefault()
+        const form = e.target as HTMLFormElement
+        const formData = new FormData(form)
+        const name = formData.get('item title')!.toString()
+        const description = formData.get('item description')!.toString()
+        const price = parseFloat(formData.get('item price')!.toString())
+        const mainImage = newImages.find(img => img.main)
+        if (!mainImage) return showToast('Item requires a main image')
         const item = {
             name,
             description,
@@ -63,25 +63,25 @@ export default function Page() {
             images: newImages
                 .filter(img => !img.main)
                 .map(img => {
-                    return { url: img.url, colour: img.colour };
+                    return { url: img.url, colour: img.colour }
                 }),
             mainImage: { url: mainImage.url, colour: mainImage.colour },
-        };
-        console.log(item);
+        }
+        console.log(item)
         if (
             Object.values(item).some(val => {
-                if (typeof val == 'string') return val == '';
-                if (typeof val == 'number') return val < 0.01;
-                return !val;
+                if (typeof val == 'string') return val == ''
+                if (typeof val == 'number') return val < 0.01
+                return !val
             })
         )
-            return showToast('Fill all inputs');
-        createItem.mutate(item);
+            return showToast('Fill all inputs')
+        createItem.mutate(item)
         if (createItem.isSuccess) {
-            form.reset();
-            setUploading(true);
+            form.reset()
+            setUploading(true)
         }
-    };
+    }
 
     return (
         <div>
@@ -98,8 +98,8 @@ export default function Page() {
                                     {newImages.length !== 0 && (
                                         <button
                                             onClick={e => {
-                                                e.stopPropagation();
-                                                setUploading(false);
+                                                e.stopPropagation()
+                                                setUploading(false)
                                             }}
                                             className='absolute right-2 top-2 z-10 rounded-md border border-gray-400 px-2 py-1 text-xs text-slate-600'
                                         >
@@ -109,22 +109,22 @@ export default function Page() {
                                     <UploadDropzone
                                         endpoint='imageUploader'
                                         onClientUploadComplete={res => {
-                                            console.log('Files: ', res);
-                                            console.log('Upload Completed');
+                                            console.log('Files: ', res)
+                                            console.log('Upload Completed')
                                             if (res) {
                                                 setNewImages(prev => [
                                                     ...prev,
                                                     ...res.map((file, i) => {
-                                                        return { ...file, main: prev.length === 0 && i === 0 };
+                                                        return { ...file, main: prev.length === 0 && i === 0 }
                                                     }),
-                                                ]);
-                                                setUploading(false);
+                                                ])
+                                                setUploading(false)
                                             }
                                         }}
                                         onUploadProgress={setImageUploadProgress}
                                         onUploadError={(error: Error) => {
-                                            showToast('There was an error uploading your images');
-                                            console.log(`ERROR! ${error.message}`);
+                                            showToast('There was an error uploading your images')
+                                            console.log(`ERROR! ${error.message}`)
                                         }}
                                     />
                                 </div>
@@ -163,10 +163,10 @@ export default function Page() {
                                                     onChange={(selected: any) => {
                                                         setNewImages((prev: any) => {
                                                             return prev.map((file: any) => {
-                                                                if (file !== image) return file;
-                                                                return { ...file, colour: selected.value };
-                                                            });
-                                                        });
+                                                                if (file !== image) return file
+                                                                return { ...file, colour: selected.value }
+                                                            })
+                                                        })
                                                     }}
                                                 />
                                             </div>
@@ -180,11 +180,11 @@ export default function Page() {
                                                     onChange={e => {
                                                         setNewImages((prev: any) => {
                                                             return prev.map((file: any, i: number) => {
-                                                                const isChecked = e.target.checked;
-                                                                if (file !== image) return { ...file, main: !isChecked ? (i === 0 ? true : file.main) : false };
-                                                                return { ...file, main: isChecked };
-                                                            });
-                                                        });
+                                                                const isChecked = e.target.checked
+                                                                if (file !== image) return { ...file, main: !isChecked ? (i === 0 ? true : file.main) : false }
+                                                                return { ...file, main: isChecked }
+                                                            })
+                                                        })
                                                     }}
                                                 />
                                             </div>
@@ -215,11 +215,11 @@ export default function Page() {
 
                         <MultiSelectCreatable setter={setSelectedColours} options={colours} label='Available Colours' isMulti insertAll />
 
-                        <MultiSelect setter={setGender} options={genders} isMulti label='Assign Gender' insertAll />
+                        <MultiSelect setter={setGender} options={genders} label='Assign Gender' isMulti insertAll />
 
                         <MultiSelectCreatable setter={setCategory} options={itemCategories} label='Item Category' />
 
-                        <MultiSelect setter={setType} options={itemTypes} label='Item Type' />
+                        <MultiSelectCreatable setter={setType} options={itemTypes} label='Item Type' />
 
                         <CustomButton disabled={createItem.isLoading} type='submit'>
                             Create Listing
@@ -228,12 +228,12 @@ export default function Page() {
                 </div>
             </div>
         </div>
-    );
+    )
 }
 
 type InputGroupProps = {
-    label: string;
-} & HTMLProps<HTMLInputElement>;
+    label: string
+} & HTMLProps<HTMLInputElement>
 
 function InputGroup({ label, ...inputProps }: InputGroupProps) {
     return (
@@ -249,5 +249,5 @@ function InputGroup({ label, ...inputProps }: InputGroupProps) {
                 placeholder='Type here'
             />
         </div>
-    );
+    )
 }

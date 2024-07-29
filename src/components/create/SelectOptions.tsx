@@ -1,23 +1,23 @@
-'use client';
+'use client'
 
-import { useEffect, useState } from 'react';
-import Select, { GroupBase, PropsValue } from 'react-select';
-import Creatable from 'react-select/creatable';
+import { useEffect, useState } from 'react'
+import Select, { GroupBase, PropsValue } from 'react-select'
+import Creatable from 'react-select/creatable'
 
 type MultiSelectProps = {
-    options: readonly ({ value: string; label: string } | GroupBase<{ value: string; label: string }>)[];
-    label: string;
-    setter: (options: any) => void;
-    isMulti?: boolean;
-    insertAll?: boolean;
-};
+    options: readonly ({ value: string; label: string } | GroupBase<{ value: string; label: string }>)[]
+    label: string
+    setter: (options: any) => void
+    isMulti?: boolean
+    insertAll?: boolean
+}
 
 export function MultiSelect({ options, setter, label, isMulti, insertAll }: MultiSelectProps) {
-    const [selectedOptions, setSelectedOptions] = useState<PropsValue<{ label: string; value: string }> | undefined>();
+    const [selectedOptions, setSelectedOptions] = useState<PropsValue<{ label: string; value: string }> | undefined>()
 
     useEffect(() => {
-        setter(selectedOptions);
-    }, [selectedOptions, setter]);
+        setter(selectedOptions)
+    }, [selectedOptions, setter])
 
     return (
         <div className='my-4 flex flex-col gap-2'>
@@ -31,15 +31,15 @@ export function MultiSelect({ options, setter, label, isMulti, insertAll }: Mult
             </div>
             <Select options={options} isMulti={isMulti} closeMenuOnSelect={!isMulti} onChange={(selected: any) => setSelectedOptions(selected)} value={selectedOptions} />
         </div>
-    );
+    )
 }
 
 export function MultiSelectCreatable({ options, setter, label, isMulti, insertAll }: MultiSelectProps) {
-    const [selectedOptions, setSelectedOptions] = useState<PropsValue<{ label: string; value: string }> | undefined>();
+    const [selectedOptions, setSelectedOptions] = useState<PropsValue<{ label: string; value: string }> | undefined>()
 
     useEffect(() => {
-        setter(selectedOptions);
-    }, [selectedOptions, setter]);
+        setter(selectedOptions)
+    }, [selectedOptions, setter])
 
     return (
         <div className='my-4 flex flex-col gap-2'>
@@ -53,5 +53,5 @@ export function MultiSelectCreatable({ options, setter, label, isMulti, insertAl
             </div>
             <Creatable isMulti={isMulti} options={options} closeMenuOnSelect={!isMulti} onChange={(selected: any) => setSelectedOptions(selected)} value={selectedOptions} />
         </div>
-    );
+    )
 }
