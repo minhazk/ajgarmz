@@ -10,6 +10,8 @@ import { useSearchParams } from 'next/navigation'
 import dummy_tee from '@/assets/dummy_tee.jpg'
 import dummy_tee2 from '@/assets/clothing.jpg'
 import { showToast } from '@/util/toastNotification'
+import Skeleton from 'react-loading-skeleton'
+import 'react-loading-skeleton/dist/skeleton.css'
 
 type PageProps = {
     searchParams: {
@@ -182,18 +184,27 @@ export default function Page({ searchParams: { category, type, sale } }: PagePro
                     <div className='grid grid-cols-2 gap-2 sm:gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4'>
                         {/* <ItemCard key='dummy1' {...dummyItem1} />
                         <ItemCard key='dummy2' {...dummyItem2} /> */}
-                        {pages?.pages.map((page: any) => {
-                            switch (sortingOrder) {
-                                case 'newest':
-                                    return page.items.sort((a: any, b: any) => b.id - a.id).map((item: any) => <ItemCard key={item.id} {...item} />)
-                                case 'highest':
-                                    return page.items.sort((a: any, b: any) => b.price - a.price).map((item: any) => <ItemCard key={item.id} {...item} />)
-                                case 'lowest':
-                                    return page.items.sort((a: any, b: any) => a.price - b.price).map((item: any) => <ItemCard key={item.id} {...item} />)
-                                default:
-                                    return page.items.map((item: any) => <ItemCard key={item.id} {...item} />)
-                            }
-                        })}
+                        {isLoading ? (
+                            <>
+                                <Skeleton className='rounded-md aspect-square' />
+                                <Skeleton className='rounded-md aspect-square' />
+                                <Skeleton className='rounded-md aspect-square' />
+                                <Skeleton className='rounded-md aspect-square' />
+                            </>
+                        ) : (
+                            pages?.pages.map((page: any) => {
+                                switch (sortingOrder) {
+                                    case 'newest':
+                                        return page.items.sort((a: any, b: any) => b.id - a.id).map((item: any) => <ItemCard key={item.id} {...item} />)
+                                    case 'highest':
+                                        return page.items.sort((a: any, b: any) => b.price - a.price).map((item: any) => <ItemCard key={item.id} {...item} />)
+                                    case 'lowest':
+                                        return page.items.sort((a: any, b: any) => a.price - b.price).map((item: any) => <ItemCard key={item.id} {...item} />)
+                                    default:
+                                        return page.items.map((item: any) => <ItemCard key={item.id} {...item} />)
+                                }
+                            })
+                        )}
                     </div>
 
                     {hasNextPage && (
